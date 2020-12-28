@@ -1,0 +1,325 @@
+### 10292019
+ALTER TABLE `web_jenra_billing`.`b_tenants` 
+CHANGE COLUMN `is_deleted` `is_deleted` TINYINT(1) NOT NULL DEFAULT '0' ,
+ADD COLUMN `is_vatted` TINYINT(1) NULL DEFAULT '0' AFTER `tin_number`,
+ADD COLUMN `vat_percent` DECIMAL(15,5) NULL DEFAULT '0.00000' AFTER `is_vatted`,
+ADD COLUMN `clearance_to_operate` TINYINT(1) NULL DEFAULT '0' AFTER `proof_of_billing`;
+
+### 10152019
+ALTER TABLE `web_jenra_billing`.`b_billing_adjustments` 
+ADD COLUMN `billing_adjustment_type` INT(2) NULL DEFAULT '0' AFTER `sort_key`;
+
+### 10102019
+ALTER TABLE `web_jenra_billing`.`b_adjustments` 
+ADD COLUMN `charge_id` INT(11) NULL DEFAULT '0' AFTER `adjustment_type`,
+ADD COLUMN `adjustment_rate` DECIMAL(15,5) NULL DEFAULT '0.00000' AFTER `charge_id`,
+ADD COLUMN `adjustment_reading` DECIMAL(15,5) NULL DEFAULT '0.00000' AFTER `adjustment_rate`;
+
+### 10022019 
+
+ALTER TABLE `web_jenra_billing`.`b_contract_info` 
+ADD COLUMN `pre_terminated_by` INT(11) NULL DEFAULT '0' AFTER `status`,
+ADD COLUMN `pre_terminated_datetime` DATETIME NULL DEFAULT NULL AFTER `pre_terminated_by`,
+ADD COLUMN `pre_terminated_remarks` VARCHAR(1000) NULL DEFAULT '' AFTER `pre_terminated_datetime`,
+ADD COLUMN `terminated_by` INT(11) NULL DEFAULT '0' AFTER `pre_terminated_remarks`,
+ADD COLUMN `terminated_datetime` DATETIME NULL DEFAULT NULL AFTER `terminated_by`,
+ADD COLUMN `terminated_remarks` VARCHAR(1000) NULL DEFAULT '' AFTER `terminated_datetime`;
+
+ALTER TABLE `web_jenra_billing`.`b_contract_info` 
+ADD COLUMN `activated_by` INT(11) NULL DEFAULT '0' AFTER `terminated_remarks`,
+ADD COLUMN `activated_datetime` DATETIME NULL DEFAULT NULL AFTER `activated_by`,
+ADD COLUMN `activated_remarks` VARCHAR(100) NULL DEFAULT '' AFTER `activated_datetime`;
+
+
+ALTER TABLE `web_jenra_billing`.`b_payment_info` 
+ADD COLUMN `wtax_amount` DECIMAL(15,5) NULL DEFAULT '0.00000' AFTER `used_advances`;
+
+### 2019-09-25 ###
+ALTER TABLE `web_jenra_billing`.`b_contract_info` 
+ADD COLUMN `status` INT(2) NULL DEFAULT '0' AFTER `is_active`;
+
+ALTER TABLE `web_jenra_billing`.`b_contract_info` 
+ADD COLUMN `is_active` TINYINT(1) NULL DEFAULT '0' AFTER `renewed`;
+
+### 2019-09-10 ###
+ALTER TABLE `web_jenra_billing`.`b_contract_info` 
+ADD COLUMN `escalation_type` INT(11) NULL DEFAULT '0' AFTER `contract_escalation_percent`;
+
+### 2019-09-11 ###
+ALTER TABLE `web_jenra_billing`.`temp_journal_info` 
+ADD COLUMN `payment_id` INT(11) NULL DEFAULT '0' AFTER `fee_id`;
+
+### 2019-09-17 ###
+USE `web_jenra_billing`;
+DROP procedure IF EXISTS `rental_and_charges`;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `rental_and_charges`(
+        IN `location_id` INTEGER,
+        IN `app_year` INTEGER,
+        IN `month_id` INTEGER,
+        IN `charge_type` INTEGER
+    )
+BEGIN
+
+	set @sql=null;
+   
+     /*
+		0 for all charges
+        1 for utilities
+        2 for misc charges
+        3 for other charges
+    */
+    
+	IF(charge_type = 0) then
+
+		/* ALL CHARGES */
+		SELECT GROUP_CONCAT(distinct
+			CONCAT('SUM(IF(br.charge_id = ',a.charge_id,',line_total,0)) AS ''', a.charge_desc,"'")
+		  ) INTO @sql
+          FROM 
+          (
+			SELECT 
+				br.charge_id,
+				br.charge_desc
+			FROM 
+            (
+				SELECT 
+					charge_id
+				FROM b_billing_util_charges as bu
+                INNER JOIN b_billing_info as bi ON bi.billing_id = bu.billing_id 
+				INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+                WHERE bi.is_deleted = 0 
+				AND bi.month_id = month_id 
+				AND bi.app_year = app_year
+				AND IF(location_id = 0, 0, ci.location_id) = location_id 
+				UNION ALL
+                SELECT 
+					charge_id
+				FROM b_billing_misc_charges as bm
+                INNER JOIN b_billing_info as bi ON bi.billing_id = bm.billing_id 
+				INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+                WHERE bi.is_deleted = 0 
+				AND bi.month_id = month_id 
+				AND bi.app_year = app_year
+				AND IF(location_id = 0, 0, ci.location_id) = location_id
+                UNION ALL
+                SELECT 
+					charge_id
+				FROM b_billing_othr_charges as bo
+                INNER JOIN b_billing_info as bi ON bi.billing_id = bo.billing_id 
+				INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+                WHERE bi.is_deleted = 0 
+				AND bi.month_id = month_id 
+				AND bi.app_year = app_year
+				AND IF(location_id = 0, 0, ci.location_id) = location_id 
+            ) AS ch
+            INNER JOIN b_refcharges as br ON ch.charge_id = br.charge_id
+		  ) as a;
+          
+          IF(@sql is null) THEN
+			set @sql := 'select * from b_billing_info where billing_id = -1';
+		  ELSE
+			  SET @sql = CONCAT(
+							'SELECT ',
+							'	DISTINCT bi.billing_no as \'Billing No\',',
+                            '	rt.space_code as \'Space Code\',',
+                            '	ci.contract_floor_area as \'Area(SQM)\',',
+                            '	rt.trade_name as \'Tradename\',',
+                            '	bi.total_fixed_rent as \'Basic Rent\',',
+                            '	(bi.total_fixed_rent * (bi.wtax_percent/100)) as \'WTax Basic\',',
+                            '	(bi.vatable_amount * (bi.vat_percent/100)) as \'VAT Basic\',',
+                            @sql,
+							'FROM b_billing_info as bi ',
+							'INNER JOIN ( ',
+							'	SELECT  ',
+							'		bu.billing_id,',
+							'		bu.charge_id, ',
+							'		bu.billing_util_line_total as line_total ',
+							'	FROM b_billing_util_charges as bu ',
+							'	INNER JOIN b_billing_info as bi ON bi.billing_id = bu.billing_id  ',
+							'	INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+							'	WHERE bi.is_deleted = 0  ',
+							'	AND bi.month_id =', month_id,
+							'	AND bi.app_year =',app_year,
+							'	AND IF(',location_id,'= 0, 0, ci.location_id) =',location_id,'  ',
+							'	UNION ALL ',
+							'	SELECT  ',
+							'		bm.billing_id,',
+							'		bm.charge_id, ',
+							'		bm.billing_misc_line_total as line_total ',
+							'	FROM b_billing_misc_charges as bm ',
+							'	INNER JOIN b_billing_info as bi ON bi.billing_id = bm.billing_id  ',
+							'	INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+							'	WHERE bi.is_deleted = 0  ',
+							'	AND bi.month_id =', month_id,
+							'	AND bi.app_year =',app_year,
+							'	AND IF(',location_id,'= 0, 0, ci.location_id) =',location_id,'  ',
+							'	UNION ALL ',
+							'	SELECT  ',
+							'		bo.billing_id,',
+							'		bo.charge_id, ',
+							'		bo.billing_othr_line_total as line_total ',
+							'	FROM b_billing_othr_charges as bo ',
+							'	INNER JOIN b_billing_info as bi ON bi.billing_id = bo.billing_id  ',
+							'	INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+							'	WHERE bi.is_deleted = 0  ',
+							'	AND bi.month_id =', month_id,
+							'	AND bi.app_year =',app_year,
+							'	AND IF(',location_id,'= 0, 0, ci.location_id) =',location_id,'  ',
+							') AS bc ON bi.billing_id = bc.billing_id  ',
+							'INNER JOIN b_refcharges as br ON br.charge_id = bc.charge_id ',
+                            'INNER JOIN b_contract_info as ci ON ci.contract_id = bi.contract_id ',
+                            'INNER JOIN b_tenants as rt ON rt.tenant_id = ci.tenant_id ',
+							'GROUP BY bi.billing_id ');
+			END IF;
+        
+	ELSEIF (charge_type = 1) then
+    
+		/* UTILITIES CHARGES */
+		SELECT
+		  GROUP_CONCAT(distinct
+			CONCAT('SUM(IF(bu.charge_id = ',br.charge_id,',bu.billing_util_line_total,0)) AS ''', br.charge_desc,"'")
+		  ) INTO @sql
+		FROM b_billing_util_charges as bu
+		INNER JOIN b_refcharges as br ON bu.charge_id = br.charge_id
+        INNER JOIN b_billing_info as bi ON bi.billing_id = bu.billing_id 
+        INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+        WHERE bi.is_deleted = 0 
+			AND bi.month_id = month_id 
+			AND bi.app_year = app_year
+			AND IF(location_id = 0, 0, ci.location_id) = location_id;
+
+		IF(@sql is null) THEN
+			set @sql := 'select * from b_billing_info where billing_id = -1';
+		ELSE
+			SET @sql = CONCAT(
+							'SELECT ',
+							'	DISTINCT bi.billing_no as \'Billing No\',',
+                            '	rt.space_code as \'Space Code\',',
+                            '	ci.contract_floor_area as \'Area(SQM)\',',
+                            '	rt.trade_name as \'Tradename\',',
+                            '	bi.total_fixed_rent as \'Basic Rent\',',
+                            '	bi.total_discounted_rent as \'Discounted Rent\',',
+                            '	(bi.total_fixed_rent * (bi.wtax_percent/100)) as \'WTax Basic\',',
+                            '	(bi.total_discounted_rent * (bi.wtax_percent/100)) as \'WTax Discounted\',',
+                            '	(bi.vatable_amount * (bi.vat_percent/100)) as \'VAT Basic\',',
+                            '	(bi.discounted_vatable_amount * (bi.vat_percent/100)) as \'Vat Discounted\',',
+                            @sql,
+							' FROM b_billing_info AS bi ',
+							' INNER JOIN b_billing_util_charges AS bu ON bu.billing_id = bi.billing_id ',
+							' INNER JOIN b_refcharges AS br ON br.charge_id = bu.charge_id ',
+							' INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+                            ' INNER JOIN b_tenants as rt ON rt.tenant_id = ci.tenant_id ',
+							' WHERE bi.is_deleted = 0 ',
+							'	AND bi.month_id = ', month_id,
+							'	AND bi.app_year = ', app_year,
+							'	AND IF(',location_id,' = 0, 0, ci.location_id) = ', location_id,
+							' GROUP BY bi.billing_id');
+		END IF;
+                        
+	ELSEIF (charge_type = 2) THEN
+    
+		/* MISC CHARGES */
+		SELECT
+		  GROUP_CONCAT(distinct
+			CONCAT('SUM(IF(bm.charge_id = ',br.charge_id,',bm.billing_misc_line_total,0)) AS ''', br.charge_desc,"'")
+		  ) INTO @sql
+		FROM b_billing_misc_charges as bm
+		INNER JOIN b_refcharges as br ON bm.charge_id = br.charge_id
+        INNER JOIN b_billing_info as bi ON bi.billing_id = bm.billing_id 
+        INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+        WHERE bi.is_deleted = 0 
+			AND bi.month_id = month_id 
+			AND bi.app_year = app_year
+			AND IF(location_id = 0, 0, ci.location_id) = location_id;
+		
+        /*SET sql_query := (SELECT @SQL);*/
+        
+		IF(@sql is null) THEN
+			set @sql := 'select * from b_billing_info where billing_id = -1';
+		ELSE
+			set @sql := CONCAT(
+						'SELECT ',
+						'	DISTINCT bi.billing_no as \'Billing No\',',
+						'	rt.space_code as \'Space Code\',',
+						'	ci.contract_floor_area as \'Area(SQM)\',',
+						'	rt.trade_name as \'Tradename\',',
+						'	bi.total_fixed_rent as \'Basic Rent\',',
+						'	bi.total_discounted_rent as \'Discounted Rent\',',
+						'	(bi.total_fixed_rent * (bi.wtax_percent/100)) as \'WTax Basic\',',
+						'	(bi.total_discounted_rent * (bi.wtax_percent/100)) as \'WTax Discounted\',',
+						'	(bi.vatable_amount * (bi.vat_percent/100)) as \'VAT Basic\',',
+						'	(bi.discounted_vatable_amount * (bi.vat_percent/100)) as \'Vat Discounted\',',
+						@sql,
+						' FROM b_billing_info AS bi ',
+						' INNER JOIN b_billing_misc_charges AS bm ON bm.billing_id = bi.billing_id ',
+						' INNER JOIN b_refcharges AS br ON br.charge_id = bm.charge_id ',
+						' INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+                        ' INNER JOIN b_tenants as rt ON rt.tenant_id = ci.tenant_id ',
+						' WHERE bi.is_deleted = 0 ',
+						'	AND bi.month_id = ', month_id,
+						'	AND bi.app_year = ', app_year,
+						'	AND IF(',location_id,' = 0, 0, ci.location_id) = ', location_id,
+						' GROUP BY bi.billing_id');
+        END IF;
+		
+	ELSE
+		/* OTHER CHARGES */
+        SELECT
+		  GROUP_CONCAT(distinct
+			CONCAT('SUM(IF(bo.charge_id = ',br.charge_id,',bo.billing_othr_line_total,0)) AS ''', br.charge_desc,"'")
+		  ) INTO @sql
+		FROM b_billing_othr_charges as bo
+		INNER JOIN b_refcharges as br ON bo.charge_id = br.charge_id
+        INNER JOIN b_billing_info as bi ON bi.billing_id = bo.billing_id 
+        INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id
+        WHERE bi.is_deleted = 0 
+			AND bi.month_id = month_id 
+			AND bi.app_year = app_year
+			AND IF(location_id = 0, 0, ci.location_id) = location_id;
+
+
+		IF(@sql is null) THEN
+			set @sql := 'select * from b_billing_info where billing_id = -1';
+		ELSE
+		SET @sql = CONCAT(
+						'SELECT ',
+						'	DISTINCT bi.billing_no as \'Billing No\',',
+						'	rt.space_code as \'Space Code\',',
+						'	ci.contract_floor_area as \'Area(SQM)\',',
+						'	rt.trade_name as \'Tradename\',',
+						'	bi.total_fixed_rent as \'Basic Rent\',',
+						'	bi.total_discounted_rent as \'Discounted Rent\',',
+						'	(bi.total_fixed_rent * (bi.wtax_percent/100)) as \'WTax Basic\',',
+						'	(bi.total_discounted_rent * (bi.wtax_percent/100)) as \'WTax Discounted\',',
+						'	(bi.vatable_amount * (bi.vat_percent/100)) as \'VAT Basic\',',
+						'	(bi.discounted_vatable_amount * (bi.vat_percent/100)) as \'Vat Discounted\',',
+						@sql, 
+						' FROM b_billing_info AS bi ',
+						' INNER JOIN b_billing_othr_charges AS bo ON bo.billing_id = bi.billing_id ',
+						' INNER JOIN b_refcharges AS br ON br.charge_id = bo.charge_id ',
+						' INNER JOIN b_contract_info as ci ON bi.contract_id = ci.contract_id ',
+                        ' INNER JOIN b_tenants as rt ON rt.tenant_id = ci.tenant_id ',
+						' WHERE bi.is_deleted = 0 ',
+						'	AND bi.month_id = ', month_id,
+						'	AND bi.app_year = ', app_year,
+						'	AND IF(',location_id,' = 0, 0, ci.location_id) = ', location_id,
+						' GROUP BY bi.billing_id');
+		END IF;
+		
+	
+    END IF;
+    
+    
+    
+	PREPARE stmt FROM @sql;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+    
+
+END$$
+
+DELIMITER ;
+
+
+
