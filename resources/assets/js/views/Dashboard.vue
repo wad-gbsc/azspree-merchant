@@ -36,8 +36,11 @@
              <b-col lg="6">
                <a class="fa fa-shopping-cart float-right" style="font-size:60px;padding:0%;"></a>
              </b-col>
+             
+         
           </b-row>
           </div>
+          
         </b-card>
       </div>
       <!--/.col-->
@@ -48,7 +51,6 @@
             <b-col lg="6">
             <h3 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 2 || i.order_stat == 3 || i.order_stat == 4 || i.order_stat == 5).length}}</h3>
             <p class="mb-0" style="font-size: 12px">In - transit(s) &nbsp; <i class="fa fa-angle-double-down" aria-hidden="true"></i></p>
-            <b-form-group>
             <b-row>
             <p class="mb-0" style="font-size: 12px" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For Drop-off(s) : &nbsp;</p>
             <h6 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 2 ).length}}</h6>
@@ -60,8 +62,8 @@
             <b-row>
             <p class="mb-0" style="font-size: 12px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For Dispatch(s) : &nbsp;</p>
             <h6 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 5).length}}</h6>
+            <hr>
             </b-row>
-            </b-form-group>
             </b-col>
              <b-col lg="6">
                <a class="fa fa-truck float-right" style="font-size:60px;padding:0%;"></a>
@@ -78,7 +80,6 @@
             <b-col lg="6">
             <h3 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 6  || i.order_stat == 7).length}}</h3>
             <p class="mb-0" style="font-size: 12px">Delivery(s) &nbsp; <i class="fa fa-angle-double-down" aria-hidden="true"></i></p>
-            <b-form-group>
            <b-row> 
             <p class="mb-0" style="font-size: 12px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To Deliver(s) : &nbsp;</p>
             <h6 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 6 ).length}}</h6>
@@ -87,7 +88,6 @@
             <p class="mb-0" style="font-size: 12px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivered(s) : &nbsp;</p>
             <h6 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 7).length}}</h6>
             </b-row>
-            </b-form-group>
             </b-col>
              <b-col lg="6">
                <a class="fa fa-arrow-circle-o-right float-right" style="font-size:60px;padding:0%;"></a>
@@ -247,7 +247,6 @@
                 <b-col sm="12">
                 <b-table
                     responsive
-                    striped
                     hover
                     small
                     bordered
@@ -515,7 +514,6 @@
       <b-table
         style="overflow: hidden;"
         responsive
-        striped
         hover
         small
         bordered
@@ -524,8 +522,8 @@
         :items="InTransitFilter"
       >
         <template #cell(order_name)="data">
-          <!-- <b class="text-success"> {{data.item.order_name}}</b>  -->
-          <b-badge pill variant="success">{{data.item.order_name}}</b-badge>
+          <b class="text-success"> {{data.item.order_name}}</b> 
+          <!--  <b-badge pill variant="success">{{data.item.order_name}}</b-badge> -->
         </template>
       <template v-slot:cell(show_details)="row">
             <b-button
@@ -592,7 +590,6 @@
                 <b-col sm="12">
                 <b-table
                     responsive
-                    striped
                     hover
                     small
                     bordered
@@ -752,7 +749,6 @@
         <b-table
         style="overflow: hidden"
         responsive
-        striped
         hover
         small
         bordered
@@ -813,7 +809,6 @@
                 <b-col sm="12">
                 <b-table
                     responsive
-                    striped
                     hover
                     small
                     bordered
@@ -890,7 +885,6 @@
         <b-table
         style="overflow: hidden"
         responsive
-        striped
         hover
         small
         bordered
@@ -930,7 +924,6 @@
                     </b-form-group>
                 <b-table
                     responsive
-                    striped
                     hover
                     small
                     bordered

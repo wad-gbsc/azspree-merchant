@@ -459,7 +459,7 @@ input[type="number"]::-webkit-outer-spin-button {
               onhand_qty: '',
               available_qty: '',
               cost_amt: '',
-              weight: '',
+              weight: null,
               lengthsize: 0,
               width: 0,
               height: 0,

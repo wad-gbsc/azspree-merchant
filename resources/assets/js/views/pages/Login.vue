@@ -20,7 +20,16 @@
   font-size: 12px;
 }
 
-
+@media screen and (max-width: 992px) {
+  div.back {
+    width: 80%;
+  }
+}
+@media screen and (max-width: 320px) {
+  div.back {
+    width: 80%;
+  }
+}
 </style>
 <template>
 <div>
@@ -31,16 +40,18 @@
   <section class="sec">
     <div class="app flex-row align-items-center">
       <div class="container">
-        <div class="row justify-content-center">
+        <div>
+         <center>
           <div
-            class="row"
+            class="row back "
             style="background: rgb(255,255, 255);
              background: rgba(255, 255, 255, 0.7);
              color: #f1f1f1;
              padding: 20px;
-             width: 40%;
              height: auto;
-             border-radius: 5px;"
+             border-radius: 5px;
+             width: 320px;"
+             
           >
             <div class="col-12">
               <h1 style="color: #17a2b8">Login</h1>
@@ -125,6 +136,7 @@
                 </div>
               </b-modal>
             </div>
+            </center>
           </div>
           <div>
           </div>
@@ -236,7 +248,6 @@ export default {
                 }).then(response => {
                     this.$store.commit('loginUser')
                     this.$store.commit('user', response.data.user)
-                    
                     localStorage.setItem('token', response.data.access_token)
                     if (this.$store.state.user.is_first == 0) {
                       this.fillEntityForm('sumr',this.$store.state.user.sumr_hash)
