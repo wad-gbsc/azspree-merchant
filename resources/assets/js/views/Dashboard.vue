@@ -24,7 +24,8 @@
     </div>
   </div> -->
   <div class="animated fadeIn">
-    <div class="row">
+    
+        <div class="row">
       <div class="col-sm-6 col-lg-3">
         <b-card class="bg-primary w-card" @click="newOrderEntry = true,IntransitEntry = false, DeliverEntry = false, CompletedEntry = false" style="height:75%;">
           <div class="card-body pb-0">
@@ -36,8 +37,6 @@
              <b-col lg="6">
                <a class="fa fa-shopping-cart float-right" style="font-size:60px;padding:0%;"></a>
              </b-col>
-             
-         
           </b-row>
           </div>
           
@@ -253,11 +252,8 @@
                     show-empty
                     :fields="tables.soln.fields"
                     :items="solnfilter(row.item.sohr_hash)"
-                    
                   >
-                 
                 </b-table>
-               
                 </b-col>
                 </b-row>
                 <b-modal v-model="showModalAcceptNewOrderDeliver" :noCloseOnEsc="true" :noCloseOnBackdrop="true" 
@@ -292,10 +288,10 @@
                       <b-form-group v-model="note" v-show="noteshow">
                       <h6 style="color:red;">Note :</h6>
                       <span style="color:red;">You will be charged 
-                        <b-form-input
-                        v-model="forms.dashboard.fields.m_shipping_fee"
-                        style="border: none; border-color: transparent; background-color: white; width:60px; text-align: center; color:blue;" 
-                        disabled></b-form-input>
+                       <vue-autonumeric
+                        v-model="forms.dashboard.fields.tf_shipping"
+                        style="border: none; border-color: transparent; background-color: white; width:60px; text-align: center; color:blue;font-weight: bold;" 
+                        disabled></vue-autonumeric>
                         pesos in your Income for  transfer fee.</span>
                       </b-form-group>
                       </b-col>
@@ -374,6 +370,7 @@
                               emptyInputBehavior:'0',}"
                   ></vue-autonumeric>   
                    </b-form-group>
+                   
                    <b-form-group v-show="row.item.excess_fee != 0 && row.item.total_excess_kg != 0" >
                     <label for="total_excess_fee">Excess Fee : </label>
                     <vue-autonumeric
@@ -1266,37 +1263,37 @@ export default {
             title: "Error!",
             text: "Please select Distribution Hub."
           });
-      }else{
-      this.forms.dashboard.isSaving = true;
-      this.$http
-        .put(
-          "api/acceptneworder/" + this.sohr_hash,
-          this.forms.dashboard.fields,
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
+        }else{
+        this.forms.dashboard.isSaving = true;
+        this.$http
+          .put(
+            "api/acceptneworder/" + this.sohr_hash,
+            this.forms.dashboard.fields,
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+              }
             }
-          }
-        )
-        .then(response => {
-          this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The New Order has been Accepted."
-          });
-          const index = this.tables.sohr.items.findIndex(
-            item => item["sohr_hash"] === response.data.data["sohr_hash"]
-          );
+          )
+          .then(response => {
+            this.forms.dashboard.isSaving = false;
+            this.$notify({
+              type: "success",
+              group: "notification",
+              title: "Success!",
+              text: "The New Order has been Accepted."
+            });
+            const index = this.tables.sohr.items.findIndex(
+              item => item["sohr_hash"] === response.data.data["sohr_hash"]
+            );
 
-          this.$delete(this.tables.sohr.items, index);
-          // this.paginations.queuereports.totalRows--;
+            this.$delete(this.tables.sohr.items, index);
+            // this.paginations.queuereports.totalRows--;
 
-          this.showModalAcceptNewOrderDeliver = false;
-          this.showModalAcceptNewOrderPickUp = false;
-          window.location.reload();
-        })
+            this.showModalAcceptNewOrderDeliver = false;
+            this.showModalAcceptNewOrderPickUp = false;
+            window.location.reload();
+          })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
           if (!error.response) return;
@@ -1544,7 +1541,7 @@ export default {
         this.showModalAcceptNewOrderPickUp = true;
       }else{
         this.showModalAcceptNewOrderDeliver = true;
-        this.forms.dashboard.fields.m_shipping_fee = Number(this.transfer_fee.transfer_fee) + Number(row.item.total_excess_fee)
+        this.forms.dashboard.fields.tf_shipping = Number(this.transfer_fee.transfer_fee) + Number(row.item.total_excess_fee)
 
       }
     },
@@ -1597,11 +1594,41 @@ export default {
     solnfilter(sohr_hash) {
       return this.tables.soln.items.filter(r => r.sohr_hash == sohr_hash);
     },
+
+    LoadTable() {
+      this.$http
+      .get("api/sohr", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
+      .then(response => {
+        
+        this.transfer_fee = response.data.comr[0];
+        this.tables.sohr.items = response.data.sohr;
+        this.tables.soln.items = response.data.soln;
+        this.tables.dhsf.items = response.data.dhsf;
+        this.tables.ship.items = response.data.ship;
+        this.tables.sumr.items = response.data.sumr;
+        this.paginations.sohr.totalRows = response.data.sohr.length;
+        this.options.default.items = response.data.default;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
+
+    getMerchantProducts: function(value, data) {
+      if (data.length > 0) {
+        this.options.filteredparts.items = this.options.parts.items.filter(
+          p => p.department_id == value
+        );
+      }
+    },
   
   },
   computed: {
 
-  
     note() {
     if (this.forms.dashboard.fields.selectdhTodeliver == null ) {
        this.noteshow = false
@@ -1618,8 +1645,9 @@ export default {
        this.noteshow1 = false
     }
     else if (this.forms.dashboard.fields.shipping_fee != this.$store.state.user.default_dh) {
+      console.log(this.forms.dashboard.fields.shipping_fee)
        this.noteshow1 = true
-     }else{
+    }else{
        this.noteshow1 = false
      }
    },
@@ -1643,7 +1671,7 @@ export default {
       },
 
  
-     GetTotalFee(){
+    GetTotalFee(){
         this.forms.dashboard.fields.total_fee = 0;
         this.forms.dashboard.fields.total_fee += ( Number(this.forms.dashboard.fields.shipping_fee) + Number(this.forms.dashboard.fields.transfer_fee));
         return this.forms.dashboard.fields.total_fee;
@@ -1729,32 +1757,15 @@ export default {
         }
         //  if (this.tables.sohr.items.filter(r => r.order_stat == 7)) {
         //     this.deliveredbutton = false
-         },
+        },
      
   
    
   },
   created() {
-    this.$http
-      .get("api/sohr", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token")
-        }
-      })
-      .then(response => {
-        
-        this.transfer_fee = response.data.comr[0];
-        this.tables.sohr.items = response.data.sohr;
-        this.tables.soln.items = response.data.soln;
-        this.tables.dhsf.items = response.data.dhsf;
-        this.tables.ship.items = response.data.ship;
-        this.tables.sumr.items = response.data.sumr;
-        this.paginations.sohr.totalRows = response.data.sohr.length;
-        this.options.default.items = response.data.default;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      
+      this.LoadTable();
+      
   },
 
 };

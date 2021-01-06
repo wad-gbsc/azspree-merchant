@@ -45,7 +45,7 @@
         <template slot="button-content" >
           <!-- image -->
           
-          <b-img :src="$store.state.user.path" class="avatar"></b-img>&nbsp;
+          <b-img :src="$store.state.user.path" class="avatar" width="30%" height="30%"></b-img>&nbsp;
           <span style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
           font-weight: 400; font-size: 16px;">{{$store.state.user.seller_name}}</span>
         </template>

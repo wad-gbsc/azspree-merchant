@@ -58,6 +58,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('dashboardcheck/{id}', 'Controller\OrdersController@checkIfUsed');
 
     Route::post('product/upload', 'Controller\ProductsController@upload');
+
+    Route::put('products/approve/{id}', 'Controller\ProductsController@ApproveProduct');
+    Route::put('products/disapprove/{id}', 'Controller\ProductsController@DisapproveProduct');
+    Route::put('products/banned/{id}', 'Controller\ProductsController@BannedProduct');
+    Route::get('profile/{fileName}', 'Controller\ProductsController@showImage');
+    Route::post('logs/', 'Controller\LogsController@create');
     
 });
-Route::get('logs/printreport/{from}/{to}', 'Controller\LogsController@PrintReport');
+Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');

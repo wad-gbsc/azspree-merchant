@@ -38,7 +38,6 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
             $data['comr'] = DB::table('comr')->select('transfer_fee')->get();
-
 {
             $data['sohr'] = SohrModel::select(
                         'sohr.*',
@@ -95,14 +94,6 @@ class OrdersController extends Controller
                                             ->leftJoin('m_city', 'm_city.city_hash', '=', 'dhsf.city_hash')
                                             ->where('sumr.type', '1')
                                             ->where('dhsf.city_hash', Auth::user()->m_city)
-                                            ->get();
-}
-{
-                    $data['ship'] = DHSFModel::select(
-                                        '*'
-                    )
-                                            ->where('is_deleted', 0)
-                                            ->where('dhsf.city_hash', Auth::user()->city_hash)
                                             ->get();
 }
                 
@@ -281,9 +272,10 @@ class OrdersController extends Controller
 
         if(count($check) > 0) {
         $sohr = SohrModel::findOrFail($id);
-        $sohr->m_shipping_fee = $request->input('m_shipping_fee');
+        $sohr->tf_shipping = $request->input('m_shipping_fee');
         $sohr->where_dh = $request->input('selectdhTodeliver');
         $sohr->order_stat = $request->input('selected');
+        $sohr->status_user = 2;
         $sohr->accept_datetime = Carbon::now();
         $sohr->to_pick_datetime = date('Y-m-d', strtotime($request->input('to_pick_datetime')));
         $sohr->is_cancel = 0;
@@ -309,6 +301,7 @@ class OrdersController extends Controller
         $sohr = SohrModel::findOrFail($id);
         $sohr->is_cancel = 1;
         $sohr->order_stat = 9;
+        $sohr->status_user = 6;
         $sohr->decline_neworder_remarks = $request->input('decline_neworder_remarks');
         $sohr->decline_neworder_datetime = Carbon::now();
      

@@ -280,6 +280,11 @@
         'driver' => 'local',
         'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\storage\\app',
       ),
+      'images' => 
+      array (
+        'driver' => 'local',
+        'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\storage\\images',
+      ),
       'public' => 
       array (
         'driver' => 'local',

@@ -1,9 +1,13 @@
 
 <template>
     <div>
+      <div v-if="$store.state.user.type == 1">
+        <not-found></not-found>
+        </div>
         <notifications group="notification" />
+        <div v-show="$store.state.user.type != 1">
         <div class="animated fadeIn">
-            <b-row>
+        <b-row>
         <!-- main row -->
         <b-col sm="12">
           <b-card>
@@ -73,7 +77,8 @@
             </b-row>
           </b-card>
         </b-col>
-            </b-row>
+        </b-row>
+        </div>
         </div>
     </div>
 </template>

@@ -6,6 +6,19 @@ input[type="number"]::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
+.badge {
+     border-radius: 0;
+     font-size: 12px;
+     line-height: 1;
+     padding: .375rem .5625rem;
+     font-weight: bold;
+     margin-top: 4px ;
+
+ }
+
+ .badge.badge-pill {
+     border-radius: 15rem
+ }
 
 .img {
   float: left;
@@ -81,10 +94,15 @@ input[type="number"]::-webkit-outer-spin-button {
 
 </style>
 <template>
-    <div  class="animated fadeIn"><!-- main container -->
+    <div  class="animated fadeIn">
+        <!-- main container -->
+        <div v-if="$store.state.user.type == 1">
+        <not-found></not-found>
+        </div>
         <notifications group="notification" />
+        <div v-show="$store.state.user.type != 1">
         <div v-show="!showEntry" class="animated fadeIn">
-            <b-row>
+        <b-row>
         <!-- main row -->
         <b-col sm="12">
           <b-card>
@@ -94,7 +112,6 @@ input[type="number"]::-webkit-outer-spin-button {
               <span class="text-primary">
                 <i class="fa fa-bars"></i>
                 Product List
-                
               </span>
             </h5>
             <b-row class="mb-2">
@@ -108,8 +125,19 @@ input[type="number"]::-webkit-outer-spin-button {
                   <i class="fa fa-plus-circle"></i> Add New Product
                 </b-button>
                 </b-form-group>
+                <b-form-group v-show="$store.state.user.type == 2">
+                <select2
+                v-model="forms.products.fields.getmerchantproducts"
+                :allowClear="true"
+                :placeholder="'Select Merchant'">
+                        <option v-for="right in options.sumr.items"
+                        :key="right.sumr_hash" 
+                        :value="right.sumr_hash">
+                        {{right.seller_name}}
+                        </option>
+                </select2>
+            </b-form-group>
               </b-col>
-
               <b-col sm="4">
                 <span></span>
               </b-col>
@@ -122,7 +150,9 @@ input[type="number"]::-webkit-outer-spin-button {
                 ></b-form-input>
               </b-col>
             </b-row>
+            
             <!-- row button and search input -->
+            
             <b-row>
               <!-- row table -->
               <b-col sm="12">
@@ -134,17 +164,23 @@ input[type="number"]::-webkit-outer-spin-button {
                   bordered
                   show-empty
                   :fields="tables.products.fields"
-                  :items="filterProduct($store.state.user.sumr_hash)"
+                  :items="getMerchantProducts"
                   :filter="filters.products.criteria"
                   :current-page="paginations.products.currentPage"
                   :per-page="paginations.products.perPage"
                 >
+                <template v-slot:cell(status)="data">
+                    <b-badge v-if="data.item.is_verified == 1" pill variant="success">{{"Verified"}}</b-badge>
+                    <b-badge v-else-if="data.item.is_verified == 2" pill variant="warning" style="color: white;">{{"Pending"}}</b-badge>
+                    <b-badge v-else-if="data.item.is_verified == 3" pill variant="danger" style="color: white;">{{"Disapproved"}}</b-badge>
+                    <b-badge v-else pill variant="dark" style="color: white;">{{"Banned"}}</b-badge>
+                </template>
                 <template v-slot:cell(action)="data">
-                  
+                    
+                    <div v-if="$store.state.user.type == 0">
                     <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
-
                     <b-btn
                       :size="'sm'"
                       :disabled="forms.products.isDeleting"
@@ -154,6 +190,38 @@ input[type="number"]::-webkit-outer-spin-button {
                       <icon v-if="forms.products.isDeleting" name="sync" spin></icon>
                       <i v-else class="fa fa-trash"></i>
                     </b-btn>
+                    </div>
+
+
+
+                    <div v-else>
+                      <b-btn
+                      v-show="data.item.is_verified == 2 || data.item.is_verified == 3"
+                      :size="'sm'"
+                      variant="success"
+                      @click="ApproveProduct(data)"
+                    >Approve
+                      <i class="fa fa-check"></i>
+                    </b-btn>
+                      <b-btn
+                      v-show="data.item.is_verified == 1 || data.item.is_verified == 2 "
+                      :size="'sm'"
+                      variant="danger"
+                      @click="DisapproveProduct(data)"
+                      >Disapprove
+                      <i class="fa fa-thumbs-down"></i>
+                      </b-btn>
+
+                      <b-btn
+                      v-show="data.item.is_verified == 3 || data.item.is_verified == 1"
+                      :size="'sm'"
+                      variant="dark"
+                      @click="BannedProduct(data)"
+                    >Banned
+                    <i class="fa fa-ban"></i>
+                    </b-btn>
+                    
+                    </div>
                   </template>
                 </b-table>
                 <b-row>
@@ -190,9 +258,7 @@ input[type="number"]::-webkit-outer-spin-button {
             </b-modal>
                 <!-- table -->
               </b-col>
-            </b-row>
-          
-                
+              </b-row>
               </b-card>
             </b-col>
           </b-row>
@@ -331,7 +397,7 @@ input[type="number"]::-webkit-outer-spin-button {
                   v-model="forms.products.fields.is_measurable"
                   value=1
                   unchecked-value=0
-                  @input="forms.products.fields.is_measurable==0? (forms.products.fields.length = 0 ,  forms.products.fields.width = 0 , forms.products.fields.height = 0): ''"
+                  @input="forms.products.fields.is_measurable==0? (forms.products.fields.lengthsize = 0 ,  forms.products.fields.width = 0 , forms.products.fields.height = 0): ''"
                   >
                   Is Measurable?
                   </b-form-checkbox>
@@ -390,7 +456,7 @@ input[type="number"]::-webkit-outer-spin-button {
         <b-tab title="Images">
         <div class="uploader">
         <div v-show="images.length">
-            <b-button @click="upload" variant="primary">Upload</b-button>
+            <!-- <b-button @click="upload" variant="primary">Upload</b-button> -->
             <b-button @click ="files = [], images = []" variant="danger" >Remove</b-button>
         </div>
         <div v-show="!images.length">
@@ -427,7 +493,7 @@ input[type="number"]::-webkit-outer-spin-button {
             </b-card>
           </b-col>
         </b-row>
-        
+        </div>
       </div>
     </div>
 </template>
@@ -449,6 +515,7 @@ input[type="number"]::-webkit-outer-spin-button {
             isSaving: false,
             isDeleting: false,
             fields: {
+              getmerchantproducts: null,
               image: '',
               imagePreview: null,
               showPreview: false,
@@ -513,6 +580,13 @@ input[type="number"]::-webkit-outer-spin-button {
                     }
               },
               {
+                key: "status",
+                thClass: "text-center",
+                label: "Status",
+                thStyle: { width: "80px" },
+                tdClass: "text-center"
+              },
+              {
                 key: "action",
                 label: "",
                 thStyle: { width: "80px" },
@@ -535,15 +609,128 @@ input[type="number"]::-webkit-outer-spin-button {
           }
         },
         options: {
-        category: {
-          items: []
-        }
+          category: {
+            items: []
+          },
+          sumr: {
+            items: []
+          }
         },
+
         inmr_hash: null,
         row: []
       };
     },
-     methods: { 
+     methods: {
+       BannedProduct(data) {
+          this.inmr_hash = data.item.inmr_hash;
+          swal.fire({
+                    title: 'Are you sure?',
+                    // text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Banned it!',
+                    text: "You won't be able to revert this!",
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.$http
+                          .put(
+                            "api/products/banned/" + this.inmr_hash,
+                            this.forms.products.fields,
+                            {
+                              headers: {
+                                Authorization: "Bearer " + localStorage.getItem("token")
+                              }
+                            }
+                          ).then(()=>{
+                                    swal.fire(
+                                    'Banned!',
+                                    'The Product has been Banned.',
+                                    'success'
+                                    )
+                                    this.loadProducts();
+                            }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                            });
+                         }
+                    })
+       },
+       DisapproveProduct(data) {
+          this.inmr_hash = data.item.inmr_hash;
+          swal.fire({
+                    title: 'Are you sure?',
+                    // text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Disapprove it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.$http
+                          .put(
+                            "api/products/disapprove/" + this.inmr_hash,
+                            this.forms.products.fields,
+                            {
+                              headers: {
+                                Authorization: "Bearer " + localStorage.getItem("token")
+                              }
+                            }
+                          ).then(()=>{
+                                    swal.fire(
+                                    'Disapproved!',
+                                    'The Product has been Disapproved.',
+                                    'success'
+                                    )
+                                    this.loadProducts();
+                            }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                            });
+                         }
+                    })
+       },
+       ApproveProduct(data) {
+           this.inmr_hash = data.item.inmr_hash;
+           swal.fire({
+                    title: 'Are you sure?',
+                    // text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, approve it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.$http
+                          .put(
+                            "api/products/approve/" + this.inmr_hash,
+                            this.forms.products.fields,
+                            {
+                              headers: {
+                                Authorization: "Bearer " + localStorage.getItem("token")
+                              }
+                            }
+                          ).then(()=>{
+                                    swal.fire(
+                                    'Approved!',
+                                    'The Product has been Approved.',
+                                    'success'
+                                    )
+                                    this.loadProducts();
+                            }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                            });
+                         }
+                    })
+        },
        
       
           onInputChange(e) {
@@ -595,9 +782,9 @@ input[type="number"]::-webkit-outer-spin-button {
                   console.log(error)
                 })
         },
-      filterProduct(sumr_hash) {
-      return this.tables.products.items.filter(r => r.sumr_hash == sumr_hash);
-      },
+      // filterProduct(sumr_hash) {
+      // return this.tables.products.items.filter(r => r.sumr_hash == sumr_hash);
+      // },
       onProductEntry() {
         if (this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length == 0) {
           this.focusElement('product_name', true)
@@ -795,9 +982,34 @@ input[type="number"]::-webkit-outer-spin-button {
       //     console.log(err);
       //   });
       },
+      loadProducts() {
+         this.$http
+      .get("api/products", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
+      .then(response => {
+        this.tables.products.items = response.data.products;
+        this.options.category.items = response.data.category;
+        this.options.sumr.items = response.data.sumr;
+        this.paginations.products.totalRows = response.data.products.length;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      },
+      
       
      },
   computed: {
+    getMerchantProducts() {
+      if (this.forms.products.fields.getmerchantproducts != null) {
+        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts);
+      }else{
+        return this.tables.products.items;
+      }
+    },
     invalidFeedbackName() {
       if (this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length == 0) {
         return 'Please enter something.'
@@ -841,25 +1053,7 @@ input[type="number"]::-webkit-outer-spin-button {
     },
  created () {
 
-       this.$http
-      .get("api/products", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token")
-        }
-      })
-      .then(response => {
-        this.tables.products.items = response.data.products;
-        this.options.category.items = response.data.category;
-        this.paginations.products.totalRows = response.data.products.length
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      this.loadProducts()
   },
   }
 </script>
-
-
-
-
-              

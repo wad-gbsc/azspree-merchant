@@ -37,7 +37,10 @@ import 'nprogress/nprogress.css'
 import DatePicker from 'vue2-datepicker'
 import BarExample from './views/charts/BarExample'
 import cSwitch from './components/Switch'
+import './components/NotFound'
 
+import swal from 'sweetalert2'
+window.swal = swal;
 
 Vue.use(Notifications)
 Vue.use(DatePicker)
@@ -47,16 +50,19 @@ Vue.component('icon', Icon)
 Vue.component('BarExample', BarExample)
 Vue.component('cSwitch', cSwitch)
 
+
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 const axiosConfig = {
   baseURL: 'http://azspree.test',
   timeout: 30000
 }
 
+
 Vue.component('icon', Icon)
 Vue.component('App', require('./App.vue'))
 Vue.component('select2', require('./select2/Select2'))
 Vue.component('vue-autonumeric', require('vue-autonumeric'))
+Vue.component( 'not-found',require('./components/NotFound.vue'));
 window.$ = window.jQuery = require('jquery')
 Vue.use(BootstrapVue)
 

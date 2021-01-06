@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ProductsModel;
 use App\Models\Category;
+use App\Models\SumrModel;
 use App\Http\Resources\Reference; 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Image;
+use DB;
 
 class ProductsController extends Controller
 {
@@ -23,18 +23,26 @@ class ProductsController extends Controller
      */
     public function index()
     {
-
+        if (Auth::user()->type == 0) {
         $data['products'] = ProductsModel::select(
-            'inmr.*'                    
+            'inmr.*',
+            'prst.*'                    
 )
-                
-                ->orderBy('inmr_hash', 'desc')
+                ->leftJoin('prst', 'prst.prst_hash', '=', 'inmr.is_verified')
                 ->where('inmr.is_deleted', 0)
                 ->where('inmr.sumr_hash', Auth::user()->sumr_hash)
+                ->orderBy('inmr_hash', 'desc')
                 ->get();
-       
+       }else{
+        $data['products'] = DB::table('inmr')->select('*')->get();
+       }
         $data['category'] = Category::where('is_deleted', 0)->orderBy('inct_hash')->get();
-        
+        $data['sumr'] = SumrModel::where('is_deleted', 0)
+        ->where('type', 0)
+        ->orderBy('sumr_hash')
+        ->get();
+
+      
         return $data;
 
     }
@@ -67,11 +75,11 @@ class ProductsController extends Controller
         $products->available_qty = $request->input('available_qty');
         $products->cost_amt = $request->input('cost_amt');
         $products->inct_hash = $request->input('inct_hash');
-        $products->length = $request->input('length');
+        $products->length = $request->input('lengthsize');
         $products->height = $request->input('height');
         $products->width = $request->input('width');
-        $products->dimension = $request->input('dimension');
-        $products->weight = $request->input('weight');
+        $products->dimension = ceil($request->input('dimension'));
+        $products->weight = ceil($request->input('weight'));
         $products->create_datetime = Carbon::now();
         $products->sumr_hash = Auth::user()->sumr_hash;
         
@@ -256,6 +264,56 @@ class ProductsController extends Controller
     //     //     Post::file('public')->put('products/'.Auth::user()->sumr_hash.'/', $photo);
     //     //  } 
     // }
-    
-    
+    public function ApproveProduct($id)
+    {
+        $products = ProductsModel::findOrFail($id);
+
+        $products->is_verified = 1;
+        //update classification based on the http json body that is sent
+        $products->save();
+
+        return ( new Reference( $products ) )
+            ->response()
+            ->setStatusCode(200);
+    }
+    public function DisapproveProduct($id)
+    {
+        $products = ProductsModel::findOrFail($id);
+
+        $products->is_verified = 3;
+        //update classification based on the http json body that is sent
+        $products->save();
+
+        return ( new Reference( $products ) )
+            ->response()
+            ->setStatusCode(200);
+    }
+    public function BannedProduct($id)
+    {
+        $products = ProductsModel::findOrFail($id);
+
+        $products->is_verified = 4;
+        //update classification based on the http json body that is sent
+        $products->save();
+
+        return ( new Reference( $products ) )
+            ->response()
+            ->setStatusCode(200);
+    }
+    // public function showImage($fileName)
+    // {
+    //     $path = public_path("/images/{$fileName}");
+
+    //     if (!\File::exists($path)) {
+    //         return response()->json(['message' => 'Image not found.'], 404);
+    //     }
+
+    //     $file = \File::get($path);
+    //     $type = \File::mimeType($path);
+
+    //     $response = \Response::make($file, 200);
+    //     $response->header("Content-Type", $type);
+
+    //     return $response;
+    // }
 }
