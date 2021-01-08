@@ -116,7 +116,7 @@
                     <th class="th1" style="text-align:left;">Merchant Name</th>
                     <th class="th1" style="text-align:left;">Order Date</th>
                     <th class="th1" style="text-align:left;">Payment Method</th>
-                    <th class="th1" tyle="text-align:left;">Status</th>
+                    {{-- <th class="th1" tyle="text-align:left;">Status</th> --}}
                     <th class="th1" style="text-align:left;">Quantity</th>
                     <th class="th1" style="text-align:left;">Order Cost Total</th>
                     <th class="th1" style="text-align:left;">Buyer's ShippingFee</th>
@@ -134,7 +134,7 @@
                         <td class="td1" style="text-align:left; ">{{$log->seller_name}}</td>
                         <td class="td1" style="text-align:left; width: 45px;">{{$log->order_date}}</td>
                         <td class="td1" style="text-align:left; ">{{$log->payment_method}}</td>
-                        <td class="td1" style="text-align:left; ">{{$log->order_name}}</td>
+                        {{-- <td class="td1" style="text-align:left; ">{{$log->order_name}}</td> --}}
                         <td class="td1" style="text-align:right; ">{{$log->total_qty}}</td>
                         <td class="td1" style="text-align:right; ">{{$log->order_total}}</td>
                         <td class="td1" style="text-align:right; ">{{$log->shipping_fee}}</td>
@@ -148,13 +148,13 @@
                 </tbody>
         </table>   
         <br>
-        <div style="text-align:right; font-size: 10pt; ">
+        {{-- <div style="text-align:right; font-size: 10pt; ">
             <span>
                 Total Quantity :1000  
                 &emsp;
                 Total Cost : 600,000.00 
             </span>
-        </div>
+        </div> --}}
         <br>
 
         <div style="text-align:center;">
@@ -165,6 +165,7 @@
          <br>
 
         <div style="text-align:right;">
+            
             <span class="top"  >&emsp;&emsp;&emsp; Prepared by &emsp;&emsp;&emsp;</span>
         </div>
     </body>

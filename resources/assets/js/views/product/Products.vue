@@ -136,7 +136,7 @@ input[type="number"]::-webkit-outer-spin-button {
                         {{right.seller_name}}
                         </option>
                 </select2>
-            </b-form-group>
+              </b-form-group>
               </b-col>
               <b-col sm="4">
                 <span></span>
@@ -154,7 +154,6 @@ input[type="number"]::-webkit-outer-spin-button {
             <!-- row button and search input -->
             
             <b-row>
-              <!-- row table -->
               <b-col sm="12">
                 <b-table
                   responsive
@@ -191,9 +190,6 @@ input[type="number"]::-webkit-outer-spin-button {
                       <i v-else class="fa fa-trash"></i>
                     </b-btn>
                     </div>
-
-
-
                     <div v-else>
                       <b-btn
                       v-show="data.item.is_verified == 2 || data.item.is_verified == 3"
@@ -258,7 +254,7 @@ input[type="number"]::-webkit-outer-spin-button {
             </b-modal>
                 <!-- table -->
               </b-col>
-              </b-row>
+            </b-row>
               </b-card>
             </b-col>
           </b-row>

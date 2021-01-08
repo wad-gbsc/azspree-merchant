@@ -29,7 +29,7 @@
         <b-col sm="3">
             <b-button
                   variant="primary"
-                  @click="showEntry = true, entryMode='Add', tables.sohrItems.items = []"
+                  @click="showEntry = true, entryMode='Create', tables.sohrItems.items = []"
                 >
                   <i class="fa fa-plus-circle"></i> Create New Issuance
             </b-button>
@@ -63,14 +63,18 @@
                 >
 
                 <template v-slot:cell(action)="data">
-                   <b-btn :size="'sm'" variant="success" @click="previewReport(data)">
+                  <b-button-group>
+                    <b-btn :size="'lg'" variant="primary" @click="markDone(data)">
+                      <i class="fa fa-check-square-o"></i>
+                    </b-btn>
+                   <b-btn :size="'lg'" variant="success" @click="previewReport(data)">
                       <i class="fa fa-print"></i>
                     </b-btn>
-                    <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
+                    <b-btn :size="'lg'" variant="info" style="color:white" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
                     <b-btn
-                      :size="'sm'"
+                      :size="'lg'"
                       :disabled="forms.logs.isDeleting"
                       variant="danger"
                       @click="setDelete(data)"
@@ -78,6 +82,7 @@
                       <icon v-if="forms.logs.isDeleting" name="sync" spin></icon>
                       <i v-else class="fa fa-trash"></i>
                     </b-btn>
+                  </b-button-group>
                 </template>
                 </b-table> 
             <b-row>
@@ -107,13 +112,13 @@
             <!-- sec card -->
             <h5 slot="header">
               <!-- table header -->
-              <!-- <span class="text-primary">{{entryMode}} Invoice</span> -->
-              <span class="text-primary">Create Issuance</span>
+              <span class="text-primary">{{entryMode}} Invoice</span>
+              <!-- <span class="text-primary">Create Issuance</span> -->
             </h5> 
             <b-row>
               <b-col lg="4">
                 <b-form-group>
-                    <label>* Issuance No</label>
+                    <label><i class="icon-required fa fa-exclamation-circle"></i> Issuance No</label>
                     <b-form-input
                         readonly
                         type="text"
@@ -121,7 +126,7 @@
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group>
-                        <label>Issued to</label>
+                        <label><i class="icon-required fa fa-exclamation-circle"></i> Issued to</label>
                         <b-form-input
                             id="issued_to"
                             type="text"
@@ -262,6 +267,7 @@
   export default {
     data() {
       return {
+        entryMode: "Create",
         showModalSohr: false,
         showEntry: false,
         forms: { 
@@ -651,10 +657,11 @@
       onIssuanceEntry() {
       if(this.tables.sohrItems.items.length > 0) {
         this.forms.logs.fields.items = this.tables.sohrItems.items
-        if (this.entryMode == "Add") {
+        if (this.entryMode == "Create") {
           this.createEntity("logs", false, "issuancemain")
+          this.loadIssuance();
         } else {
-          this.updateEntity("issuance", "issuance_id", false, this.row)
+          this.updateEntity("logs", "issuance_hash", false, this.row)
         }
       }
       else {
@@ -708,6 +715,114 @@
       this.issuance_hash = data.item.issuance_hash;
       window.open("api/logs/printreport/" + this.issuance_hash);
     },
+      async setDelete(data) {
+        this.issuance_hash = data.item.issuance_hash;
+        swal.fire({
+                    title: 'Are you sure?',
+                    // text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Delete it!',
+                    text: "You won't be able to revert this!",
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.$http
+                          .put(
+                            "api/issuance/delete/" + this.issuance_hash,
+                            this.forms.logs.fields,
+                            {
+                              headers: {
+                                Authorization: "Bearer " + localStorage.getItem("token")
+                              }
+                            }
+                          ).then(()=>{
+                                    swal.fire(
+                                    'Deleted!',
+                                    'The Issuance has been Banned.',
+                                    'success'
+                                    )
+                                    this.loadIssuance();
+                            }).catch(()=> {
+                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                            });
+                         }
+                    })
+      },
+      setUpdate(data) {
+      this.row = data.item
+      this.$http.get('api/issuance/'+ data.item.issuance_hash, {
+          headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+      }).then(response => {
+          this.forms.logs.fields = response.data.issuance
+          this.tables.sohrItems.items = response.data.issuance_items
+          this.showEntry = true
+          this.entryMode = "Edit"
+      }).catch(err => {
+          console.log(err)
+      })
+      },
+      markDone(data) {
+
+      this.issuance_hash = data.item.issuance_hash;
+      swal.fire({
+                  title: 'Are you sure?',
+                  // text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, Mark as Paid!',
+                  }).then((result) => {
+
+                      // Send request to the server
+                        if (result.value) {
+                              this.$http
+                        .put(
+                          "api/markpaid/" + this.issuance_hash,
+                          this.forms.logs.fields,
+                          {
+                            headers: {
+                              Authorization: "Bearer " + localStorage.getItem("token")
+                            }
+                          }
+                        ).then(()=>{
+                                  swal.fire(
+                                  'Paid!',
+                                  'The Issuance has been Paid.',
+                                  'success'
+                                  )
+                                  this.loadIssuance();
+                          }).catch(()=> {
+                                  swal.fire("Failed!", "There was something wronge.", "warning");
+                          });
+                        }
+                  })
+      },
+      loadIssuance() {
+         this.$http
+      .get("api/logs", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
+      .then(response => {
+        this.tables.issuancemain.items = response.data.issuancemain;
+        this.options.sumr.items = response.data.sumr;
+        this.tables.sohr.items = response.data.sohr;
+        this.azspree = response.data.comr[0];
+        this.paginations.sohr.totalRows = response.data.sohr.length;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      
+      },
 
     },
       computed: {
@@ -785,23 +900,8 @@
     },
 
     created() {
-    this.$http
-      .get("api/logs", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token")
-        }
-      })
-      .then(response => {
-        this.tables.issuancemain.items = response.data.issuancemain;
-        this.options.sumr.items = response.data.sumr;
-        this.tables.sohr.items = response.data.sohr;
-        this.azspree = response.data.comr[0];
-        this.paginations.sohr.totalRows = response.data.sohr.length;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      
+      this.loadIssuance();
+   
   },
 };
 </script>

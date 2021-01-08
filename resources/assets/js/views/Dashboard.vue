@@ -341,28 +341,27 @@
                     <b-form-group >
                     <label for="shipping_fee">Select Hub :</label>
                     <select2
+                    @input="getShippingFee"
                     class="form-control"
                     style="padding:0px; font-size:14px;"
-                    ref="shipping_fee"
-                    id="shipping_fee"
-                    v-model="forms.dashboard.fields.shipping_fee" 
+                    v-model="forms.dashboard.fields.pickupSelectDH" 
                     :placeholder="'Select Hub'">
                     <option
                       v-for="right in tables.dhsf.items"
                       :key="right.sumr_hash"
-                      :value="right.shipping_fee"
+                      :value="right.sumr_hash"
                     >{{right.seller_name}}</option>
                     </select2>
                     </b-form-group>
                     
                     <b-form-group>
                     <!-- <label id="shipping_fee" ref="shipping_fee">Shipping Fee : {{formatNumber(forms.dashboard.fields.shipping_fee)}} </label> -->
-                    <label for="shipping_fee1">Shipping Fee : </label>
+                    <label for="shipping_fee">Shipping Fee : </label>
                     <vue-autonumeric
                     style="width:50%;background-color: white;"
                     readonly
-                    id="shipping_fee1"
-                    ref="shipping_fee1"
+                    id="shipping_fee"
+                    ref="shipping_fee"
                     :value="forms.dashboard.fields.shipping_fee"
                     class='form-control text-right'
                     :options="{
@@ -393,6 +392,8 @@
                     v-model="row.item.total_excess_kg"
                     class='form-control text-right'
                   ></b-form-input>
+                  </b-form-group>
+                  <b-form-group v-model="note1" v-show="noteshow1">
                     <label for="tranfer_fee">Tranfer Fee : </label>
                     <b-form-input
                     style="width:50%;background-color: white;"
@@ -402,9 +403,6 @@
                     v-model="transfer_fee.transfer_fee"
                     class='form-control text-right'
                   ></b-form-input>
-                   </b-form-group>
-
-                   <b-form-group v-model="note1" v-show="noteshow1">
                       <h6 style="color:red;">Note :</h6>
                       <span style="color:red;">You will be charged <label>{{formatNumber(Number(transfer_fee.transfer_fee) + Number(row.item.total_excess_fee) + Number(forms.dashboard.fields.shipping_fee))}}</label> pesos in your Income for  transfer fee.</span>
                       </b-form-group>
@@ -1012,6 +1010,7 @@ export default {
             total_fee: 0,
             shipping_fee: 0,
             total_cost: 0,
+            pickupSelectDH: null,
           }
         }
       },
@@ -1140,6 +1139,12 @@ export default {
     }
   },
   methods: {
+    getShippingFee: function(value,data)  {
+      if (data.length > 0) {
+        var sf = this.tables.dhsf.items[data[0].element.index]
+        this.forms.dashboard.fields.shipping_fee = sf.shipping_fee
+      }
+    },
 
     rowClass(item, type) {
           if (!item || type !== "row") return;
@@ -1641,11 +1646,10 @@ export default {
    },
 
     note1() {
-    if (this.forms.dashboard.fields.shipping_fee == 0 ) {
+    if (this.forms.dashboard.fields.pickupSelectDH == null ) {
        this.noteshow1 = false
     }
-    else if (this.forms.dashboard.fields.shipping_fee != this.$store.state.user.default_dh) {
-      console.log(this.forms.dashboard.fields.shipping_fee)
+    else if (this.forms.dashboard.fields.pickupSelectDH != this.$store.state.user.default_dh) {
        this.noteshow1 = true
     }else{
        this.noteshow1 = false
@@ -1755,17 +1759,10 @@ export default {
         if (this.$store.state.user.type == 1) {
             this.deliveredbutton = true
         }
-        //  if (this.tables.sohr.items.filter(r => r.order_stat == 7)) {
-        //     this.deliveredbutton = false
         },
-     
-  
-   
   },
   created() {
-      
       this.LoadTable();
-      
   },
 
 };
