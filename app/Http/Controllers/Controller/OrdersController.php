@@ -415,6 +415,16 @@ class OrdersController extends Controller
         $sohr = SohrModel::findOrFail($id);
         
         $sohr->order_stat = 7;
+
+        $myorder = SolnModel::select('inmr_hash', 'qty')
+                ->where('soln.sohr_hash', $id)
+                ->get(); 
+            
+                foreach ($myorder as $order)
+                {
+                    DB::table('inmr')->where('inmr_hash', $order->inmr_hash)->increment('sales',$order->qty);
+                }
+
         $sohr->delivered_datetime = Carbon::now();
         // $sohr->stat_transit = 1;
      

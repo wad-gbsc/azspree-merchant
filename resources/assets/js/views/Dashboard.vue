@@ -794,7 +794,7 @@
                     <br>
                     <br>
                     <br>
-                    <b-form-group style="text-align:center;" v-show="row.item.order_stat == 6">
+                    <b-form-group style="text-align:center;" v-show="row.item.order_stat == 6 && $store.state.user.type == 1">
                     <b-button @click="Delivered(row)" variant="success">
                       <i class="fa fa-check-square-o" aria-hidden="true"></i> Is Delivered?</b-button>
                     </b-form-group>
@@ -1763,6 +1763,7 @@ export default {
   },
   created() {
       this.LoadTable();
+      // setInterval(() =>  this.LoadTable(), 3000)
   },
 
 };
