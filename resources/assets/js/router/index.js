@@ -24,6 +24,7 @@ import Orders from '@/views/shop/Orders'
 import Logs from '@/views/shop/Logs'
 import Shipments from '@/views/shop/Shipments'
 import Cancellations from '@/views/shop/Cancellations'
+import Comments from '@/views/shop/Comments'
 
 import store from '../store'
 Vue.use(Router)
@@ -92,6 +93,12 @@ const router = new Router({
                 path: 'Cancellations',
                 name: 'Cancellation(s)',
                 component: Cancellations,
+                meta: {requiresAuth: true}
+              },
+              {
+                path: 'Comments',
+                name: 'Comment(s)',
+                component: Comments,
                 meta: {requiresAuth: true}
               },
               {

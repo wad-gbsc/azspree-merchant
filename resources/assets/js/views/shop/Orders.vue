@@ -15,7 +15,7 @@
             <h5 slot="header">
               <!-- table header -->
               <span class="text-primary">
-                <i class="fa fa-bars"></i>
+                <i class="fa fa-handshake-o"></i>
                 Orders
               </span>
             </h5>

@@ -72,6 +72,12 @@ Vue.prototype.$http.interceptors.request.use(config => {
   NProgress.start()
   return config
 })
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+  })
 
 // before a response is returned stop nprogress
 Vue.prototype.$http.interceptors.response.use(response => {

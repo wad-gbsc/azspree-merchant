@@ -780,7 +780,7 @@
                       <label>Customer Address :</label>
                   <b-form-input readonly
                   style="background-color: white;"
-                   v-model="row.item.user_address">
+                   v-model="row.item.city">
                   </b-form-input>
                     </b-form-group>
                     </b-col>

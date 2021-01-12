@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Auth;
 use App\User;
 use DB;
+use Intervention\Image\Point;
 
 class OrdersController extends Controller
 {
@@ -411,10 +412,15 @@ class OrdersController extends Controller
      */
 
     public function Delivered(Request $request ,$id)
-    {
+    {   
+        // $az_pouch = DB::table('comr')->select('az_pouch')->get();
         $sohr = SohrModel::findOrFail($id);
-        
         $sohr->order_stat = 7;
+        $points = $sohr->order_total / 100;
+
+        DB::table('user')->where('user_hash', $sohr->user_hash)->increment('az_points', $points);
+        
+        // $user = DB::table('user')->select('*')->where('user_hash',  $sohr->user_hash)->get(); 
 
         $myorder = SolnModel::select('inmr_hash', 'qty')
                 ->where('soln.sohr_hash', $id)

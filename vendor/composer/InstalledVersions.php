@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '30d6a398aa06d280fff06631613d43e9871143f0',
+    'reference' => '05b3dedc98ef16b554a772ab4d6d722f73f1c40a',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -145,6 +145,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '8c3d0a3f6af734494ad8f6fbbee0ba92422859f3',
+    ),
+    'hashids/hashids' => 
+    array (
+      'pretty_version' => '4.1.0',
+      'version' => '4.1.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '8cab111f78e0bd9c76953b082919fc9e251761be',
     ),
     'illuminate/auth' => 
     array (
@@ -401,7 +410,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '30d6a398aa06d280fff06631613d43e9871143f0',
+      'reference' => '05b3dedc98ef16b554a772ab4d6d722f73f1c40a',
     ),
     'laravel/tinker' => 
     array (

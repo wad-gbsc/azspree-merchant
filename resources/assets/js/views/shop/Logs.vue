@@ -8,9 +8,8 @@
            <div v-if="$store.state.user.type != 2">
             <not-found></not-found>
         </div>
-         <div v-show="!showEntry" class="animated fadeIn">
+        <div v-show="!showEntry" class="animated fadeIn">
         <b-row>
-          
         <!-- main row -->
         <b-col sm="12">
            <b-card v-show="$store.state.user.type == 2">
@@ -18,7 +17,7 @@
             <h5 slot="header">
               <!-- table header -->
               <span class="text-primary">
-                <i class="fa fa-bars"></i>
+                <i class="fa fa-database"></i>
                 History Log
               </span>
             </h5>

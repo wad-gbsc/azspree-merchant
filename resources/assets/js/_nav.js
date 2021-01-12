@@ -43,6 +43,11 @@ export default {
             icon: 'fa fa-code'
           },
           {
+            name: 'Comment(s)',
+            url: '/shop/Comments',
+            icon: 'fa fa-comments'
+          },
+          {
             name: 'Rating(s)',
             url: '/references/categories',
             icon: 'fa fa-star-o'
@@ -50,7 +55,7 @@ export default {
           {
             name: 'History Log(s)',
             url: '/shop/Logs',
-            icon: 'fa fa-database'
+            icon: 'fa fa-database',
           },
         ]},
         {

@@ -11,7 +11,7 @@
             <h5 slot="header">
               <!-- table header -->
               <span class="text-primary">
-                <i class="fa fa-bars"></i>
+                <i class="fa fa-exclamation-circle"></i>
                 Cancellations
               </span>
             </h5>

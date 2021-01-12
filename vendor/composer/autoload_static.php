@@ -187,6 +187,10 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
             'Intervention\\Image\\' => 19,
             'Illuminate\\' => 11,
         ),
+        'H' => 
+        array (
+            'Hashids\\' => 8,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -460,6 +464,10 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
         ),
+        'Hashids\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hashids/hashids/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -567,6 +575,8 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         'App\\Models\\ComrModel' => __DIR__ . '/../..' . '/app/Models/ComrModel.php',
         'App\\Models\\DHSFModel' => __DIR__ . '/../..' . '/app/Models/DHSFModel.php',
         'App\\Models\\DHTFModel' => __DIR__ . '/../..' . '/app/Models/DHTFModel.php',
+        'App\\Models\\IssuanceDetails' => __DIR__ . '/../..' . '/app/Models/IssuanceDetails.php',
+        'App\\Models\\IssuanceMain' => __DIR__ . '/../..' . '/app/Models/IssuanceMain.php',
         'App\\Models\\OrderStatusModel' => __DIR__ . '/../..' . '/app/Models/OrderStatusModel.php',
         'App\\Models\\ProductsModel' => __DIR__ . '/../..' . '/app/Models/ProductsModel.php',
         'App\\Models\\SohrModel' => __DIR__ . '/../..' . '/app/Models/SohrModel.php',
@@ -1294,6 +1304,12 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         'Hamcrest\\Type\\IsString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
         'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
+        'Hashids\\Hashids' => __DIR__ . '/..' . '/hashids/hashids/src/Hashids.php',
+        'Hashids\\HashidsException' => __DIR__ . '/..' . '/hashids/hashids/src/HashidsException.php',
+        'Hashids\\HashidsInterface' => __DIR__ . '/..' . '/hashids/hashids/src/HashidsInterface.php',
+        'Hashids\\Math\\Bc' => __DIR__ . '/..' . '/hashids/hashids/src/Math/Bc.php',
+        'Hashids\\Math\\Gmp' => __DIR__ . '/..' . '/hashids/hashids/src/Math/Gmp.php',
+        'Hashids\\Math\\MathInterface' => __DIR__ . '/..' . '/hashids/hashids/src/Math/MathInterface.php',
         'Illuminate\\Auth\\Access\\AuthorizationException' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Auth/Access/AuthorizationException.php',
         'Illuminate\\Auth\\Access\\Gate' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Auth/Access/Gate.php',
         'Illuminate\\Auth\\Access\\HandlesAuthorization' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Auth/Access/HandlesAuthorization.php',

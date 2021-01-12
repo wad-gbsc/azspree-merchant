@@ -121,8 +121,8 @@
                     <th class="th1" style="text-align:left;">Order Cost Total</th>
                     <th class="th1" style="text-align:left;">Buyer's ShippingFee</th>
                     <th class="th1" style="text-align:left;">Merchants's ShippingFee</th>
-                    <th class="th1" style="text-align:left;">Merchant</th>
-                    <th class="th1" style="text-align:left;">DH</th>
+                    {{-- <th class="th1" style="text-align:left;">Merchant</th> --}}
+                    {{-- <th class="th1" style="text-align:left;">DH</th> --}}
                     <th class="th1" style="text-align:left;">Azspree</th>
                     <th class="th1" style="text-align:left;">Total</th>
                 </tr>
@@ -139,10 +139,10 @@
                         <td class="td1" style="text-align:right; ">{{$log->order_total}}</td>
                         <td class="td1" style="text-align:right; ">{{$log->shipping_fee}}</td>
                         <td class="td1" style="text-align:right; ">{{$log->m_shipping_fee}}</td>
-                        <td class="td1" style="text-align:right; ">1000</td>
-                        <td class="td1" style="text-align:right; ">{{$log->dh}}</td>
-                        <td class="td1" style="text-align:right; ">{{$log->azspree}}</td>
-                        <td class="td1" style="text-align:right; ">{{$log->order_total}}</td>
+                        {{-- <td class="td1" style="text-align:right; ">1000</td> --}}
+                        {{-- <td class="td1" style="text-align:right; ">{{$log->dh}}</td> --}}
+                        <td class="td1" style="text-align:right; ">{{number_format($log->azspree,2)}}</td>
+                        <td class="td1" style="text-align:right; ">{{number_format($log->order_total,2)}}</td>
                     </tr>
                     @endforeach
                 </tbody>

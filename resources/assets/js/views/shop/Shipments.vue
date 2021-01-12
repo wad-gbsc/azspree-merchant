@@ -11,7 +11,7 @@
             <h5 slot="header">
               <!-- table header -->
               <span class="text-primary">
-                <i class="fa fa-bars"></i>
+                <i class="fa fa-shopping-cart"></i>
                 Shipments
               </span>
             </h5>

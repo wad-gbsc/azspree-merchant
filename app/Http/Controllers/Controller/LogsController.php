@@ -22,6 +22,7 @@ use DB;
 use Auth;
 use App\User;
 use Mpdf\Mpdf;
+use Hashids\Hashids;
 
 class LOgsController extends Controller
 {
