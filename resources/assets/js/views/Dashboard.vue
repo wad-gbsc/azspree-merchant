@@ -25,7 +25,7 @@
   </div> -->
   <div class="animated fadeIn">
     
-        <div class="row">
+      <div class="row">
       <div class="col-sm-6 col-lg-3">
         <b-card class="bg-primary w-card" @click="newOrderEntry = true,IntransitEntry = false, DeliverEntry = false, CompletedEntry = false" style="height:75%;">
           <div class="card-body pb-0">
@@ -39,10 +39,8 @@
              </b-col>
           </b-row>
           </div>
-          
         </b-card>
-      </div>
-      <!--/.col-->
+      </div><!--/.col-->
       <div class="col-sm-6 col-lg-3">
         <b-card class="bg-success w-card" @click="IntransitEntry = true ,newOrderEntry = false, DeliverEntry = false, CompletedEntry = false" style="cursor:pointer !impotant; height:75%;">
           <div class="card-body pb-0">

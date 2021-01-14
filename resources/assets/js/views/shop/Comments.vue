@@ -1,11 +1,11 @@
 <template>
     <!--<b-animated fade-in>  main container -->
-    <div>
-        <notifications group="notification" />
-        <div class="animated fadeIn">
+    <div class="container">
         <div v-if="$store.state.user.type != 0">
         <not-found></not-found>
         </div>
+        <notifications group="notification" />
+        <div class="animated fadeIn" v-show="$store.state.user.type == 1 || $store.state.user.type == 0">
             <b-row>
                 <b-col sm="12">
                     <b-card >

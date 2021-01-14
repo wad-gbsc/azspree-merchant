@@ -430,12 +430,15 @@ class OrdersController extends Controller
                 {
                     DB::table('inmr')->where('inmr_hash', $order->inmr_hash)->increment('sales',$order->qty);
                 }
-
         $sohr->delivered_datetime = Carbon::now();
-        // $sohr->stat_transit = 1;
-     
+        $sohr->completed_datetime = date('y:m:d H:i:s', strtotime('+3 days'));
         $sohr->save();
-
+        // sleep(10);
+        // if ($sohr->status_user != 5) {
+        //     $sohr->status_user = 5;
+        //     // DB::table('sohr')->where('sohr_hash', $id)->update(['status_user', 5]);
+        // }
+        
         return ( new Reference( $sohr ) )
             ->response()
             ->setStatusCode(200);

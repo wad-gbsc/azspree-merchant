@@ -69,11 +69,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('issuance/{id}', 'Controller\LogsController@show');
     Route::put('markpaid/{id}', 'Controller\LogsController@MarkPaid');
     Route::get('comments', 'Controller\CommentsController@index');
+    Route::get('commentslength', 'Controller\CommentsController@commentslength');
     Route::get('comments/{id}', 'Controller\CommentsController@show');
     Route::put('comments/{id}', 'Controller\CommentsController@update');
-    
+    Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 });
-// Route::get('logs/printreport/{id}', );
-Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport', function ($id)  {
-    return Hasher::decode($id);
-});
+
+// Route::get('logs/printreport/{id}', , function ($id)  {
+//     return Hasher::decode($id);
+// });

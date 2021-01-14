@@ -1,3 +1,34 @@
+var badge_type;
+var badge_text;
+
+function CheckEmptyFields() {  
+  
+  fetch("api/commentslength", {
+      headers: {
+      Authorization: "Bearer " + localStorage.getItem("token")
+      }
+  })
+.then(res => res.json())
+  .then(data => {
+    
+    // comments_length = data
+    // console.log(comments_length);
+    if(data != null)
+    {
+       badge_type = "danger";
+       badge_text = data;
+    }
+    // if(data["0"].dependents == 0)
+    // {
+    //   console.log('Empty fields');
+    //   badge_type = "danger";
+    //   badge_text = "!";
+    // }
+  });
+}
+
+//My function for checking if the fields are empty to show a danger badge
+CheckEmptyFields() 
 export default {
   items: [{
       name: 'Dashboard',
@@ -42,10 +73,14 @@ export default {
             url: '/shop/category',
             icon: 'fa fa-code'
           },
-          {
+          { 
             name: 'Comment(s)',
             url: '/shop/Comments',
-            icon: 'fa fa-comments'
+            icon: 'fa fa-comments',
+            badge: {
+              variant: badge_type,
+              text: badge_text
+            },
           },
           {
             name: 'Rating(s)',

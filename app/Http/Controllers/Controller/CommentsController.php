@@ -28,7 +28,7 @@ class CommentsController extends Controller
                 ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'cmnt.inmr_hash')
                 ->leftJoin('user', 'user.user_hash', '=', 'cmnt.user_hash')
                 ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'cmnt.sumr_hash')
-                // ->where('sohr.is_selected' , 0)
+                ->where('cmnt.sumr_hash' , Auth::user()->sumr_hash)
                 // ->orderBy('sohr_hash', 'desc')
                 ->get();
 
@@ -40,6 +40,15 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function commentslength()
+    {
+        
+        $data['accounts'] = count(CommentsModel::where('answer_status', 0)->get());
+        return $data;
+
+    }
+
     public function create()
     {
         //

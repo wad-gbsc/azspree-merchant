@@ -134,6 +134,4 @@ export default {
   margin-left: auto;
   font-weight: 700;
 }
-
-  
 </style>

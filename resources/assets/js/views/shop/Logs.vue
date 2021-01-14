@@ -215,8 +215,9 @@
             <!-- row button and search input -->
 
             <b-table
+                
                 selectable select-mode="single"
-                responsive fixed striped hover small bordered show-empty
+                responsive fixed hover small bordered show-empty
                 :filter="filters.sohr.criteria"
                 :fields="tables.sohr.fields"
                 :per-page="paginations.sohr.perPage"
