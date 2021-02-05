@@ -88,6 +88,7 @@ class OrdersController extends Controller
                     $data['dhsf'] = DHSFModel::select(
                         'dhsf.*',
                         'sumr.m_city',
+                        'sumr.where_dh',
                         'sumr.seller_name',
                         'm_city.city_hash'
 )
@@ -418,7 +419,7 @@ class OrdersController extends Controller
         $sohr->order_stat = 7;
         $points = $sohr->order_total / 100;
 
-        DB::table('user')->where('user_hash', $sohr->user_hash)->increment('az_points', $points);
+        DB::table('user')->where('user_hash', $sohr->user_hash)->increment('az_pouch', $points);
         
         // $user = DB::table('user')->select('*')->where('user_hash',  $sohr->user_hash)->get(); 
 

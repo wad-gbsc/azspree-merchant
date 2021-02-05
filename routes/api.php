@@ -74,6 +74,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('comments/{id}', 'Controller\CommentsController@update');
     Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 });
+Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 
 // Route::get('logs/printreport/{id}', , function ($id)  {
 //     return Hasher::decode($id);

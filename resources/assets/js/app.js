@@ -38,9 +38,18 @@ import DatePicker from 'vue2-datepicker'
 import BarExample from './views/charts/BarExample'
 import cSwitch from './components/Switch'
 import './components/NotFound'
+import Swal from 'sweetalert2'
+window.Swal = Swal;
 
-import swal from 'sweetalert2'
-window.swal = swal;
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+})
+
+window.Toast = Toast;
 
 Vue.use(Notifications)
 Vue.use(DatePicker)
@@ -53,10 +62,9 @@ Vue.component('cSwitch', cSwitch)
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 const axiosConfig = {
-  baseURL: 'http://azspree.test',
+  baseURL: 'http://azspree.com:81',
   timeout: 30000
 }
-
 
 Vue.component('icon', Icon)
 Vue.component('App', require('./App.vue'))
@@ -72,12 +80,6 @@ Vue.prototype.$http.interceptors.request.use(config => {
   NProgress.start()
   return config
 })
-import VueProgressBar from 'vue-progressbar'
-Vue.use(VueProgressBar, {
-    color: 'rgb(143, 255, 199)',
-    failedColor: 'red',
-    height: '3px'
-  })
 
 // before a response is returned stop nprogress
 Vue.prototype.$http.interceptors.response.use(response => {

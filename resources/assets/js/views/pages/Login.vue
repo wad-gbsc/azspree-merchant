@@ -164,8 +164,6 @@ export default {
     };
   },
   methods: {
-
-  
     ChangePassword() {
       if (this.login.new_password == null || this.login.new_password == "") {
           this.focusElement('new_password')

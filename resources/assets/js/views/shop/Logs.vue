@@ -714,10 +714,10 @@
      previewReport(data) {
       this.issuance_hash = data.item.issuance_hash;
       window.open("api/logs/printreport/" + this.issuance_hash);
-    },
+      },
       async setDelete(data) {
         this.issuance_hash = data.item.issuance_hash;
-        swal.fire({
+        Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -740,14 +740,14 @@
                               }
                             }
                           ).then(()=>{
-                                    swal.fire(
+                                    Swal.fire(
                                     'Deleted!',
                                     'The Issuance has been Banned.',
                                     'success'
                                     )
                                     this.loadIssuance();
                             }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                    Swal.fire("Failed!", "There was something wronge.", "warning");
                             });
                          }
                     })
@@ -770,7 +770,7 @@
       markDone(data) {
 
       this.issuance_hash = data.item.issuance_hash;
-      swal.fire({
+      Swal.fire({
                   title: 'Are you sure?',
                   // text: "You won't be able to revert this!",
                   icon: 'warning',
@@ -792,14 +792,14 @@
                             }
                           }
                         ).then(()=>{
-                                  swal.fire(
+                                  Swal.fire(
                                   'Paid!',
                                   'The Issuance has been Paid.',
                                   'success'
                                   )
                                   this.loadIssuance();
                           }).catch(()=> {
-                                  swal.fire("Failed!", "There was something wronge.", "warning");
+                                  Swal.fire("Failed!", "There was something wronge.", "warning");
                           });
                         }
                   })

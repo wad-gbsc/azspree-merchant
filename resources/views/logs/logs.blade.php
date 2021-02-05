@@ -75,7 +75,6 @@
             border: 1px solid black;
             border-collapse: collapse;
         }
-                
         </style>
     </head>
     <body>
@@ -95,7 +94,6 @@
             </tr>
             
         </table>
-    
         <div style="text-align:right;">
         <small> Date Prepared :  {{date("Y-m-d")}}
         <br>

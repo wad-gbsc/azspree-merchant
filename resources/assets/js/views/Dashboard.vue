@@ -342,12 +342,12 @@
                     @input="getShippingFee"
                     class="form-control"
                     style="padding:0px; font-size:14px;"
-                    v-model="forms.dashboard.fields.pickupSelectDH" 
+                    v-model="forms.dashboard.fields.selectdhTodeliver" 
                     :placeholder="'Select Hub'">
                     <option
                       v-for="right in tables.dhsf.items"
-                      :key="right.sumr_hash"
-                      :value="right.sumr_hash"
+                      :key="right.where_dh"
+                      :value="right.where_dh"
                     >{{right.seller_name}}</option>
                     </select2>
                     </b-form-group>
@@ -418,7 +418,7 @@
                     <i class="fa fa-check"></i>
                     I will Accept
                   </b-button>
-                  <b-button class="button" variant="secondary" @click="showModalAcceptNewOrderPickUp = false , clearFields('dashboard')">Close</b-button>
+                  <b-button class="button" variant="secondary" @click="showModalAcceptNewOrderPickUp = false , clearFields('dashboard') , forms.dashboard.fields.selected = 3;">Close</b-button>
                 </div>
                  </b-modal>
                  <b-modal v-model="showModalDeclineNewOrder" :noCloseOnEsc="true" :noCloseOnBackdrop="true" @shown="focusElement('decline_neworder_remarks')"
@@ -1243,7 +1243,9 @@ export default {
 
           this.showModalAcceptNewOrderDeliver = false;
           this.showModalAcceptNewOrderPickUp = false;
-          window.location.reload();
+          setTimeout(function () {
+                window.location.reload();
+          }, 1200);
         })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
@@ -1295,7 +1297,9 @@ export default {
 
             this.showModalAcceptNewOrderDeliver = false;
             this.showModalAcceptNewOrderPickUp = false;
-            window.location.reload();
+            setTimeout(function () {
+                window.location.reload();
+          }, 1200);
           })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
@@ -1335,7 +1339,9 @@ export default {
           });
           
           this.showModalAcceptIntransit = false
-          window.location.reload();
+          setTimeout(function () {
+                window.location.reload();
+          }, 1200);
 
           })
           // this.refresh()
@@ -1379,7 +1385,9 @@ export default {
           //   item => item["sohr_hash"] === response.data.data["sohr_hash"]
           // );
             this.showModalAcceptIntransitPickup = false
-            window.location.reload();
+            setTimeout(function () {
+                window.location.reload();
+          }, 1200);
             })
     },
     onAcceptingIntransitDispatch() {
@@ -1402,7 +1410,9 @@ export default {
             });
             
             this.showModalAcceptIntransitDispatch = false
-            window.location.reload();
+            setTimeout(function () {
+                window.location.reload();
+          }, 1200);
             })
             
     },
@@ -1436,7 +1446,9 @@ export default {
           // this.paginations.queuereports.totalRows--;
 
           this.showModalreadytoDeliver = false;
-          window.location.reload();
+          setTimeout(function () {
+                window.location.reload();
+          }, 1200);
         })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
@@ -1490,7 +1502,9 @@ export default {
           // this.paginations.queuereports.totalRows--;
 
           this.showModalDeclineIntransit = false;
-          window.location.reload();
+          setTimeout(function () {
+                window.location.reload();
+          }, 1200);
         })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
@@ -1529,7 +1543,9 @@ export default {
           // this.paginations.queuereports.totalRows--;
 
           this.showModalDelivered = false;
-          window.location.reload();
+          setTimeout(function () {
+                window.location.reload();
+          }, 1200);
         })
         .catch(error => {
           this.forms.dashboard.isSaving = false;
@@ -1541,8 +1557,10 @@ export default {
      async AcceptNewOrders(row) {
       this.sohr_hash = row.item.sohr_hash;
       if (this.forms.dashboard.fields.selected == 3) {
+        this.forms.dashboard.fields.selectdhTodeliver = null;
         this.showModalAcceptNewOrderPickUp = true;
       }else{
+        this.forms.dashboard.fields.selectdhTodeliver = null;
         this.showModalAcceptNewOrderDeliver = true;
         this.forms.dashboard.fields.tf_shipping = Number(this.transfer_fee.transfer_fee) + Number(row.item.total_excess_fee)
 

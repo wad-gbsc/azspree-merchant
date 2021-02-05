@@ -171,8 +171,6 @@ class LOgsController extends Controller
         $old_items = IssuanceDetails::where('issuance_hash', $issuance->issuance_hash);
         $old_items->delete();
 
-        
-
         $items_dataset = [];
         foreach($items as $item)
         {
@@ -244,35 +242,6 @@ class LOgsController extends Controller
         $issuance = IssuanceMain::findOrFail($id);
         $issuance->is_paid = 1;
         $issuance->update();
-
-        // $items = $request->input('items');
-        // $issuance = IssuanceDetails::where('issuance_hash', $issuance->issuance_hash);
-
-        // $items_dataset = [];
-        // foreach($items as $item)
-        // {
-        //     $items_dataset[] = [
-        //         'issuance_hash'=>$issuance->issuance_hash,
-        //         'sohr_hash'=>$item['sohr_hash'],
-        //         'order_no'=>$item['order_no'],
-        //         'seller_name'=>$item['seller_name'],
-        //         'order_date'=>$item['order_date'],
-        //         'payment_method'=>$item['payment_method'],
-        //         'shipping_fee'=>$item['shipping_fee'],
-        //         'seller_name'=>$item['seller_name'],
-        //         'm_shipping_fee'=>$item['m_shipping_fee'],
-        //         'total_qty'=>$item['total_qty'],
-        //         'order_total'=>$item['order_total'],
-        //         'azspree'=>$item['azspree'],
-        //     ];
-        // }
-
-        // DB::table('isdt')->insert($items_dataset);
-
-        // $issuance->is_paid = 1;
-
-        // //update classification based on the http json body that is sent
-        // $issuance->save();
 
         return ( new Reference( $issuance ) )
             ->response()

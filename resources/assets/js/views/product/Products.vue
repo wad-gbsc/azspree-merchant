@@ -470,8 +470,8 @@ input[type="number"]::-webkit-outer-spin-button {
         </div>
     </div>
           </b-tab>
-          <b-tab title="Variants" disabled>
-          </b-tab>
+          <!-- <b-tab title="Variants" disabled>
+          </b-tab> -->
            </b-form>
               </b-tabs>
                <hr />
@@ -620,7 +620,7 @@ input[type="number"]::-webkit-outer-spin-button {
      methods: {
        BannedProduct(data) {
           this.inmr_hash = data.item.inmr_hash;
-          swal.fire({
+          Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -643,21 +643,21 @@ input[type="number"]::-webkit-outer-spin-button {
                               }
                             }
                           ).then(()=>{
-                                    swal.fire(
+                                    Swal.fire(
                                     'Banned!',
                                     'The Product has been Banned.',
                                     'success'
                                     )
                                     this.loadProducts();
                             }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                    Swal.fire("Failed!", "There was something wronge.", "warning");
                             });
                          }
                     })
        },
        DisapproveProduct(data) {
           this.inmr_hash = data.item.inmr_hash;
-          swal.fire({
+          Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -679,21 +679,21 @@ input[type="number"]::-webkit-outer-spin-button {
                               }
                             }
                           ).then(()=>{
-                                    swal.fire(
+                                    Swal.fire(
                                     'Disapproved!',
                                     'The Product has been Disapproved.',
                                     'success'
                                     )
                                     this.loadProducts();
                             }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                    Swal.fire("Failed!", "There was something wronge.", "warning");
                             });
                          }
                     })
        },
        ApproveProduct(data) {
            this.inmr_hash = data.item.inmr_hash;
-           swal.fire({
+           Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
                     icon: 'warning',
@@ -715,14 +715,14 @@ input[type="number"]::-webkit-outer-spin-button {
                               }
                             }
                           ).then(()=>{
-                                    swal.fire(
+                                    Swal.fire(
                                     'Approved!',
                                     'The Product has been Approved.',
                                     'success'
                                     )
                                     this.loadProducts();
                             }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
+                                    Swal.fire("Failed!", "There was something wronge.", "warning");
                             });
                          }
                     })
