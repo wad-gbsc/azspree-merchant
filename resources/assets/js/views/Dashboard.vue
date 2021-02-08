@@ -125,9 +125,7 @@
       </h5>
       </div>
       <b-row>
-      
        <b-col sm="3">
-         
           <date-picker
             id="date"
             format="MMMM/DD/YYYY"
@@ -260,7 +258,7 @@
                 <div slot="modal-title">Accept New Order? <small>For Drop-off</small></div>
 
                 <label>Are you sure you want to Accept this Order?</label><br>
-                <b-form  style="color:#2196F3;">
+                <!-- <b-form  style="color:#2196F3;">
                 <span>Reminder : </span><br>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You will be charged tranfer fee base on your customers location.</span><br><br></b-form>
                     <b-row>
@@ -282,7 +280,6 @@
                     </select2>
                     </b-col>
                     <b-col lg="6">
-                      <!-- <b-form-group v-show="forms.dashboard.fields.selectdhTodeliver != $store.state.user.default_dh"> -->
                       <b-form-group v-model="note" v-show="noteshow">
                       <h6 style="color:red;">Note :</h6>
                       <span style="color:red;">You will be charged 
@@ -293,7 +290,7 @@
                         pesos in your Income for  transfer fee.</span>
                       </b-form-group>
                       </b-col>
-                    </b-row>
+                    </b-row> -->
                 <div slot="modal-footer">
                   <b-button
                     class="button"
@@ -336,7 +333,7 @@
                     v-model="tables.sumr.items.city_hash"
                     >
                     </b-form-input> -->
-                    <b-form-group >
+                    <!-- <b-form-group >
                     <label for="shipping_fee">Select Hub :</label>
                     <select2
                     @input="getShippingFee"
@@ -350,28 +347,32 @@
                       :value="right.where_dh"
                     >{{right.seller_name}}</option>
                     </select2>
-                    </b-form-group>
-                    
+                    </b-form-group> -->
+                    <b-row>
+                    <b-col lg="12">
                     <b-form-group>
                     <!-- <label id="shipping_fee" ref="shipping_fee">Shipping Fee : {{formatNumber(forms.dashboard.fields.shipping_fee)}} </label> -->
                     <label for="shipping_fee">Shipping Fee : </label>
                     <vue-autonumeric
-                    style="width:50%;background-color: white;"
+                    style="width:46%;background-color: white;"
                     readonly
                     id="shipping_fee"
                     ref="shipping_fee"
-                    :value="forms.dashboard.fields.shipping_fee"
+                    :value="brgy_shipping.shipping_fee"
                     class='form-control text-right'
                     :options="{
                               minimumValue: '0',  
                               emptyInputBehavior:'0',}"
                   ></vue-autonumeric>   
                    </b-form-group>
-                   
+                   </b-col>
+                   </b-row>
+                   <b-row>
+                  <b-col lg="6">
                    <b-form-group v-show="row.item.excess_fee != 0 && row.item.total_excess_kg != 0" >
                     <label for="total_excess_fee">Excess Fee : </label>
                     <vue-autonumeric
-                    style="width:50%;background-color: white;"
+                    style="width:100%;background-color: white;"
                     readonly
                     id="total_excess_fee"
                     ref="total_excess_fee"
@@ -381,17 +382,22 @@
                               minimumValue: '0',  
                               emptyInputBehavior:'0',}"
                   ></vue-autonumeric>
+                  </b-form-group>
+                  </b-col>
+                  <b-col lg="6">
+                  <b-form-group v-show="row.item.excess_fee != 0 && row.item.total_excess_kg != 0" >
                     <label for="total_excess_kg">Excess Kg. : </label>
                     <b-form-input
-                    style="width:50%;background-color: white;"
+                    style="width:100%;background-color: white;"
                     readonly
                     id="total_excess_kg"
                     ref="total_excess_kg"
                     v-model="row.item.total_excess_kg"
-                    class='form-control text-right'
+                    class='form-control text-left'
                   ></b-form-input>
                   </b-form-group>
-                  <b-form-group v-model="note1" v-show="noteshow1">
+                  
+                  <!-- <b-form-group v-model="note1" v-show="noteshow1">
                     <label for="tranfer_fee">Tranfer Fee : </label>
                     <b-form-input
                     style="width:50%;background-color: white;"
@@ -403,7 +409,27 @@
                   ></b-form-input>
                       <h6 style="color:red;">Note :</h6>
                       <span style="color:red;">You will be charged <label>{{formatNumber(Number(transfer_fee.transfer_fee) + Number(row.item.total_excess_fee) + Number(forms.dashboard.fields.shipping_fee))}}</label> pesos in your Income for  transfer fee.</span>
+                      </b-form-group> -->
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                       <!-- <b-form-group>
+                        <label for="total_fee">Total Fee : </label>
+                        <vue-autonumeric
+                        style="width:100%;background-color: white;"
+                        readonly
+                        id="total_fee"
+                        ref="total_fee"
+                        v-model="GetTotalFee"
+                        class='form-control text-right'
+                        :options="{
+                                  minimumValue: '0',  
+                                  emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
                       </b-form-group>
+                      </b-form-group> -->
+                    </b-row>
+                       <h6 >Total Fee : &emsp;&emsp;&emsp;&emsp;&emsp;{{formatNumber(Number(row.item.total_excess_fee) + Number(brgy_shipping.shipping_fee))}}</h6>
                   </b-form>
                 </b-col>
                 </b-row>
@@ -1624,11 +1650,10 @@ export default {
         }
       })
       .then(response => {
-        
         this.transfer_fee = response.data.comr[0];
         this.tables.sohr.items = response.data.sohr;
         this.tables.soln.items = response.data.soln;
-        this.tables.dhsf.items = response.data.dhsf;
+        this.brgy_shipping = response.data.brgy[0];
         this.tables.ship.items = response.data.ship;
         this.tables.sumr.items = response.data.sumr;
         this.paginations.sohr.totalRows = response.data.sohr.length;
@@ -1691,11 +1716,11 @@ export default {
       },
 
  
-    GetTotalFee(){
-        this.forms.dashboard.fields.total_fee = 0;
-        this.forms.dashboard.fields.total_fee += ( Number(this.forms.dashboard.fields.shipping_fee) + Number(this.forms.dashboard.fields.transfer_fee));
-        return this.forms.dashboard.fields.total_fee;
-      },
+    // GetTotalFee(){
+    //     this.forms.dashboard.fields.total_fee = 0;
+    //     this.forms.dashboard.fields.total_fee += ( Number(this.forms.dashboard.fields.shipping_fee) + Number(this.forms.dashboard.fields.transfer_fee));
+    //     return this.forms.dashboard.fields.total_fee;
+    //   },
     NeworderFilter(){
       if (this.forms.dashboard.fields.neworderdate != null){
          return this.tables.sohr.items.filter(r => r.order_stat == 1  && 

@@ -177,6 +177,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <template v-slot:cell(action)="data">
                     
                     <div v-if="$store.state.user.type == 0">
+                      <div v-show="data.item.is_verified != 4">
                     <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
@@ -189,6 +190,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <icon v-if="forms.products.isDeleting" name="sync" spin></icon>
                       <i v-else class="fa fa-trash"></i>
                     </b-btn>
+                    </div>
                     </div>
                     <div v-else>
                       <b-btn

@@ -85,17 +85,12 @@ class OrdersController extends Controller
 }
 
 {
-                    $data['dhsf'] = DHSFModel::select(
-                        'dhsf.*',
-                        'sumr.m_city',
-                        'sumr.where_dh',
-                        'sumr.seller_name',
-                        'm_city.city_hash'
+                    $data['brgy'] = DB::table('brgy')->select(
+                        'brgy.*',
+                        'sumr.*'
 )
-                                            ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'dhsf.sumr_hash')
-                                            ->leftJoin('m_city', 'm_city.city_hash', '=', 'dhsf.city_hash')
-                                            ->where('sumr.type', '1')
-                                            ->where('dhsf.city_hash', Auth::user()->m_city)
+                                        ->leftJoin('sumr', 'sumr.brgy', '=', 'brgy.brgy_hash')
+                                        ->where('sumr.brgy', Auth::user()->brgy)
                                             ->get();
 }
                 
