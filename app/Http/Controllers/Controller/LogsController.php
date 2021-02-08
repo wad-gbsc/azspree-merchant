@@ -24,6 +24,10 @@ use App\User;
 use Mpdf\Mpdf;
 use Hashids\Hashids;
 
+ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+set_time_limit(300);
+ini_set("pcre.backtrack_limit", "5000000");
+
 class LOgsController extends Controller
 {
     

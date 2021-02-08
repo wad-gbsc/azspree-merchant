@@ -5,7 +5,7 @@
         <not-found></not-found>
         </div>
         <notifications group="notification" />
-        <div class="animated fadeIn" v-show="$store.state.user.type == 1 || $store.state.user.type == 0">
+        <div class="animated fadeIn" v-show="$store.state.user.type == 0">
             <b-row>
                 <b-col sm="12">
                     <b-card >
