@@ -23,6 +23,9 @@ use Auth;
 use App\User;
 use Mpdf\Mpdf;
 use Hashids\Hashids;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\Generator;
+
 
 ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 set_time_limit(300);
@@ -71,18 +74,26 @@ class LOgsController extends Controller
     }
     public function PrintReport($id)
     {   
-        
         $data['logs'] = IssuanceDetails::select(
                     'isdt.*'                     
         )                          
                         ->where('isdt.issuance_hash' , $id)
                         ->orderBy('issuance_details_hash', 'desc');
-        
+
         $data['logs'] = $data['logs']->get();
+
+        // $qrcode = new Generator;
+        // $data['qr'] = $qrcode->size(250)->generate('Make me a QrCode!');
+        
+        $qrcode = new Generator;
+        $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
+        // $qrcode = QrCode::format('png')->size(399)->color(40,40,40)->generate('Make me a QrCode!');
+
         $mpdf = new Mpdf();
         $content = view('logs.logs')->with($data);
         $mpdf->WriteHTML($content);
         $mpdf->Output();
+        
     }
 
 

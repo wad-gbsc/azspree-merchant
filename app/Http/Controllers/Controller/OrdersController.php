@@ -44,15 +44,15 @@ class OrdersController extends Controller
                         'sohr.*',
                         'user.fullname',
                         'sumr.*',
-                        'city.*',
-                        'm_city.*',
+                        'city.city',
+                        'm_city.m_city',
                         'odst.*' ,
                         'regn.*'                       
 )                          
                             ->leftJoin('regn', 'regn.regn_hash', '=', 'sohr.regn_hash')
                             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
                             ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
-                            ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
+                            ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
                             ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
                             ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
                             ->where('sohr.sumr_hash' , Auth::user()->sumr_hash)

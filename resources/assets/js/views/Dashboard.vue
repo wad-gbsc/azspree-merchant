@@ -599,8 +599,9 @@
                     <br>
                     <br>
                     <br>
+                    <b-button  @click="PrintWaybill(row)" variant="success"><i class="fa fa-print" aria-hidden="true"></i> Waybill</b-button>
                     <b-form-group style="text-align:center;" v-model="transitbtn" v-show="transitbutton">
-                    <b-button  @click="AcceptIntransit(row)" variant="success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
+                    <b-button  @click="AcceptIntransit(row)" variant="primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
                     <b-button  @click="DeclineIntransit(row)  " variant="danger"><i class="fa fa-times" aria-hidden="true"></i> Decline</b-button>
                     </b-form-group>
                   </b-col>
@@ -1163,6 +1164,12 @@ export default {
     }
   },
   methods: {
+      PrintWaybill(row) {
+      // this.sohr_hash = row.item.sohr_hash;
+      // this.sumr_hash = row.item.sumr_hash;
+      console.log(row.item)
+      window.open("api/waybill/" + row.item.sohr_hash);
+      },
     getShippingFee: function(value,data)  {
       if (data.length > 0) {
         var sf = this.tables.dhsf.items[data[0].element.index]

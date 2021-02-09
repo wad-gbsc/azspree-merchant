@@ -177,7 +177,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <template v-slot:cell(action)="data">
                     
                     <div v-if="$store.state.user.type == 0">
-                      <div v-show="data.item.is_verified != 4">
+                      <div v-show="data.item.is_verified != 0">
                     <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>

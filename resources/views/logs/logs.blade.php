@@ -163,8 +163,12 @@
          <br>
 
         <div style="text-align:right;">
-            
+            {!! $qr !!}
             <span class="top"  >&emsp;&emsp;&emsp; Prepared by &emsp;&emsp;&emsp;</span>
+            {{-- <div class="visible-print text-center"> --}}
+               
+                {{-- <p>Scan me to return to the original page.</p> --}}
+            {{-- </div> --}}
         </div>
     </body>
 </html>

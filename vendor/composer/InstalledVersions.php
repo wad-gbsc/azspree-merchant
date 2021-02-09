@@ -19,17 +19,35 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '05b3dedc98ef16b554a772ab4d6d722f73f1c40a',
+    'reference' => 'f6915cf5b7dac91d2ed517808cfa977258fd5a5b',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
   array (
+    'bacon/bacon-qr-code' => 
+    array (
+      'pretty_version' => '2.0.3',
+      'version' => '2.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3e9d791b67d0a2912922b7b7c7312f4b37af41e4',
+    ),
     'cordoval/hamcrest-php' => 
     array (
       'replaced' => 
       array (
         0 => '*',
       ),
+    ),
+    'dasprid/enum' => 
+    array (
+      'pretty_version' => '1.0.3',
+      'version' => '1.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '5abf82f213618696dda8e3bf6f64dd042d8542b2',
     ),
     'davedevelopment/hamcrest-php' => 
     array (
@@ -410,7 +428,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '05b3dedc98ef16b554a772ab4d6d722f73f1c40a',
+      'reference' => 'f6915cf5b7dac91d2ed517808cfa977258fd5a5b',
     ),
     'laravel/tinker' => 
     array (
@@ -921,6 +939,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'f2246c8669bd25834f5c264425eb0e250d7a9312',
+    ),
+    'simplesoftwareio/simple-qrcode' => 
+    array (
+      'pretty_version' => '4.1.0',
+      'version' => '4.1.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3b721089cc541f6c37f0a41b90377529af977948',
     ),
     'swiftmailer/swiftmailer' => 
     array (
