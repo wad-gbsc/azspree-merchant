@@ -167,6 +167,7 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         'M' => 
         array (
             'MyCLabs\\Enum\\' => 13,
+            'Mpdf\\QrCode\\' => 12,
             'Mpdf\\' => 5,
             'Monolog\\' => 8,
             'Matrix\\' => 7,
@@ -430,6 +431,10 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         array (
             0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
         ),
+        'Mpdf\\QrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/qrcode/src',
+        ),
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
@@ -582,6 +587,7 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         'App\\Http\\Controllers\\Controller\\ProductsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ProductsController.php',
         'App\\Http\\Controllers\\Controller\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ProfileController.php',
         'App\\Http\\Controllers\\Controller\\QrCodeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/QrCodeController.php',
+        'App\\Http\\Controllers\\Controller\\WaybillController' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/WaybillController.php',
         'App\\Http\\Controllers\\SessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/SessionController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -2683,6 +2689,11 @@ class ComposerStaticInitdd1a4529649098eb00e4fc159c5a8620
         'Mpdf\\PageFormat' => __DIR__ . '/..' . '/mpdf/mpdf/src/PageFormat.php',
         'Mpdf\\Pdf\\Protection' => __DIR__ . '/..' . '/mpdf/mpdf/src/Pdf/Protection.php',
         'Mpdf\\Pdf\\Protection\\UniqidGenerator' => __DIR__ . '/..' . '/mpdf/mpdf/src/Pdf/Protection/UniqidGenerator.php',
+        'Mpdf\\QrCode\\Output\\Html' => __DIR__ . '/..' . '/mpdf/qrcode/src/Output/Html.php',
+        'Mpdf\\QrCode\\Output\\Mpdf' => __DIR__ . '/..' . '/mpdf/qrcode/src/Output/Mpdf.php',
+        'Mpdf\\QrCode\\Output\\Png' => __DIR__ . '/..' . '/mpdf/qrcode/src/Output/Png.php',
+        'Mpdf\\QrCode\\QrCode' => __DIR__ . '/..' . '/mpdf/qrcode/src/QrCode.php',
+        'Mpdf\\QrCode\\QrCodeException' => __DIR__ . '/..' . '/mpdf/qrcode/src/QrCodeException.php',
         'Mpdf\\RemoteContentFetcher' => __DIR__ . '/..' . '/mpdf/mpdf/src/RemoteContentFetcher.php',
         'Mpdf\\ServiceFactory' => __DIR__ . '/..' . '/mpdf/mpdf/src/ServiceFactory.php',
         'Mpdf\\Shaper\\Indic' => __DIR__ . '/..' . '/mpdf/mpdf/src/Shaper/Indic.php',

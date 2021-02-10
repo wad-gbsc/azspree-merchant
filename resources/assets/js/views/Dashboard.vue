@@ -15,6 +15,7 @@
 </style>
 <template>
   <div>
+   
   <notifications group="notification" />
   <!-- <div v-if="errors" class="bg-red-500 text-white py-2 px-4 pr-0 rounded font-bold mb-4 shadow-lg">
     <div v-for="(v, k) in errors" :key="k">
@@ -24,7 +25,6 @@
     </div>
   </div> -->
   <div class="animated fadeIn">
-    
       <div class="row">
       <div class="col-sm-6 col-lg-3">
         <b-card class="bg-primary w-card" @click="newOrderEntry = true,IntransitEntry = false, DeliverEntry = false, CompletedEntry = false" style="height:75%;">
@@ -1167,7 +1167,7 @@ export default {
       PrintWaybill(row) {
       // this.sohr_hash = row.item.sohr_hash;
       // this.sumr_hash = row.item.sumr_hash;
-      console.log(row.item)
+      // console.log(row.item)
       window.open("api/waybill/" + row.item.sohr_hash);
       },
     getShippingFee: function(value,data)  {

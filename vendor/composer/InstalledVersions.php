@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'f6915cf5b7dac91d2ed517808cfa977258fd5a5b',
+    'reference' => '07ac4f6965cc304a56a57d88862e200caf8a728b',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -428,7 +428,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'f6915cf5b7dac91d2ed517808cfa977258fd5a5b',
+      'reference' => '07ac4f6965cc304a56a57d88862e200caf8a728b',
     ),
     'laravel/tinker' => 
     array (
@@ -519,6 +519,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '4ce221329d0918146514605db1644b2771c5e308',
+    ),
+    'mpdf/qrcode' => 
+    array (
+      'pretty_version' => 'v1.1.1',
+      'version' => '1.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'f3c0a99e37e8489f0b91b7d2c394dcba0b38d71c',
     ),
     'mrholek/coreui-free-bootstrap-admin-template' => 
     array (
@@ -942,12 +951,12 @@ private static $installed = array (
     ),
     'simplesoftwareio/simple-qrcode' => 
     array (
-      'pretty_version' => '4.1.0',
-      'version' => '4.1.0.0',
+      'pretty_version' => '4.2.0',
+      'version' => '4.2.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3b721089cc541f6c37f0a41b90377529af977948',
+      'reference' => '916db7948ca6772d54bb617259c768c9cdc8d537',
     ),
     'swiftmailer/swiftmailer' => 
     array (

@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
 
 /*
@@ -79,5 +80,3 @@ Route::get('waybill/{id}', 'Controller\WaybillController@PrintWaybill');
 // Route::get('logs/printreport/{id}', , function ($id)  {
 //     return Hasher::decode($id);
 // });
-
-  

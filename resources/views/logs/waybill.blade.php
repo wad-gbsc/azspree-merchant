@@ -48,6 +48,7 @@
         @endforeach
         @foreach ($sumr as $merchant)
         @endforeach
+        
         <div>
         <img src="brands_try/azspreelogo.png" class="logodh">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -69,16 +70,19 @@
 			<td colspan="7">
                 <br>
                 <div><label>Tracking No.</label></div><br>
-				<div style="font-size: 26px;"><label><center><b>P20204785AVD</b></center></label></div>
+				<div style="font-size: 26px;"><label><center><b>{{$item->order_no}}</b></center></label></div>
                 <br>
                 <br>
             </td>
             <td colspan="5" >
                 <center>
-               
-
-                    {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
-
+                        <barcode code="{{$item->order_no}}"  size="1.2" class="barcode" />
+                        
+                        
+                        {{-- {!!  QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : "
+                         .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " 
+                         .$merchant->barangay .", " .$merchant->m_city); !!} --}}
+                
                 </center>
 			</td>
         </tr>
@@ -97,7 +101,7 @@
             <td colspan="9"  style="font-size: 16px">
                <div>Merchant's Name: {{$merchant->seller_name}}</div><br>
                <div>Contact No: {{$merchant->contact}}</div><br>
-               <div>Address: {{$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city }}</div> <br>
+               <div>Address: {{$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city .", " .$merchant->province }}</div> <br>
             </td>
         </tr>
         <tr>
@@ -107,7 +111,7 @@
             <td colspan="9"  style="font-size: 16px">
                <div>Buyer's Name: {{$item->fullname}}</div><br>
                <div>Contact No: {{$item->contact_no}}</div><br>
-               <div>Address: {{$item->address ." " .$item->barangay ." " .$item->city}}</div><br>
+               <div>Address: {{$item->address ." " .$item->barangay ." " .$item->city .", " .$item->province}}</div><br>
             </td>
         </tr>
         <tr>
@@ -142,7 +146,21 @@
             </td>
             <td colspan="5">
                 <center>
-                   {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
+                    <barcode code="{{
+                        "Order No. : "  .$item->order_no .'\n'
+                        ."-".'\n'
+                        ."Merchant Name : ".$merchant->seller_name .'\n'
+                        ."Contact No. : " .$merchant->contact .'\n'
+                        ."Address : " .$merchant->sumr_address." ".$merchant->barangay .", " .$merchant->m_city .'\n'
+                        ."-".'\n'
+                        ."Buyer Name : ".$item->fullname .'\n'
+                        ."Contact No. : ".$item->contact_no .'\n'
+                        ."Buyer Address : " .$item->address 
+                        ." " 
+                        .$item->barangay .", " .$item->city
+                        }}" 
+
+                        size="1.5" type="QR" error="M" disableborder="1"  class="barcode" />
                 </center>
             </td>
         </tr>
@@ -189,14 +207,12 @@
                 <td colspan="7">
                     <br>
                     <div><label>Tracking No.</label></div><br>
-                    <div style="font-size: 26px;"><label><center><b>P20204785AVD</b></center></label></div>
+                    <div style="font-size: 26px;"><label><center><b>{{$item->order_no}}</b></center></label></div>
                     <br>
                     <br>
                 </td>
                 <td colspan="5" >
-                    <center>
-                        {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
-                    </center>
+                    <barcode code="{{$item->order_no}}"  size="1.2" class="barcode" />
                 </td>
             </tr>
             <tr>
@@ -259,7 +275,21 @@
                 </td>
                 <td colspan="5">
                     <center>
-                        {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
+                        <barcode code="{{
+                            "Order No. : "  .$item->order_no .'\n'
+                                ."-".'\n'
+                                ."Merchant Name : ".$merchant->seller_name .'\n'
+                                ."Contact No. : " .$merchant->contact .'\n'
+                                ."Address : " .$merchant->sumr_address." ".$merchant->barangay .", " .$merchant->m_city .'\n'
+                                ."-".'\n'
+                                ."Buyer Name : ".$item->fullname .'\n'
+                                ."Contact No. : ".$item->contact_no .'\n'
+                                ."Buyer Address : " .$item->address 
+                                ." " 
+                                .$item->barangay .", " .$item->city
+                            }}" 
+    
+                            size="1.5" type="QR" error="M" disableborder="1"  class="barcode" />
                     </center>
                 </td>
             </tr>
@@ -298,13 +328,13 @@
                     <td colspan="7">
                         <br>
                         <div><label>Tracking No.</label></div><br>
-                        <div style="font-size: 26px;"><label><center><b>P20204785AVD</b></center></label></div>
+                        <div style="font-size: 26px;"><label><center><b>{{$item->order_no}}</b></center></label></div>
                         <br>
                         <br>
                     </td>
                     <td colspan="5" >
                         <center>
-                            {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
+                            <barcode code="{{$item->order_no}}"  size="1.2" class="barcode" />
                         </center>
                     </td>
                 </tr>
@@ -368,7 +398,21 @@
                     </td>
                     <td colspan="5">
                         <center>
-                            {!! QrCode::size(130)->generate("Order No. : "  .$item->order_no ."\nMerchant Name : " .$item->seller_name ."\nContact No. : " .$item->contact ."\nAddress : " .$merchant->sumr_address ." " .$merchant->barangay ." " .$merchant->m_city); !!}
+                            <barcode code="
+                                {{
+                                "Order No. : "  .$item->order_no .'\n'
+                                ."-".'\n'
+                                ."Merchant Name : ".$merchant->seller_name .'\n'
+                                ."Contact No. : " .$merchant->contact .'\n'
+                                ."Address : " .$merchant->sumr_address." ".$merchant->barangay .", " .$merchant->m_city .'\n'
+                                ."-".'\n'
+                                ."Buyer Name : ".$item->fullname .'\n'
+                                ."Contact No. : ".$item->contact_no .'\n'
+                                ."Buyer Address : " .$item->address 
+                                ." " 
+                                .$item->barangay .", " .$item->city
+                                }}"
+                                size="1.5" type="QR" error="M" disableborder="1"  class="barcode" />
                         </center>
                     </td>
                 </tr>
