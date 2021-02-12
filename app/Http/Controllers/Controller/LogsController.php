@@ -85,8 +85,8 @@ class LOgsController extends Controller
         // $qrcode = new Generator;
         // $data['qr'] = $qrcode->size(250)->generate('Make me a QrCode!');
         
-        $qrcode = new Generator;
-        $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
+        // $qrcode = new Generator;
+        // $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
         // $qrcode = QrCode::format('png')->size(399)->color(40,40,40)->generate('Make me a QrCode!');
 
         $mpdf = new Mpdf();
@@ -105,8 +105,13 @@ class LOgsController extends Controller
             ]
         )->validate();
 
+        $y = date("Y");
+
+        
+        $last_in = IssuanceMain::select('issuance_hash')->max('issuance_hash' );
         $issuance = new IssuanceMain();
-        $issuance->issuance_no = DB::raw('CreateIssuanceNo()');
+        $issuance->issuance_no = 'IN-'. $y .'-'.str_pad($last_in + 1,5,"0",STR_PAD_LEFT);
+        // $issuance->issuance_no = DB::raw('CreateIssuanceNo()');
         $issuance->issued_to = $request->input('issued_to');
         $issuance->created_datetime = Carbon::now();
         $issuance->created_by = Auth::user()->sumr_hash;

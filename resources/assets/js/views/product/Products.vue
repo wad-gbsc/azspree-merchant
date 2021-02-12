@@ -95,11 +95,12 @@ input[type="number"]::-webkit-outer-spin-button {
 </style>
 <template>
     <div  class="animated fadeIn">
+      <notifications group="notification" />
         <!-- main container -->
         <div v-if="$store.state.user.type == 1">
         <not-found></not-found>
         </div>
-        <notifications group="notification" />
+        
         <div v-show="$store.state.user.type != 1">
         <div v-show="!showEntry" class="animated fadeIn">
         <b-row>
@@ -172,7 +173,7 @@ input[type="number"]::-webkit-outer-spin-button {
                     <b-badge v-if="data.item.is_verified == 1" pill variant="success">{{"Verified"}}</b-badge>
                     <b-badge v-else-if="data.item.is_verified == 2" pill variant="warning" style="color: white;">{{"Pending"}}</b-badge>
                     <b-badge v-else-if="data.item.is_verified == 3" pill variant="danger" style="color: white;">{{"Disapproved"}}</b-badge>
-                    <b-badge v-else pill variant="dark" style="color: white;">{{"Banned"}}</b-badge>
+                    <b-badge v-else-if="data.item.is_verified == 4" pill variant="dark" style="color: white;">{{"Banned"}}</b-badge>
                 </template>
                 <template v-slot:cell(action)="data">
                     
@@ -194,28 +195,31 @@ input[type="number"]::-webkit-outer-spin-button {
                     </div>
                     <div v-else>
                       <b-btn
+                      v-b-tooltip title="Approve"
                       v-show="data.item.is_verified == 2 || data.item.is_verified == 3"
                       :size="'sm'"
                       variant="success"
                       @click="ApproveProduct(data)"
-                    >Approve
+                    >
                       <i class="fa fa-check"></i>
                     </b-btn>
                       <b-btn
+                      v-b-tooltip title="Disapprove"
                       v-show="data.item.is_verified == 1 || data.item.is_verified == 2 "
                       :size="'sm'"
                       variant="danger"
                       @click="DisapproveProduct(data)"
-                      >Disapprove
+                      >
                       <i class="fa fa-thumbs-down"></i>
                       </b-btn>
 
                       <b-btn
+                      v-b-tooltip title="Ban"
                       v-show="data.item.is_verified == 3 || data.item.is_verified == 1"
                       :size="'sm'"
                       variant="dark"
                       @click="BannedProduct(data)"
-                    >Banned
+                    >
                     <i class="fa fa-ban"></i>
                     </b-btn>
                     
@@ -625,7 +629,7 @@ input[type="number"]::-webkit-outer-spin-button {
           Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
-                    icon: 'warning',
+                    icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -662,7 +666,7 @@ input[type="number"]::-webkit-outer-spin-button {
           Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
-                    icon: 'warning',
+                    icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -698,7 +702,7 @@ input[type="number"]::-webkit-outer-spin-button {
            Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
-                    icon: 'warning',
+                    icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -874,17 +878,6 @@ input[type="number"]::-webkit-outer-spin-button {
         })
         }else{
           if (this.entryMode == "Add") {
-            //name of form
-            //if from a modal?
-            //name of table to be inserted
-            //is from tab
-          //  this.createEntity("products", false, "products", true);
-            
-           
-            // const formData = new FormData();
-            // this.files.forEach(file => {
-            //     formData.append('images[]', file, file.name);
-            // });
             this.forms.products.isSaving = true;
             this.resetFieldStates('products');
 
@@ -903,9 +896,8 @@ input[type="number"]::-webkit-outer-spin-button {
             title: "Success!",
             text: "The record has been successfully created."
           });
+          this.loadProducts();
           this.upload();
-          this.tables.products.items.unshift(response.data.data);
-          this.paginations.products.totalRows++;
           this.images = [];
           this.files = [];
           this.showEntry = false;
@@ -963,22 +955,6 @@ input[type="number"]::-webkit-outer-spin-button {
         this.fillEntityForm("products", data.item.inmr_hash);
         this.showEntry = true;
         this.entryMode = "Edit";
-      // this.row = data.item;
-      // this.$http
-      //   .get("api/products/" + data.item.inmr_hash, {
-      //     headers: {
-      //       Authorization: "Bearer " + localStorage.getItem("token")
-      //     }
-      //   })
-      //   .then(response => {
-      //     this.forms.purchasemain.fields = response.data.purchasemain;
-      //     this.tables.orderlists.items = response.data.po_items;
-      //     this.showEntry = true;
-      //     this.entryMode = "Edit";
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
       },
       loadProducts() {
          this.$http
@@ -997,8 +973,6 @@ input[type="number"]::-webkit-outer-spin-button {
         console.log(error);
       });
       },
-      
-      
      },
   computed: {
     getMerchantProducts() {

@@ -261,13 +261,17 @@ class OrdersController extends Controller
     }
     public function AcceptNewOrder(Request $request ,$id)
     {   
-        $check = SohrModel::select('is_cancel')
+
+        // $letter = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
+        // $number = substr(str_shuffle("0123456789"), 0, 8);
+
+
+        $check = SohrModel::select('*')
         ->where('sohr_hash', $id)
-        ->where('is_cancel', 0)
-        // ->findOrFail($id);
+        ->where('is_cancel', 1)
         ->get();
 
-        if(count($check) > 0) {
+        if(count($check) < 1) {
         $sohr = SohrModel::findOrFail($id);
         $sohr->tf_shipping = $request->input('m_shipping_fee');
         $sohr->where_dh = $request->input('selectdhTodeliver');
@@ -276,6 +280,8 @@ class OrdersController extends Controller
         $sohr->accept_datetime = Carbon::now();
         $sohr->to_pick_datetime = date('Y-m-d', strtotime($request->input('to_pick_datetime')));
         $sohr->is_cancel = 0;
+        // $sohr->tracking_no = $letter  .$number;
+       
         $sohr->save();
         return ( new Reference( $sohr ) )
             ->response()

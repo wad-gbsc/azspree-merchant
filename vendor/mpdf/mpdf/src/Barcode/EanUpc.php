@@ -46,7 +46,7 @@ class EanUpc extends \Mpdf\Barcode\AbstractBarcode implements \Mpdf\Barcode\Barc
 			$length = 12; // UPC-A
 			$upce = true; // UPC-E mode
 		}
-		$dataLength = $length - 1;
+		$dataLength = $length - 1 ;
 
 		// Padding
 		$code = str_pad($code, $dataLength, '0', STR_PAD_LEFT);

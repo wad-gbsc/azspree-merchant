@@ -60,10 +60,8 @@ class WaybillController extends Controller
         // $qrcode = new Generator;
         // $data['qr'] = $qrcode->size(100)->generate($qr);
         // $qrcode = QrCode::size(130)->generate('Make a qrcode without Laravel!');
-        
-    
             
-        $mpdf = new Mpdf();
+        $mpdf = new \Mpdf\Mpdf();
         $content = view('logs.waybill')->with($data);
         $mpdf->WriteHTML($content);
         $mpdf->Output();

@@ -34,7 +34,7 @@ class ProductsController extends Controller
                 ->orderBy('inmr_hash', 'desc')
                 ->get();
        }else{
-        $data['products'] = DB::table('inmr')->select('*')->get();
+        $data['products'] = DB::table('inmr')->select('*')->orderBy('inmr_hash', 'desc')->get();
        }
         $data['category'] = Category::where('is_deleted', 0)->orderBy('inct_hash')->get();
         $data['sumr'] = SumrModel::where('is_deleted', 0)
@@ -83,38 +83,31 @@ class ProductsController extends Controller
         $products->create_datetime = Carbon::now();
         $products->sumr_hash = Auth::user()->sumr_hash;
         
-        
         $products->save();
-
-        $inmr_hash = $products->inmr_hash;
+        // $date = Carbon::now();
+        // $path = storage_path().'/app/public/products/'.Auth::user()->sumr_hash.'/'.$date;
+        // File::makeDirectory($path, $mode = 0777, true, true);
         // $path = public_path('/images/products/'.Auth::user()->sumr_hash.'/'.$inmr_hash);
    
         // if(!File::exists($path)){
         //     File::makeDirectory($path, 0777, true, true);
         // }
-        $date = Carbon::now();
-        $path = storage_path().'/app/public/products/'.Auth::user()->sumr_hash.'/'.$date;
-        File::makeDirectory($path, $mode = 0777, true, true);
-
         //return json based from the resource data
         return ( new Reference( $products ))
                 ->response()
                 ->setStatusCode(201);
     }
-
     public function upload(Request $request)
     {   
-        // $products = ProductsModel::select('inmr_hash')->get();
-        // $inmr_hash = $products->inmr_hash;
+        $last_id = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->max('inmr_hash');
+        $last_item = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->where('inmr_hash',  $last_id)->max('product_name');
+
         $date = date('Y-m-d H-i-s');
         if (count($request->images)) {
             foreach ($request->images as $image) {
-                $image->store('products/'.Auth::user()->sumr_hash.'/'.$date);
-                
+                $image->store('products/'.Auth::user()->sumr_hash.'/'.$last_item);
             }
         }
-    
-
         return response()->json([
             "message" => "Done"
         ]);

@@ -305,6 +305,9 @@
                   <b-button class="button" variant="secondary" @click="showModalAcceptNewOrderDeliver=false">Close</b-button>
                 </div>
                  </b-modal>
+
+
+
                   <b-modal v-model="showModalAcceptNewOrderPickUp" :noCloseOnEsc="true" :noCloseOnBackdrop="true"
                   header-bg-variant="primary"
                   header-text-variant="light">
@@ -1240,14 +1243,7 @@ export default {
     },
     onAcceptingNewOrder() {
       if (this.forms.dashboard.fields.selected === 2){
-        if (this.forms.dashboard.fields.selectdhTodeliver == null) {
-         this.$notify({
-            type: "error",
-            group: "notification",
-            title: "Error!",
-            text: "Please select Distribution Hub."
-          });
-      }else{
+       
       this.forms.dashboard.isSaving = true;
       this.$http
         .put(
@@ -1292,7 +1288,7 @@ export default {
           });
           console.log(errors);
         });
-      }
+      
       }else{
         if (this.forms.dashboard.fields.shipping_fee == 0) {
          this.$notify({
