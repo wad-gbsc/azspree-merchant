@@ -58,7 +58,7 @@ class ProductsController extends Controller
             [
                 'product_name' => 'required',
                 'inct_hash' => 'required',
-                'product_desc' => 'required',
+                'product_details' => 'required',
                 'onhand_qty' => 'required',
                 'available_qty' => 'required',
                 'cost_amt' => 'required',
@@ -69,7 +69,7 @@ class ProductsController extends Controller
         
         $products = new ProductsModel();
         $products->product_name = $request->input('product_name');
-        $products->product_details = $request->input('product_desc');
+        $products->product_details = $request->input('product_details');
         $products->inct_hash = $request->input('inct_hash');
         $products->onhand_qty = $request->input('onhand_qty');
         $products->available_qty = $request->input('available_qty');
@@ -147,7 +147,7 @@ class ProductsController extends Controller
             [
                 'product_name' => 'required',
                 'inct_hash' => 'required',
-                'product_desc' => 'required',
+                'product_details' => 'required',
                 'onhand_qty' => 'required',
                 'available_qty' => 'required',
                 'cost_amt' => 'required'
@@ -155,7 +155,7 @@ class ProductsController extends Controller
             ]
         )->validate();
         $products->product_name = $request->input('product_name');
-        $products->product_details = $request->input('product_desc');
+        $products->product_details = $request->input('product_details');
         $products->onhand_qty = $request->input('onhand_qty');
         $products->available_qty = $request->input('available_qty');
         $products->inct_hash = $request->input('inct_hash');

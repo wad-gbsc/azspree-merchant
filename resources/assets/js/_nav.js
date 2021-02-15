@@ -68,11 +68,11 @@ export default {
             url: '/shop/Cancellations',
             icon: 'fa fa-exclamation-circle'
           },
-          {
-            name: 'Category(s)',
-            url: '/shop/category',
-            icon: 'fa fa-code'
-          },
+          // {
+          //   name: 'Category(s)',
+          //   url: '/shop/category',
+          //   icon: 'fa fa-code'
+          // },
           { 
             name: 'Comment(s)',
             url: '/shop/Comments',
@@ -82,41 +82,41 @@ export default {
               text: badge_text
             },
           },
-          {
-            name: 'Rating(s)',
-            url: '/references/categories',
-            icon: 'fa fa-star-o'
-          },
+          // {
+          //   name: 'Rating(s)',
+          //   url: '/references/categories',
+          //   icon: 'fa fa-star-o'
+          // },
           {
             name: 'History Log(s)',
             url: '/shop/Logs',
             icon: 'fa fa-database',
           },
         ]},
-        {
-          name: 'Finance',
-          url: '/references',
-          icon: 'fa fa-usd',
-          children:[
-            {
-              name: 'Income',
-              url: '/references/categories',
-              icon: 'fa fa-credit-card'
-            },
+        // {
+        //   name: 'Finance',
+        //   url: '/references',
+        //   icon: 'fa fa-usd',
+        //   children:[
+        //     {
+        //       name: 'Income',
+        //       url: '/references/categories',
+        //       icon: 'fa fa-credit-card'
+        //     },
     
-        ]},
-            {
-              name: 'Settings',
-              url: '/references',
-              icon: 'fa fa-cogs',
-              children:[
-                {
-                  name: 'Address',
-                  url: '/references/categories',
-                  icon: 'fa fa-address-book-o'
-                },
+        // ]},
+            // {
+            //   name: 'Settings',
+            //   url: '/references',
+            //   icon: 'fa fa-cogs',
+            //   children:[
+            //     {
+            //       name: 'Address',
+            //       url: '/references/categories',
+            //       icon: 'fa fa-address-book-o'
+            //     },
         
-              ]},
+            //   ]},
   
   ],
 }

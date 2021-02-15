@@ -147,7 +147,7 @@
                 
                 <td colspan="2" style="text-align: left;">
                   <span>{{$line->product_name}}</span> 
-                  <br><br><br><br>
+                  <br><br>
                 </td>
                 <td colspan="5" style="text-align: left;">
                     <span>{{$line->product_desc}}</span>
@@ -155,15 +155,15 @@
                 </td>
                 <td colspan="1" style="text-align: right;">
                     <span>{{$line->cost_amt}}</span>
-                    <br><br><br><br>
+                    <br><br>
                 </td>
                 <td colspan="1" style="text-align: right;">
                     <span>{{$item->disc_amt}}</span>
-                    <br><br><br><br>
+                    <br><br>
                 </td>
                 <td colspan="3" style="text-align: right;">
                     <span>{{$line->unit_price}}</span>
-                    <br><br><br><br>
+                    <br><br>
                 </td>
                
             </tr>
@@ -185,7 +185,7 @@
                     <br><br><br><br>
                 </td>
                 <td colspan="2" style="text-align: right;">
-                    <span>{{$item->shipping_fee}}</span>
+                    <span>{{number_format($item->shipping_fee,2)}}</span>
                     <br>
                     <span>0.00</span>
                     <br>

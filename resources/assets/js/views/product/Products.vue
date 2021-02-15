@@ -320,16 +320,16 @@ input[type="number"]::-webkit-outer-spin-button {
                           :invalid-feedback="invalidFeedbackDetail"
                           :valid-feedback="ValidFeedbackDetail"
                           :state="DetailState">
-                        <label for="product_desc"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Product Details</label>
+                        <label for="product_details"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Product Details</label>
                        <b-form-textarea
                         tab="0"
                         rows="3"
                         minlength=50
                         maxlength=1500
                         placeholder="Enter your Product Details"
-                        id="product_desc"
-                        ref="product_desc"
-                        v-model="forms.products.fields.product_desc"
+                        id="product_details"
+                        ref="product_details"
+                        v-model="forms.products.fields.product_details"
                       ></b-form-textarea>
                     </b-form-group>
                     
@@ -524,7 +524,7 @@ input[type="number"]::-webkit-outer-spin-button {
               dimension: 0,
               is_measurable: 0,
               product_name: null,
-              product_desc: '' ,
+              product_details: '' ,
               onhand_qty: '',
               available_qty: '',
               cost_amt: '',
@@ -812,16 +812,16 @@ input[type="number"]::-webkit-outer-spin-button {
           title: 'Error!',
           text: 'Please Select Category'
         })
-        }else if (this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length == 0) {
-          this.focusElement('product_desc', true)
+        }else if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length == 0) {
+          this.focusElement('product_details', true)
           this.$notify({
           type: 'error',
           group: 'notification',
           title: 'Error!',
           text: 'Please Enter Product Details'
         })
-        }else if (this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length < 50) {
-          this.focusElement('product_desc', true)
+        }else if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length < 50) {
+          this.focusElement('product_details', true)
           this.$notify({
           type: 'error',
           group: 'notification',
@@ -997,16 +997,16 @@ input[type="number"]::-webkit-outer-spin-button {
         }
       },
       invalidFeedbackDetail() {
-      if (this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length == 0) {
+      if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length == 0) {
         return 'Please enter something.'
-        } if (this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length <= 49) {
+        } if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length <= 49) {
           return 'Enter at least 50 characters.'
           }else{
             return
         }
       },
       ValidFeedbackDetail() {
-       if (this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length >= 50) {
+       if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length >= 50) {
           return 'Maximum of 1500 characters.'
         }
       },
@@ -1014,7 +1014,7 @@ input[type="number"]::-webkit-outer-spin-button {
         return this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length >= 20
       },
       DetailState() {
-        return this.forms.products.fields.product_desc !== null && this.forms.products.fields.product_desc.length >= 50
+        return this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length >= 50
       },
         Getdimension() {
         this.forms.products.fields.dimension = 0;
