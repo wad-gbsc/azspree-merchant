@@ -77,6 +77,7 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 Route::get('waybill/{id}', 'Controller\WaybillController@PrintWaybill');
+Route::get('deliveryform/{id}', 'Controller\WaybillController@PrintDeliveryForm');
 // Route::get('logs/printreport/{id}', , function ($id)  {
 //     return Hasher::decode($id);
 // });

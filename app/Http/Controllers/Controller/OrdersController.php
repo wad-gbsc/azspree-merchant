@@ -150,10 +150,8 @@ class OrdersController extends Controller
                             ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                             ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
                             ->where('sohr.sumr_hash', Auth::user()->sumr_hash)
-                            ->where('sohr.order_stat', 2)
-                            ->orwhere('sohr.order_stat', 3)
-                            ->orwhere('sohr.order_stat', 4)
-                            ->orwhere('sohr.order_stat', 5)
+                            ->where('sohr.order_stat' ,'>=', 2)
+                            ->where('sohr.order_stat' ,'<=', 5)
                             ->orderBy('sohr_hash', 'asc')
                             ->get();
 }

@@ -597,16 +597,17 @@
                     </b-form-group>
                   </b-col>
                   <b-col lg="4">
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <b-row>
+                    <b-col lg="12">
+                    <div style="text-align:center;">
+                    <br><br>
                     <b-button  @click="PrintWaybill(row)" variant="success"><i class="fa fa-print" aria-hidden="true"></i> Waybill</b-button>
-                    <b-form-group style="text-align:center;" v-model="transitbtn" v-show="transitbutton">
-                    <b-button  @click="AcceptIntransit(row)" variant="primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
-                    <b-button  @click="DeclineIntransit(row)  " variant="danger"><i class="fa fa-times" aria-hidden="true"></i> Decline</b-button>
-                    </b-form-group>
+                    <b-button v-show="$store.state.user.type == 1" @click="PrintDeliveryForm(row)" variant="warning"><i class="fa fa-file-text-o" aria-hidden="true"></i> Delivery Form</b-button><br><br>
+                    <b-button v-show="$store.state.user.type == 1" @click="AcceptIntransit(row)" variant="primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
+                    <b-button v-show="$store.state.user.type == 1" @click="DeclineIntransit(row)  " variant="danger"><i class="fa fa-times" aria-hidden="true"></i> Decline</b-button>
+                    </div>
+                    </b-col>
+                    </b-row>
                   </b-col>
                 </div>
                    <b-row>
@@ -993,7 +994,7 @@ export default {
       newOrderEntry: true,
       IntransitEntry: false,
       radiobutton: false,
-      transitbutton: false,
+      // transitbutton: false,
       deliveredbutton: false,
       btnneworder: false,
       DeliverEntry: false,
@@ -1167,10 +1168,10 @@ export default {
     }
   },
   methods: {
+      PrintDeliveryForm(row) {
+      window.open("api/deliveryform/" + row.item.sohr_hash);
+      },
       PrintWaybill(row) {
-      // this.sohr_hash = row.item.sohr_hash;
-      // this.sumr_hash = row.item.sumr_hash;
-      // console.log(row.item)
       window.open("api/waybill/" + row.item.sohr_hash);
       },
     getShippingFee: function(value,data)  {
@@ -1794,11 +1795,11 @@ export default {
             this.btnneworder = true
         }
     },
-      transitbtn() {
-        if (this.$store.state.user.type == 1) {
-            this.transitbutton = true
-        }
-    },
+    //   transitbtn() {
+    //     if (this.$store.state.user.type == 1) {
+    //         this.transitbutton = true
+    //     }
+    // },
         deliveredbtn() {
         if (this.$store.state.user.type == 1) {
             this.deliveredbutton = true
