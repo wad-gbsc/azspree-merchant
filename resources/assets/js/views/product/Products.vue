@@ -424,11 +424,7 @@ input[type="number"]::-webkit-outer-spin-button {
            <div v-show="images.length">
             <b-button @click ="files = [], images = []" variant="danger" >Remove</b-button>
         </div>
-        <!-- <img
-              v-for="image in example.images"
-              :key="image.filename"
-              :src="`/storage/app/public/products/`"
-          > -->
+        <!-- <img :src="'/storage/app/public/products/' + $store.state.user.sumr_hash + ''" /> -->
       </div>
     </b-col>
     </b-row>   

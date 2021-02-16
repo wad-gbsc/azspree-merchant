@@ -22,7 +22,7 @@
                     </SidebarNavDropdown>
                   </template>
                   <template v-else>
-                    <li class="nav-item" style="margin-left:20px;">
+                    <li class="nav-item" style="margin-left:20px;" >
                       <SidebarNavLink  :name="child.name" :url="child.url" :icon="child.icon" :badge="child.badge"   />
                     </li>
                   </template>

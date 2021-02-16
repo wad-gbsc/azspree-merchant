@@ -77,6 +77,11 @@ export default {
             localStorage.removeItem("token");
             this.$store.commit("logoutUser");
             this.$router.push({ name: "Login" });
+            Toast.fire({
+                      icon: 'success',
+                      title: 'Success!',
+                      text: 'You have successfully logged out.'
+                    })
           })
           .catch(err => {
             console.log(err);

@@ -167,27 +167,24 @@ export default {
     ChangePassword() {
       if (this.login.new_password == null || this.login.new_password == "") {
           this.focusElement('new_password')
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please enter New password'
-        })
+          Toast.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Please enter New password.'
+              })
       }else if (this.login.confirm_password == null || this.login.confirm_password == "") {
          this.focusElement('confirm_password')
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please enter Confirm password'
-        })
+          Toast.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Please enter Confirm password'
+              })
       }else if (this.login.new_password != this.login.confirm_password) {
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Password do not match'
-        })
+        Toast.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Password do not match'
+              })
         }else{
       
       this.login.is_saving = true;
@@ -203,13 +200,11 @@ export default {
         )
         .then(response => {
           this.login.is_saving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "Change Password Successful."
-          });
-
+          Toast.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Change Password Successful.'
+              })
             this.showModalChangePassword = false;
             this.focusElement("password");
             this.login.password = "";
@@ -224,13 +219,12 @@ export default {
             // this.forms[entity].states[key] = false
             // this.forms[entity].errors[key] =  errors[key]
             if (a == 0) {
-              this.focusElement('new_password', false);
-              this.$notify({
-                type: "error",
-                group: "notification",
-                title: "Error!",
+              this.focusElement(key, false);
+              Toast.fire({
+                icon: 'error',
+                title: 'Error!',
                 text: errors[key][0]
-              });
+              })
             }
 
             a++;
@@ -251,9 +245,8 @@ export default {
                       this.fillEntityForm('sumr',this.$store.state.user.sumr_hash)
                       this.showModalChangePassword = true
                     }else{
-                    this.$notify({
-                      type: 'success',
-                      group: 'notification',
+                    Toast.fire({
+                      icon: 'success',
                       title: 'Success!',
                       text: 'User Authenticated successfully.'
                     })
@@ -263,12 +256,11 @@ export default {
                     this.login.is_saving = false
                     }
                 }).catch(err => {
-                      this.$notify({
-                        type: 'error',
-                        group: 'notification',
-                        title: 'Error!',
-                        text: 'Incorrect username or password.'
-                      })
+                      Toast.fire({
+                      icon: 'success',
+                      title: 'Success!',
+                      text: 'Incorrect username or password.'
+                    })
                       this.login.is_saving = false
       });
     }
