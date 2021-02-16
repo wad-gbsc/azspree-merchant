@@ -62,7 +62,7 @@ Vue.component('cSwitch', cSwitch)
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 const axiosConfig = {
-  baseURL: 'http://azspree.test',
+  baseURL: 'http://azspree.com:81',
   timeout: 30000
 }
 

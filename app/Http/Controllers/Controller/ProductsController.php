@@ -54,28 +54,50 @@ class ProductsController extends Controller
      */
     public function create(Request $request)
     {
+        // Validator::make($request->all(),
+        //     [
+        //         'product_name' => 'required',
+        //         'inct_hash' => 'required',
+        //         'product_details' => 'required',
+        //         'onhand_qty' => 'required',
+        //         'available_qty' => 'required',
+        //         'cost_amt' => 'required',
+        //         'weight' => 'required'
+        //     ]
+        // )->validate();
+        
         Validator::make($request->all(),
-            [
-                'product_name' => 'required',
-                'inct_hash' => 'required',
-                'product_details' => 'required',
-                'onhand_qty' => 'required',
-                'available_qty' => 'required',
-                'cost_amt' => 'required',
-                'weight' => 'required'
-                
-            ]
-        )->validate();
+        [
+            'product_name' => 'required',
+            'inct_hash' => 'required',
+            'product_details' => 'required',
+            'onhand_qty' => 'required',
+            'available_qty' => 'required',
+            'cost_amt' => 'required',
+            'weight' => 'required'
+        ]
+        )->setAttributeNames([
+            'product_name' => 'Product Name',
+            'inct_hash' => 'Category',
+            'product_details' => 'Product Details',
+            'onhand_qty' => 'On hand Quantity',
+            'available_qty' => 'Available Quantity',
+            'cost_amt' => 'Price',
+            'weight' => 'Weight'
+            ])->validate();
+
         
         $products = new ProductsModel();
         $products->product_name = $request->input('product_name');
+        $products->co_no = '01';
+        $products->image_path = 'Default.jpg';
         $products->product_details = $request->input('product_details');
         $products->inct_hash = $request->input('inct_hash');
         $products->onhand_qty = $request->input('onhand_qty');
         $products->available_qty = $request->input('available_qty');
         $products->cost_amt = $request->input('cost_amt');
         $products->inct_hash = $request->input('inct_hash');
-        $products->length = $request->input('lengthsize');
+        $products->lengthsize = $request->input('lengthsize');
         $products->height = $request->input('height');
         $products->width = $request->input('width');
         $products->dimension = ceil($request->input('dimension'));
@@ -84,15 +106,9 @@ class ProductsController extends Controller
         $products->sumr_hash = Auth::user()->sumr_hash;
         
         $products->save();
-        // $date = Carbon::now();
-        // $path = storage_path().'/app/public/products/'.Auth::user()->sumr_hash.'/'.$date;
-        // File::makeDirectory($path, $mode = 0777, true, true);
-        // $path = public_path('/images/products/'.Auth::user()->sumr_hash.'/'.$inmr_hash);
-   
-        // if(!File::exists($path)){
-        //     File::makeDirectory($path, 0777, true, true);
-        // }
-        //return json based from the resource data
+
+        DB::table('inmr')->where('inmr_hash', $products->inmr_hash)->update(['image_path' =>  $products->sumr_hash.'/'.$products->inmr_hash.'/Default.jpg']);
+        
         return ( new Reference( $products ))
                 ->response()
                 ->setStatusCode(201);

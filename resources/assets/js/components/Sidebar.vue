@@ -23,7 +23,7 @@
                   </template>
                   <template v-else>
                     <li class="nav-item" style="margin-left:20px;">
-                      <SidebarNavLink :name="child.name" :url="child.url" :icon="child.icon" :badge="child.badge"/>
+                      <SidebarNavLink  :name="child.name" :url="child.url" :icon="child.icon" :badge="child.badge"   />
                     </li>
                   </template>
                 </template>
@@ -48,6 +48,7 @@ export default {
   name: 'sidebar',
   data () {
       return {
+        
       }
   },
   props: {
@@ -70,7 +71,6 @@ export default {
   }
 }
 </script>
-
 <style lang="css">
   .nav-link {
     cursor:pointer;

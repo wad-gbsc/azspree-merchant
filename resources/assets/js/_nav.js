@@ -43,7 +43,8 @@ export default {
         {
           name: 'Product(s)',
           url: '/product/Products',
-          icon: 'icon-list'
+          icon: 'icon-list',
+          type: [0 , 1 , 2]
         },
 
       ]},
@@ -56,7 +57,7 @@ export default {
           {
             name: 'Order(s)',
             url: '/shop/Orders',
-            icon: 'fa fa-handshake-o'
+            icon: 'fa fa-handshake-o',
           },
           {
             name: 'Shipment(s)',
@@ -81,6 +82,7 @@ export default {
               variant: badge_type,
               text: badge_text
             },
+            
           },
           // {
           //   name: 'Rating(s)',
@@ -91,6 +93,7 @@ export default {
             name: 'History Log(s)',
             url: '/shop/Logs',
             icon: 'fa fa-database',
+            type: 2
           },
         ]},
         // {

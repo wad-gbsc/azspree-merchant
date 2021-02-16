@@ -171,9 +171,9 @@
             </td>
         </tr>
         <tr>
-            <td colspan="4"  style="font-size: 18px">
+            {{-- <td colspan="4"  style="font-size: 18px">
                 <br><center>MERCHANT'S SIGNATURE</center><br>
-            </td>
+            </td> --}}
             <td colspan="8"  style="font-size: 18px">
                 <br><center>DH'S SIGNATURE</center><br>
             </td>

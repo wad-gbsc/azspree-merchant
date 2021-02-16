@@ -8,6 +8,7 @@ use App\Models\CommentsModel;
 use App\Http\Resources\Reference; 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Auth;
 
 class CommentsController extends Controller
 {

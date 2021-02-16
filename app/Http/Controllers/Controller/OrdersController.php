@@ -263,7 +263,6 @@ class OrdersController extends Controller
         // $letter = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
         // $number = substr(str_shuffle("0123456789"), 0, 8);
 
-
         $check = SohrModel::select('*')
         ->where('sohr_hash', $id)
         ->where('is_cancel', 1)
@@ -279,7 +278,6 @@ class OrdersController extends Controller
         $sohr->to_pick_datetime = date('Y-m-d', strtotime($request->input('to_pick_datetime')));
         $sohr->is_cancel = 0;
         // $sohr->tracking_no = $letter  .$number;
-       
         $sohr->save();
         return ( new Reference( $sohr ) )
             ->response()

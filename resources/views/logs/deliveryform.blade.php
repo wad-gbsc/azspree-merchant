@@ -142,32 +142,38 @@
             <tr>
                 <td colspan="12" class="top"></td>
             </tr>
-            @foreach($soln as $line)
+            <?php 
+            $item_total = 0;
+            $grand_total =0;
+            ?>
+            <?php foreach($soln as $line):
+            $item_total += $line->unit_price;
+            ?>
+            
             <tr>
-                
-                <td colspan="2" style="text-align: left;">
+                <td colspan="1" style="text-align: left;">
                   <span>{{$line->product_name}}</span> 
                   <br><br>
                 </td>
-                <td colspan="5" style="text-align: left;">
+                <td colspan="6" style="text-align: left;">
                     <span>{{$line->product_desc}}</span>
                     <br><br>
                 </td>
                 <td colspan="1" style="text-align: right;">
-                    <span>{{$line->cost_amt}}</span>
+                    <span>{{number_format($line->cost_amt,2)}}</span>
                     <br><br>
                 </td>
                 <td colspan="1" style="text-align: right;">
-                    <span>{{$item->disc_amt}}</span>
+                    <span>{{number_format($item->disc_amt,2)}}</span>
                     <br><br>
                 </td>
                 <td colspan="3" style="text-align: right;">
-                    <span>{{$line->unit_price}}</span>
+                    <span>{{number_format($line->unit_price,2)}}</span>
                     <br><br>
                 </td>
                
             </tr>
-             @endforeach
+            <?php endforeach; ?> 
             <tr>
                 <td colspan="12" class="top"></td>
             </tr>
@@ -189,12 +195,20 @@
                     <br>
                     <span>0.00</span>
                     <br>
-                    <span>0.00</span>
+                    <span>{{number_format($item_total + $item->shipping_fee,2)}} </span>
                     <br><br><br><br>
                 </td>
             </tr>
             <tr>
-                <td colspan="12"><br>&nbsp;<br><br>&nbsp;<br></td>
+               
+                    <tr>
+                    <td colspan="4"  style="font-size: 18px">
+                        <br><center>MERCHANT'S SIGNATURE</center><br>
+                    </td>
+                    <td colspan="8"  style="font-size: 18px">
+                        <br><center>DH'S SIGNATURE</center><br>
+                    </td>
+                </tr>
             </tr>
             <tr>
                 <td colspan="12">

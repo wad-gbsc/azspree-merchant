@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state: {
         isLoggedIn: !!localStorage.getItem('token'),
         user: [],
-        rights: []
+        rights: [],
+        type: []
     },
     mutations: {
         loginUser (state) {
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         },
         rights (state, rights) {
             state.rights = rights
-        }
+        },
+       
     }
 })

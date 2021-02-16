@@ -42,53 +42,25 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .uploader {
     width: 100%;
-    padding: 40px 15px;
+    margin-top: 20px ;
     border-radius: 10px;
     border: 3px dashed #fff;
     position: relative;
-    
-    i {
-        font-size: 85px;
-    }
    
     .images-preview {
         display: flex;
         flex-wrap: wrap;
         margin-top: 20px;
         .img-wrapper {
-            width: 213px;
-            height: 322px;
+            width: 180px;
+            height: 250px;
             display: flex;
             flex-direction: column;
             img {
-                max-height: 310px;
+                max-height: 250px;
             }
         }
         
-    }
-    .upload-control {
-        position: absolute;
-        width: 100%;
-        background: #fff;
-        top: 0;
-        left: 0;
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-        padding: 10px;
-        padding-bottom: 4px;
-        button, label {
-            background: #2196F3;
-            border: 2px solid #03A9F4;
-            border-radius: 3px;
-            color: #fff;
-            font-size: 15px;
-            cursor: pointer;
-        }
-        label {
-            padding: 2px 5px;
-            margin-right: 10px;
-            font-size: 14px;
-        }
     }
 }
 
@@ -178,7 +150,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <template v-slot:cell(action)="data">
                     
                     <div v-if="$store.state.user.type == 0">
-                      <div v-show="data.item.is_verified != 0">
+                    <div v-show="data.item.is_verified != 4">
                     <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
@@ -278,13 +250,10 @@ input[type="number"]::-webkit-outer-spin-button {
               <span class="text-primary">{{entryMode}} Product</span>
             </h5> 
       <b-col lg="12">
-        <b-tabs v-model="tabIndex" >
         <b-form @keydown="resetFieldStates('products')" autocomplete="off" @shown="focusElement('product_name')">
-          <b-tab title="Product Information">
             <b-row>
-            <b-col lg="6">
+            <b-col lg="4">
             <b-form-group
-            tab="0"
             id="fieldset-1"
             label-for="input-1"
             :invalid-feedback="invalidFeedbackName"
@@ -316,13 +285,11 @@ input[type="number"]::-webkit-outer-spin-button {
                                 </select2>
                             </b-form-group>
                           <b-form-group
-                          tab="0"
                           :invalid-feedback="invalidFeedbackDetail"
                           :valid-feedback="ValidFeedbackDetail"
                           :state="DetailState">
                         <label for="product_details"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Product Details</label>
                        <b-form-textarea
-                        tab="0"
                         rows="3"
                         minlength=50
                         maxlength=1500
@@ -333,12 +300,10 @@ input[type="number"]::-webkit-outer-spin-button {
                       ></b-form-textarea>
                     </b-form-group>
                     
-                    </b-col>
-                    <b-col lg="6">
                       <b-form-group>
                         <label for="onhand_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> On hand Quantity.</label><span>  The number you have physically available.</span>
                       <b-form-input
-                            tab="0"
+                            min="0"
                             ref="onhand_qty"
                             id="onhand_qty"
                             v-model="forms.products.fields.onhand_qty"
@@ -349,7 +314,7 @@ input[type="number"]::-webkit-outer-spin-button {
                            <b-form-group>
                         <label for="available_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Available Quantity.</label><span>  The quantity of an item that is currently available for sale.</span>
                      <b-form-input
-                            tab="0"
+                            min="0"
                             ref="available_qty"
                             id="available_qty"
                             v-model="forms.products.fields.available_qty"
@@ -360,7 +325,6 @@ input[type="number"]::-webkit-outer-spin-button {
                       <b-form-group>
                     <label><i class="icon-required fa fa-exclamation-circle"></i> Price</label>
                     <vue-autonumeric
-                        tab="0"
                         ref="cost_amt"
                         id="cost_amt"
                         v-model="forms.products.fields.cost_amt"
@@ -372,14 +336,10 @@ input[type="number"]::-webkit-outer-spin-button {
                 ></vue-autonumeric>
                   </b-form-group>
                   </b-col>
-                  </b-row>
-                  </b-tab>
-                  <b-tab title="Shipping Fee">
-                  <b-col lg="6">
+                  <b-col lg="2">
                   <b-form-group>
-                  <label>Weight (kg) :</label>
+                  <label><i class="icon-required fa fa-exclamation-circle"></i> Weight (kg) :</label>
                   <vue-autonumeric
-                    tab="1"
                     ref="weight"
                     id="weight"
                     v-model="forms.products.fields.weight"
@@ -393,7 +353,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   </b-form-group>
                   <b-form-group>
                   <b-form-checkbox
-                  tab="1"
                   ref="is_measurable"
                   id="is_measurable"
                   v-model="forms.products.fields.is_measurable"
@@ -407,7 +366,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-group>
                   <label>Length (cm) :</label>
                   <vue-autonumeric
-                      tab="1"
                       ref="lengthsize"
                       id="lengthsize"
                       placeholder="cm"
@@ -419,7 +377,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-group>
                   <label>Width (cm) :</label>
                   <vue-autonumeric
-                      tab="1"
                       ref="width"
                       id="width"
                       placeholder="cm"
@@ -431,7 +388,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-group>
                   <label>Height (cm) :</label>
                   <vue-autonumeric
-                      tab="1"
                       ref="height"
                       id="height"
                       :disabled="forms.products.fields.is_measurable == 0"
@@ -443,7 +399,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-group>
                   <label>Dimension (kg):</label>
                   <vue-autonumeric
-                      tab="1"
                       placeholder="kg"
                       disabled
                       ref="dimension"
@@ -453,35 +408,33 @@ input[type="number"]::-webkit-outer-spin-button {
                     ></vue-autonumeric>
                   </b-form-group>
                   </b-col>
-                  </b-tab>
-                  
-        <b-tab title="Images">
+               
+        <b-col lg="6">
         <div class="uploader">
-        <div v-show="images.length">
-            <!-- <b-button @click="upload" variant="primary">Upload</b-button> -->
-            <b-button @click ="files = [], images = []" variant="danger" >Remove</b-button>
-        </div>
+     
         <div v-show="!images.length">
-            <div class="file-input">
-                <label for="file">Select a file</label>
-                <b-form-file multiple id="file" ref="file" name="images" type="file" v-model="files" @change="onInputChange" tab="2"> 
+                <b-form-file multiple id="file" ref="file" name="images" type="file" v-model="files" @change="onInputChange"> 
               </b-form-file>
-            </div>
         </div>
-
         <div class="images-preview" v-show="images.length">
             <div class="img-wrapper img" v-for="(image, index) in images" :key="index">
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
             </div>
         </div>
-    </div>
-          </b-tab>
-          <!-- <b-tab title="Variants" disabled>
-          </b-tab> -->
+           <div v-show="images.length">
+            <b-button @click ="files = [], images = []" variant="danger" >Remove</b-button>
+        </div>
+        <!-- <img
+              v-for="image in example.images"
+              :key="image.filename"
+              :src="`/storage/app/public/products/`"
+          > -->
+      </div>
+    </b-col>
+    </b-row>   
            </b-form>
-              </b-tabs>
-               <hr />
-            <b-row class="pull-right mt-2">
+            <hr />
+            <b-row class="pull-right">
               <b-col sm="12">
                 <b-button :disabled="forms.products.isSaving" variant="primary" @click="onProductEntry">
                     <icon v-if="forms.products.isSaving" name="sync" spin></icon>
@@ -510,7 +463,6 @@ input[type="number"]::-webkit-outer-spin-button {
         showModalProducts: false, 
         showModalDelete: false,
         showEntry: false,
-        tabIndex: 0,
         image: '',
         forms: { 
             products: {
@@ -524,11 +476,11 @@ input[type="number"]::-webkit-outer-spin-button {
               dimension: 0,
               is_measurable: 0,
               product_name: null,
-              product_details: '' ,
-              onhand_qty: '',
-              available_qty: '',
-              cost_amt: '',
-              weight: null,
+              product_details: null ,
+              onhand_qty: 0,
+              available_qty: 0,
+              cost_amt: 0,
+              weight: 0,
               lengthsize: 0,
               width: 0,
               height: 0,
@@ -742,7 +694,7 @@ input[type="number"]::-webkit-outer-spin-button {
        
         addImage(file) {
             if (!file.type.match('image.*')) {
-                this.$notify({
+                Toast.fire({
                   type: "error",
                   group: "notification",
                   title: "Error!",
@@ -770,12 +722,12 @@ input[type="number"]::-webkit-outer-spin-button {
                   }
                 })
                 .then(response => {
-                  this.$notify({
-                  type: "success",
-                  group: "notification",
-                  title: "Success!",
-                  text: "Image Uploaded"
-                });
+                //   Toast.fire({
+                //   type: "success",
+                //   group: "notification",
+                //   title: "Success!",
+                //   text: "Image Uploaded"
+                // });
                   this.images = [];
                   this.files = [];
                 })
@@ -788,96 +740,94 @@ input[type="number"]::-webkit-outer-spin-button {
       // return this.tables.products.items.filter(r => r.sumr_hash == sumr_hash);
       // },
       onProductEntry() {
-        if (this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length == 0) {
-          this.focusElement('product_name', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Product Name'
-        })
-        }else if (this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length <= 19) {
-          this.focusElement('product_name', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Product Name at least 20 Characters'
-        })
+        if (this.forms.products.fields.product_name == null || this.forms.products.fields.product_name == "") {
+            Toast.fire(
+            'Error!',
+            'Please Enter Product Name',
+            'error'
+            )
+         this.focusElement('product_name' , false)
+        }else if (this.forms.products.fields.product_name.length <= 19) {
+          this.focusElement('product_name')
+           Toast.fire(
+            'Error!',
+            'Please Enter Product Name at least 20 Characters',
+            'error'
+            )
         }else if (this.forms.products.fields.inct_hash == null) {
-          this.focusElement('inct_hash', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Select Category'
-        })
-        }else if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length == 0) {
-          this.focusElement('product_details', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Product Details'
-        })
-        }else if (this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length < 50) {
-          this.focusElement('product_details', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Product Details at least 50 Characters'
-        })
-        }else if (this.forms.products.fields.onhand_qty !== null && this.forms.products.fields.onhand_qty.length == 0) {
-          this.focusElement('onhand_qty', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter On hand Quantity'
-        })
-        }else if (this.forms.products.fields.available_qty !== null && this.forms.products.fields.available_qty.length == 0) {
-          this.focusElement('available_qty', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Available Quantity'
-        })
+           this.focusElement('inct_hash')
+          Toast.fire(
+            'Error!',
+            'Please Select Category',
+            'error'
+            )
+        }else if (this.forms.products.fields.product_details == null || this.forms.products.fields.product_details == "") {
+          this.focusElement('product_details')
+         Toast.fire(
+            'Error!',
+            'Please Enter Product Details',
+            'error'
+            )
+        }else if (this.forms.products.fields.product_details.length < 50) {
+          this.focusElement('product_details')
+          Toast.fire(
+            'Error!',
+            'Please Enter Product Details at least 50 Characters',
+            'error'
+            )
+        }else if (this.forms.products.fields.onhand_qty == "" || this.forms.products.fields.onhand_qty == 0) {
+          this.focusElement('onhand_qty')
+          Toast.fire(
+            'Error!',
+            'Please Enter On hand Quantity',
+            'error'
+            )
+        }else if (this.forms.products.fields.available_qty == "" || this.forms.products.fields.available_qty == 0) {
+          this.focusElement('available_qty')
+          Toast.fire(
+              'Error!',
+              'Please Enter Available Quantity',
+              'error'
+              )
         }else if (Number(this.forms.products.fields.onhand_qty) < Number(this.forms.products.fields.available_qty)) {
-          this.focusElement('onhand_qty', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Your On Hand Stock should be greater than Your Available Stock'
-        })
-          }else if (this.forms.products.fields.cost_amt !== null && this.forms.products.fields.cost_amt.length == 0) {
-          this.focusElement('cost_amt', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Price'
-        })
-        }else if (this.forms.products.fields.weight !== null && this.forms.products.fields.weight.length == 0) {
-          this.focusElement('weight', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Weight'
-        })
-        }else if (this.images !== null && this.images.length == 0) {
-          this.focusElement('file', true)
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Image'
-        })
+          this.focusElement('onhand_qty')
+          Toast.fire(
+              'Error!',
+              'Your On Hand Stock should be greater than Your Available Stock',
+              'error'
+              )
+          }else if (this.forms.products.fields.cost_amt == "" || this.forms.products.fields.cost_amt == 0) {
+          this.focusElement('cost_amt')
+          Toast.fire(
+              'Error!',
+              'Please Enter Price',
+              'error'
+              )
+        }else if (this.forms.products.fields.weight == null || this.forms.products.fields.weight == 0) {
+          this.focusElement('weight')
+          Toast.fire(
+              'Error!',
+              'Please Enter Weight',
+              'error'
+              )
+        // }else if (this.images !== null && this.images.length == 0) {
+        //   this.focusElement('file')
+        //   this.$notify({
+        //   type: 'error',
+        //   group: 'notification',
+        //   title: 'Error!',
+        //   text: 'Please Enter Image'
+        // })
         }else{
           if (this.entryMode == "Add") {
+            if (this.images !== null && this.images.length == 0) {
+               this.focusElement('file')
+               Toast.fire(
+              'Error!',
+              'Please Enter Image',
+              'error'
+              )
+            }else{  
             this.forms.products.isSaving = true;
             this.resetFieldStates('products');
 
@@ -890,18 +840,16 @@ input[type="number"]::-webkit-outer-spin-button {
         .then(response => {
           this.forms.products.isSaving = false;
           this.clearFields('products');
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The record has been successfully created."
-          });
           this.loadProducts();
           this.upload();
           this.images = [];
           this.files = [];
           this.showEntry = false;
-        
+          Toast.fire(
+              'Success!',
+              'The record has been successfully created.',
+              'success'
+              )
         })
         .catch(error => {
           this.forms.products.isSaving = false;
@@ -912,18 +860,19 @@ input[type="number"]::-webkit-outer-spin-button {
             // this.forms[entity].states[key] = false
             // this.forms[entity].errors[key] =  errors[key]
             if (a == 0) {
-              this.focusElement(key, true);
-              this.$notify({
-                type: "error",
-                group: "notification",
-                title: "Error!",
-                text: errors[key][0]
-              });
-            }
-
-            a++;
+                    this.focusElement(key, false);
+                    Toast.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: errors[key][0]
+                    })
+                    }
+                    a++
           }
         });
+            }
           } else {
             //name of form
             //name of primary key
