@@ -26,15 +26,26 @@ class ProductsController extends Controller
         if (Auth::user()->type == 0) {
         $data['products'] = ProductsModel::select(
             'inmr.*',
-            'prst.*'                    
+            'prst.*',
+            'inct.cat_name'                  
 )
                 ->leftJoin('prst', 'prst.prst_hash', '=', 'inmr.is_verified')
+                ->leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
                 ->where('inmr.is_deleted', 0)
                 ->where('inmr.sumr_hash', Auth::user()->sumr_hash)
                 ->orderBy('inmr_hash', 'desc')
                 ->get();
        }else{
-        $data['products'] = DB::table('inmr')->select('*')->orderBy('inmr_hash', 'desc')->get();
+        $data['products'] = DB::table('inmr')->select(
+            'inmr.*',
+            'inct.cat_name',
+            'sumr.shop_name',
+            'sumr.seller_name'
+)
+                
+                ->leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
+                ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'inmr.sumr_hash')
+                ->orderBy('is_verified')->get();
        }
         $data['category'] = Category::where('is_deleted', 0)->orderBy('inct_hash')->get();
         $data['sumr'] = SumrModel::where('is_deleted', 0)

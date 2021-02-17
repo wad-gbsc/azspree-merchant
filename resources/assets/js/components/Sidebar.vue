@@ -23,19 +23,30 @@
                   </template>
                   <template v-else>
                     <li class="nav-item" style="margin-left:20px;" >
-                      <SidebarNavLink  :name="child.name" :url="child.url" :icon="child.icon" :badge="child.badge"   />
+                      <SidebarNavLink v-if="child.type.includes($store.state.user.type)"  :name="child.name" :url="child.url" :icon="child.icon" :badge="child.badge"/>
                     </li>
+        
                   </template>
                 </template>
               </SidebarNavDropdown>
             </template>
             <template v-else>
-              <SidebarNavLink :name="item.name" :url="item.url" :icon="item.icon" :badge="item.badge"/>
+              <SidebarNavLink :name="item.name" :url="item.url" :icon="item.icon" :badge="item.badge" />
             </template>
+          
           </template>
         </li>
       </ul>
-      <slot></slot>
+      <slot> 
+        <br>
+        <center>
+        <a style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;cursor: pointer;
+          font-weight: 400; font-size: 16px;" href="http://azspree.test/#/Profile" ><i class="fa fa-user" aria-hidden="true"></i> <span>{{$store.state.user.shop_name}}</span></a>
+          <br><br>
+           <a style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ; cursor: pointer;
+          font-weight: 400; font-size: 16px;" @click="logOut()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+          </center>
+          </slot>
       <div slot="footer"></div>
     </nav>
   </div>
@@ -67,6 +78,37 @@ export default {
     handleClick (e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')
+    },
+     logOut() {
+      if (localStorage.token) {
+        this.$http
+          .get("api/auth/logout", {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token")
+            }
+          })
+          .then(response => {
+            localStorage.removeItem("token");
+            this.$store.commit("logoutUser");
+            this.$router.push({ name: "Login" });
+            Toast.fire({
+                      icon: 'success',
+                      title: 'Success!',
+                      text: 'You have successfully logged out.'
+                    })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+    checkRight(type) {
+      return type.includes(Number(this.user.type))
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
     }
   }
 }

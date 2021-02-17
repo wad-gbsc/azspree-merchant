@@ -1,34 +1,3 @@
-var badge_type;
-var badge_text;
-
-function CheckEmptyFields() {  
-  
-  fetch("api/commentslength", {
-      headers: {
-      Authorization: "Bearer " + localStorage.getItem("token")
-      }
-  })
-.then(res => res.json())
-  .then(data => {
-    
-    // comments_length = data
-    // console.log(comments_length);
-    if(data != null)
-    {
-       badge_type = "danger";
-       badge_text = data;
-    }
-    // if(data["0"].dependents == 0)
-    // {
-    //   console.log('Empty fields');
-    //   badge_type = "danger";
-    //   badge_text = "!";
-    // }
-  });
-}
-
-//My function for checking if the fields are empty to show a danger badge
-CheckEmptyFields() 
 export default {
   items: [{
       name: 'Dashboard',
@@ -44,7 +13,7 @@ export default {
           name: 'Product(s)',
           url: '/product/Products',
           icon: 'icon-list',
-          type: [0 , 1 , 2]
+          type: [0 , 2]
         },
 
       ]},
@@ -58,16 +27,20 @@ export default {
             name: 'Order(s)',
             url: '/shop/Orders',
             icon: 'fa fa-handshake-o',
+            type: [0 , 2]
           },
+          
           {
             name: 'Shipment(s)',
             url: '/shop/Shipments',
-            icon: 'fa fa-shopping-cart'
+            icon: 'fa fa-shopping-cart',
+            type: [0 , 2]
           },
           {
             name: 'Cancellation',
             url: '/shop/Cancellations',
-            icon: 'fa fa-exclamation-circle'
+            icon: 'fa fa-exclamation-circle',
+            type: [0 , 2 , 1]
           },
           // {
           //   name: 'Category(s)',
@@ -78,10 +51,7 @@ export default {
             name: 'Comment(s)',
             url: '/shop/Comments',
             icon: 'fa fa-comments',
-            badge: {
-              variant: badge_type,
-              text: badge_text
-            },
+            type: [0 , 2]
             
           },
           // {
@@ -93,9 +63,25 @@ export default {
             name: 'History Log(s)',
             url: '/shop/Logs',
             icon: 'fa fa-database',
-            type: 2
+            type: [2]
           },
         ]},
+        // {
+        //   name: 'Settings',
+        //   url: '/settings',
+        //   icon: 'fa fa-cogs',
+        //   children:[
+        //     {
+        //       name: 'Profile',
+        //       url: '/settings/Profile',
+        //       icon: 'icon-list'
+        //     },
+        //     {
+        //       name: 'Logout',
+        //       url: '/logout',
+        //       icon: 'icon-list'
+        //     },
+        //   ]},
         // {
         //   name: 'Finance',
         //   url: '/references',
@@ -106,7 +92,6 @@ export default {
         //       url: '/references/categories',
         //       icon: 'fa fa-credit-card'
         //     },
-    
         // ]},
             // {
             //   name: 'Settings',
@@ -120,6 +105,6 @@ export default {
             //     },
         
             //   ]},
-  
   ],
 }
+

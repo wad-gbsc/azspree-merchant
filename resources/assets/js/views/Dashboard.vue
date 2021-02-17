@@ -180,8 +180,8 @@
           <template v-slot:row-details="row"> 
               <div class="row">
                   <b-col lg="4">
-                    <b-form-group>
-                      <label>Customer Name :</label>
+                  <b-form-group>
+                  <label>Customer Name :</label>
                   <b-form-input readonly
                   style="background-color: white;"
                     v-model="row.item.fullname">
@@ -595,13 +595,13 @@
                    v-model="row.item.m_city">
                   </b-form-input>
                     </b-form-group>
-                  </b-col>
+                </b-col>
                   <b-col lg="4">
                     <b-row>
                     <b-col lg="12">
                     <div style="text-align:center;">
                     <br><br>
-                    <b-button  @click="PrintWaybill(row)" variant="success"><i class="fa fa-print" aria-hidden="true"></i> Waybill</b-button>
+                    <b-button v-show="$store.state.user.type == 1" @click="PrintWaybill(row)" variant="success"><i class="fa fa-print" aria-hidden="true"></i> Waybill</b-button>
                     <b-button v-show="$store.state.user.type == 1" @click="PrintDeliveryForm(row)" variant="warning"><i class="fa fa-file-text-o" aria-hidden="true"></i> Delivery Form</b-button><br><br>
                     <b-button v-show="$store.state.user.type == 1" @click="AcceptIntransit(row)" variant="primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
                     <b-button v-show="$store.state.user.type == 1" @click="DeclineIntransit(row)  " variant="danger"><i class="fa fa-times" aria-hidden="true"></i> Decline</b-button>
@@ -1718,8 +1718,6 @@ export default {
       DetailState() {
       return this.forms.dashboard.fields.decline_intransit_remarks !== null && this.forms.dashboard.fields.decline_intransit_remarks.length >= 20
       },
-
- 
     // GetTotalFee(){
     //     this.forms.dashboard.fields.total_fee = 0;
     //     this.forms.dashboard.fields.total_fee += ( Number(this.forms.dashboard.fields.shipping_fee) + Number(this.forms.dashboard.fields.transfer_fee));

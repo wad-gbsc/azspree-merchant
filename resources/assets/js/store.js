@@ -23,6 +23,10 @@ export default new Vuex.Store({
         rights (state, rights) {
             state.rights = rights
         },
+
+        type (state, type) {
+            state.type = type
+        },
        
     }
 })

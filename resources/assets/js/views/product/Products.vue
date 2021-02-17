@@ -101,17 +101,30 @@ input[type="number"]::-webkit-outer-spin-button {
                 <b-form-group v-show="$store.state.user.type == 2">
                 <select2
                 v-model="forms.products.fields.getmerchantproducts"
-                :allowClear="true"
+                :allowClear="false"
                 :placeholder="'Select Merchant'">
                         <option v-for="right in options.sumr.items"
                         :key="right.sumr_hash" 
                         :value="right.sumr_hash">
-                        {{right.seller_name}}
+                        {{right.shop_name}}
                         </option>
                 </select2>
               </b-form-group>
               </b-col>
-              <b-col sm="4">
+              <b-col sm="2">
+                <b-form-group v-show="$store.state.user.type == 2">
+                <select2
+                v-model="forms.products.fields.getStatus"
+                :allowClear="false"
+                :placeholder="'Select Status'">
+                <option value="1">Verified</option>
+                <option value="2">Pending</option>
+                <option value="3">Disapproved</option>
+                <option value="4">Banned</option>
+                </select2>
+              </b-form-group>
+              </b-col>
+              <b-col lg="2">
                 <span></span>
               </b-col>
 
@@ -197,18 +210,103 @@ input[type="number"]::-webkit-outer-spin-button {
                     
                     </div>
                   </template>
+                   <template v-slot:cell(show_details)="data">
+                    <b-button
+                      class="button"
+                      variant="primary"
+                      size="sm"
+                      @click="data.toggleDetails()"
+                    >
+                      <i class="fa fa-eye"></i>
+                      {{ row.detailsShowing ? 'Hide' : 'Show'}} Details 
+                    </b-button>
+                  </template>
+                  <template v-slot:row-details="data"> 
+                    <b-card>
+                      <b-row class="mb-2">
+                      <b-col lg="6">
+                        <br>
+                          <h3>{{data.item.shop_name}}</h3>
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Merchant Name :</b>
+                          <label>&emsp;{{data.item.seller_name}}</label>
+                        </b-col>
+                      </b-row>
+                      
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Product Name :</b>
+                          <label>&emsp;{{data.item.product_name}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Category :</b>
+                          <label>&emsp;{{data.item.cat_name}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Product Details :</b>
+                          <label>&emsp;{{data.item.product_details}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>On hand Quantity :</b>
+                          <label>&emsp;{{data.item.onhand_qty}}</label>
+                        </b-col>
+                      </b-row>
+
+                       <b-row class="mb-2">
+                        <b-col>
+                          <b>Available Quantity :</b>
+                          <label>&emsp;{{data.item.available_qty}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Sales :</b>
+                          <label>&emsp;{{data.item.sales}}</label>
+                        </b-col>
+                      </b-row>
+                      
+                       <b-row class="mb-2">
+                        <b-col>
+                          <b>Sales :</b>
+                          <label>&emsp;{{data.item.cost_amt}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Weight :</b>
+                          <label>&emsp;{{data.item.weight}}</label>
+                        </b-col>
+                      </b-row>
+
+                      <b-row class="mb-2">
+                        <b-col>
+                          <b>Dimension :</b>
+                          <label>&emsp;{{data.item.dimension}}</label>
+                        </b-col>
+                      </b-row>
+                      
+
+                      </b-col>
+                       </b-row>
+                       </b-card>
+                  </template>
                 </b-table>
                 <b-row>
               <!-- Pagination -->
               <b-col sm="12" class="my-1">
-                <b-pagination
-                  size="sm"
-                  align="right"
-                  :total-rows="paginations.products.totalRows"
-                  :per-page="paginations.products.perPage"
-                  v-model="paginations.products.currentPage"
-                  class="my-0"
-                />
+                <b-pagination size="sm" align="right" :total-rows="paginations.products.totalRows" :per-page="paginations.products.perPage" v-model="paginations.products.currentPage" />
               </b-col>
             </b-row>
                 <b-modal 
@@ -465,6 +563,7 @@ input[type="number"]::-webkit-outer-spin-button {
             isSaving: false,
             isDeleting: false,
             fields: {
+              getStatus: null,
               getmerchantproducts: null,
               image: '',
               imagePreview: null,
@@ -538,6 +637,13 @@ input[type="number"]::-webkit-outer-spin-button {
               },
               {
                 key: "action",
+                label: "Action",
+                thClass: "text-center",
+                thStyle: { width: "80px" },
+                tdClass: "text-center"
+              },
+              {
+                key: "show_details",
                 label: "",
                 thStyle: { width: "80px" },
                 tdClass: "text-center"
@@ -921,11 +1027,13 @@ input[type="number"]::-webkit-outer-spin-button {
      },
   computed: {
     getMerchantProducts() {
-      if (this.forms.products.fields.getmerchantproducts != null) {
-        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts);
+      if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus != null) {
+        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts && p.is_verified == this.forms.products.fields.getStatus);
+      }else if (this.forms.products.fields.getmerchantproducts != null){
+        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts)
       }else{
         return this.tables.products.items;
-      }
+        }
     },
     invalidFeedbackName() {
       if (this.forms.products.fields.product_name !== null && this.forms.products.fields.product_name.length == 0) {
