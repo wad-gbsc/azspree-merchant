@@ -54,6 +54,7 @@
                           </b-form-group>
                          <b-table
                               style="overflow: hidden;"
+                              fixed
                               responsive
                               striped
                               hover

@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,16 +24,16 @@ Route::group([
     Route::get('logout', 'AuthController@logout');
     Route::get('refresh', 'AuthController@refresh');
     Route::get('me', 'AuthController@me');
+   
     
-    
-
 });
 
  
 Route::middleware('auth:api')->group(function () {
-
+    
     Route::get('/','ProfileController@index');
-
+    Route::get('profile', 'AuthController@ProfileInfo');
+    Route::put('profile/{id}', 'AuthController@updateProfile');
     Route::put('changepassword/{id}', 'AuthController@changepassword');
     Route::get('sumr/{id}', 'Controller\OrdersController@sumr');
     Route::get('products', 'Controller\ProductsController@index');
@@ -53,12 +53,10 @@ Route::middleware('auth:api')->group(function () {
     Route::put('acceptintransitpickup/{id}', 'Controller\OrdersController@AcceptIntransitPickup');
     Route::put('todeliver/{id}', 'Controller\OrdersController@Todeliver');
     Route::post('products', 'Controller\ProductsController@create');
-    Route::post('refresh', 'Controller\OrdersController@refresh');
     Route::resource('posts', 'Controller\OrdersController');
     Route::post('upload','Controller\ProductsController@upload');
     Route::get('dashboardcheck/{id}', 'Controller\OrdersController@checkIfUsed');
-
-    Route::post('product/upload', 'Controller\ProductsController@upload');
+    Route::put('products/remove/{id}', 'Controller\ProductsController@removeImages');
 
     Route::put('products/approve/{id}', 'Controller\ProductsController@ApproveProduct');
     Route::put('products/disapprove/{id}', 'Controller\ProductsController@DisapproveProduct');
@@ -75,7 +73,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('comments/{id}', 'Controller\CommentsController@update');
     Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 });
-Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
+
+Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintInvoice');
+// Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 Route::get('waybill/{id}', 'Controller\WaybillController@PrintWaybill');
 Route::get('deliveryform/{id}', 'Controller\WaybillController@PrintDeliveryForm');
 // Route::get('logs/printreport/{id}', , function ($id)  {

@@ -7,11 +7,18 @@
   margin-left: 10%;
 }
 
-@media screen and (max-width: 600px) {
-  .a a{
-   margin: 0%;
+/* @media screen and (max-width: 360px) {
+  .cardres {
+  width: 50%;
+  display: block;
   }
 }
+
+@media screen and (max-width: 360px) {
+  .iconhide {
+   display: none;
+  }
+} */
 </style>
 <template>
   <div>
@@ -27,7 +34,7 @@
   <div class="animated fadeIn">
       <div class="row">
       <div class="col-sm-6 col-lg-3">
-        <b-card class="bg-primary w-card" @click="newOrderEntry = true,IntransitEntry = false, DeliverEntry = false, CompletedEntry = false" style="height:75%;">
+        <b-card class="bg-primary w-card cardres" @click="newOrderEntry = true, focusElement('searchfocus'), IntransitEntry = false, DeliverEntry = false, CompletedEntry = false" style="height:75%;">
           <div class="card-body pb-0">
             <b-row>
             <b-col lg="6">
@@ -35,14 +42,14 @@
             <p style="font-size: 14px">New Order(s)</p>
             </b-col>
              <b-col lg="6">
-               <a class="fa fa-shopping-cart float-right" style="font-size:60px;padding:0%;"></a>
+               <a class="fa fa-shopping-cart float-right iconhide" style="font-size:60px;padding:0%;"></a>
              </b-col>
           </b-row>
           </div>
         </b-card>
       </div><!--/.col-->
       <div class="col-sm-6 col-lg-3">
-        <b-card class="bg-success w-card" @click="IntransitEntry = true ,newOrderEntry = false, DeliverEntry = false, CompletedEntry = false" style="cursor:pointer !impotant; height:75%;">
+        <b-card class="bg-success w-card cardres" @click="IntransitEntry = true , focusElement('searchfocusIntransit'), newOrderEntry = false, DeliverEntry = false, CompletedEntry = false" style="cursor:pointer !impotant; height:75%;">
           <div class="card-body pb-0">
             <b-row>
             <b-col lg="6">
@@ -63,7 +70,7 @@
             </b-row>
             </b-col>
              <b-col lg="6">
-               <a class="fa fa-truck float-right" style="font-size:60px;padding:0%;"></a>
+               <a class="fa fa-truck float-right iconhide" style="font-size:60px;padding:0%;"></a>
              </b-col>
           </b-row>
           </div>
@@ -71,7 +78,7 @@
       </div>
       <!--/.col-->
       <div class="col-sm-6 col-lg-3">
-        <b-card class="bg-warning w-card" :no-block="true" @click="DeliverEntry = true, IntransitEntry = false ,newOrderEntry = false, CompletedEntry = false" style="height:75%;">
+        <b-card class="bg-warning w-card cardres" :no-block="true" @click="DeliverEntry = true, focusElement('searchfocusDelivery'), IntransitEntry = false ,newOrderEntry = false, CompletedEntry = false" style="height:75%;">
           <div class="card-body pb-0">
             <b-row>
             <b-col lg="6">
@@ -87,7 +94,7 @@
             </b-row>
             </b-col>
              <b-col lg="6">
-               <a class="fa fa-arrow-circle-o-right float-right" style="font-size:60px;padding:0%;"></a>
+               <a class="fa fa-arrow-circle-o-right float-right iconhide" style="font-size:60px;padding:0%;"></a>
              </b-col>
           </b-row>
           </div>
@@ -95,72 +102,76 @@
       </div>
       <!--/.col-->
       <div class="col-sm-6 col-lg-3">
-        <b-card class="bg-danger w-card" :no-block="true" @click="CompletedEntry = true,DeliverEntry = false, IntransitEntry = false ,newOrderEntry = false" style="height:75%;">
+        <b-card class="bg-danger w-card cardres" :no-block="true" @click="CompletedEntry = true, focusElement('searchfocusCompleted'),DeliverEntry = false, IntransitEntry = false ,newOrderEntry = false" style="height:75%;">
           <div class="card-body pb-0">
             <b-row>
             <b-col lg="6">
-            <h2 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 7 && i.status_user == "COMPLETED").length}}</h2>
+            <h2 class="mb-0">{{tables.sohr.items.filter(i => i.order_stat == 7 && i.status_user == 5).length}}</h2>
             <p style="font-size: 14px">Completed(s)</p>
             </b-col>
              <b-col lg="6">
-               <a class="fa fa-check-square float-right" style="font-size:60px;padding:0%;"></a>
+               <a class="fa fa-check-square float-right iconhide" style="font-size:60px;padding:0%;"></a>
                
              </b-col>
           </b-row>
           </div>
         </b-card>
       </div>
-   
-    <b-card class="t-card animated" v-show="newOrderEntry" 
+
+ 
+      <b-card class="t-card animated" v-show="newOrderEntry"
         border-variant="primary"
         header-bg-variant="primary"
-        header-text-variant="white" >
-      <div slot="header" >
-      <h5>
-        <span class="text-primary">
-     <span style="color: white;">
-       <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-          New Order </span>
-        </span>
-      </h5>
-      </div>
-      <b-row>
-       <b-col sm="3">
+        header-text-variant="white" style="width: 100%; padding: 0%; margin:0%;">
+        <div slot="header" >
+        <h5>
+          <span class="text-primary">
+        <span style="color: white;">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            New Order </span>
+          </span>
+        </h5>
+        </div>
+        <b-row>
+        <b-col sm="3">
           <date-picker
-            id="date"
+
+            id="datefocus"
             format="MMMM/DD/YYYY"
             type="date"
             lang="en"
             input-class="form-control mx-input"
             v-model="forms.dashboard.fields.neworderdate"
-            ref="date"
+            ref="datefocus"
           ></date-picker>
         </b-col>
         <b-col lg="3"><span></span></b-col>
         <b-col lg="3"><span></span></b-col>
         <b-col lg="3">
           <b-form-input
+            id="searchfocus"
+            ref="searchfocus"
             v-model="filters.sohr.criteria"
             type="text"
             placeholder="Search"
           ></b-form-input></b-col>
         </b-row>
         <br>
-      <b-table
-        style="overflow: hidden"
-        responsive
-        hover
-        small
-        bordered
-        show-empty
-        :fields="tables.sohr.fields"
-        :items="NeworderFilter"
-        :filter="filters.sohr.criteria"
-        :total-rows="paginations.sohr.totalRows"
-        :per-page="paginations.sohr.perPage"
-        :current-page="paginations.sohr.currentPage"
-        :tbody-tr-class="rowClass"
-      >     
+        <b-table
+          style="overflow: hidden; width: 100%;"
+          responsive
+          hover
+          small
+          bordered
+          show-empty
+          :fields="tables.sohr.fields"
+          :items="NeworderFilter"
+          :filter="filters.sohr.criteria"
+          :total-rows="paginations.sohr.totalRows"
+          :per-page="paginations.sohr.perPage"
+          :current-page="paginations.sohr.currentPage"
+          :tbody-tr-class="rowClass"
+        >     
             <template #cell(order_name)="data">
               <b class="text-info"> {{data.item.order_name}}</b> 
               <!-- <b-badge pill variant="primary">{{data.item.order_name}}</b-badge> -->
@@ -187,13 +198,13 @@
                     v-model="row.item.fullname">
                   </b-form-input>
                     </b-form-group>
-                    <b-form-group>
-                      <label>Customer Address :</label>
+                    <!-- <b-form-group>
+                    <label>Customer Address :</label>
                   <b-form-input readonly
                   style="background-color: white;"
                    v-model="row.item.region">
                   </b-form-input>
-                    </b-form-group>
+                    </b-form-group> -->
                       <b-form-group>
                       <label>Customer Address :</label>
                   <b-form-input readonly
@@ -216,7 +227,7 @@
                     </b-form-group>
                   </b-col>
                   <b-col lg="4">
-                    <br>
+                  <br>
                   <b-form-group v-show="row.item.decline_intransit_remarks != null" >
                   <b-row>
                     <b-col>
@@ -258,39 +269,6 @@
                 <div slot="modal-title">Accept New Order? <small>For Drop-off</small></div>
 
                 <label>Are you sure you want to Accept this Order?</label><br>
-                <!-- <b-form  style="color:#2196F3;">
-                <span>Reminder : </span><br>
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You will be charged tranfer fee base on your customers location.</span><br><br></b-form>
-                    <b-row>
-                    <b-col lg="6">
-                    <span for="selectdhTodeliver" class="p-0">Select Hub :</span>
-                    <select2
-                    :placeholder="'Select Hub'"
-                    class="form-control"
-                    style="padding:0px; font-size:14px;" 
-                    id="selectdhTodeliver" 
-                    ref="selectdhTodeliver" 
-                    v-model="forms.dashboard.fields.selectdhTodeliver" 
-                    >
-                    <option
-                      v-for="right in options.default.items"
-                      :key="right.where_dh"
-                      :value="right.where_dh"
-                    >{{right.seller_name}}</option>
-                    </select2>
-                    </b-col>
-                    <b-col lg="6">
-                      <b-form-group v-model="note" v-show="noteshow">
-                      <h6 style="color:red;">Note :</h6>
-                      <span style="color:red;">You will be charged 
-                       <vue-autonumeric
-                        v-model="forms.dashboard.fields.tf_shipping"
-                        style="border: none; border-color: transparent; background-color: white; width:60px; text-align: center; color:blue;font-weight: bold;" 
-                        disabled></vue-autonumeric>
-                        pesos in your Income for  transfer fee.</span>
-                      </b-form-group>
-                      </b-col>
-                    </b-row> -->
                 <div slot="modal-footer">
                   <b-button
                     class="button"
@@ -305,9 +283,6 @@
                   <b-button class="button" variant="secondary" @click="showModalAcceptNewOrderDeliver=false">Close</b-button>
                 </div>
                  </b-modal>
-
-
-
                   <b-modal v-model="showModalAcceptNewOrderPickUp" :noCloseOnEsc="true" :noCloseOnBackdrop="true"
                   header-bg-variant="primary"
                   header-text-variant="light">
@@ -317,7 +292,7 @@
                   <b-col lg="12">
                   <p>Are you sure you want to Accept this Order?</p>
                   <b-form @keydown="resetFieldStates('dashboard')" autocomplete="off">
-                  <b-form-group>
+                  <!-- <b-form-group>
                   <label>Pick Up Date :</label>
                   <date-picker
                     id="to_pick_datetime"
@@ -329,32 +304,11 @@
                     ref="to_pick_datetime"
                     :clearable="false"
                   ></date-picker>
-                  </b-form-group>
-                    <!-- <label>Merchant Address :</label>
-                    <b-form-input 
-                    disabled
-                    v-model="tables.sumr.items.city_hash"
-                    >
-                    </b-form-input> -->
-                    <!-- <b-form-group >
-                    <label for="shipping_fee">Select Hub :</label>
-                    <select2
-                    @input="getShippingFee"
-                    class="form-control"
-                    style="padding:0px; font-size:14px;"
-                    v-model="forms.dashboard.fields.selectdhTodeliver" 
-                    :placeholder="'Select Hub'">
-                    <option
-                      v-for="right in tables.dhsf.items"
-                      :key="right.where_dh"
-                      :value="right.where_dh"
-                    >{{right.seller_name}}</option>
-                    </select2>
-                    </b-form-group> -->
+                  </b-form-group> -->
                     <b-row>
                     <b-col lg="12">
+                       <input type="hidden" v-model="forms.dashboard.fields.m_shipping_fee">
                     <b-form-group>
-                    <!-- <label id="shipping_fee" ref="shipping_fee">Shipping Fee : {{formatNumber(forms.dashboard.fields.shipping_fee)}} </label> -->
                     <label for="shipping_fee">Shipping Fee : </label>
                     <vue-autonumeric
                     style="width:46%;background-color: white;"
@@ -399,40 +353,11 @@
                     class='form-control text-left'
                   ></b-form-input>
                   </b-form-group>
-                  
-                  <!-- <b-form-group v-model="note1" v-show="noteshow1">
-                    <label for="tranfer_fee">Tranfer Fee : </label>
-                    <b-form-input
-                    style="width:50%;background-color: white;"
-                    readonly
-                    id="tranfer_fee"
-                    ref="tranfer_fee"
-                    v-model="transfer_fee.transfer_fee"
-                    class='form-control text-right'
-                  ></b-form-input>
-                      <h6 style="color:red;">Note :</h6>
-                      <span style="color:red;">You will be charged <label>{{formatNumber(Number(transfer_fee.transfer_fee) + Number(row.item.total_excess_fee) + Number(forms.dashboard.fields.shipping_fee))}}</label> pesos in your Income for  transfer fee.</span>
-                      </b-form-group> -->
                       </b-col>
                     </b-row>
                     <b-row>
-                       <!-- <b-form-group>
-                        <label for="total_fee">Total Fee : </label>
-                        <vue-autonumeric
-                        style="width:100%;background-color: white;"
-                        readonly
-                        id="total_fee"
-                        ref="total_fee"
-                        v-model="GetTotalFee"
-                        class='form-control text-right'
-                        :options="{
-                                  minimumValue: '0',  
-                                  emptyInputBehavior:'0',}"
-                      ></vue-autonumeric>
-                      </b-form-group>
-                      </b-form-group> -->
                     </b-row>
-                       <h6 >Total Fee : &emsp;&emsp;&emsp;&emsp;&emsp;{{formatNumber(Number(row.item.total_excess_fee) + Number(brgy_shipping.shipping_fee))}}</h6>
+                       <span id="m_shipping_fee" ref="m_shipping_fee">Total Fee : &emsp;&emsp;&emsp;&emsp;&emsp;{{formatNumber(Number(row.item.total_excess_fee) + Number(brgy_shipping.shipping_fee))}}</span>
                   </b-form>
                 </b-col>
                 </b-row>
@@ -478,7 +403,7 @@
                 </div>
                  </b-modal>
           </template>
-      </b-table>
+          </b-table>
             <b-col sm="12" class="my-1">
               <b-pagination
                 size="sm"
@@ -489,11 +414,12 @@
                 class="my-0"
               ></b-pagination>
             </b-col>
-    </b-card>
+      </b-card>
+ 
     <b-card class="t-card animated" v-show="IntransitEntry" 
         border-variant="success"
         header-bg-variant="success"
-        header-text-variant="white" >
+        header-text-variant="white" style="width: 100%; padding: 0%; margin:0%;" >
      
       <div slot="header" >
       <h5>
@@ -532,6 +458,16 @@
             ref="date"
           ></date-picker>
         </b-col>
+        <b-col sm="3"></b-col>
+        <b-col sm="3">
+          <b-form-input
+            id="searchfocusIntransit"
+            ref="searchfocusIntransit"
+            v-model="filters.sohr.criteria"
+            type="text"
+            placeholder="Search"
+          ></b-form-input></b-col>
+
       </b-row>
       <b-table
         style="overflow: hidden;"
@@ -542,6 +478,7 @@
         show-empty
         :fields="tables.sohr.fields"
         :items="InTransitFilter"
+        :filter="filters.sohr.criteria"
       >
         <template #cell(order_name)="data">
           <b class="text-success"> {{data.item.order_name}}</b> 
@@ -597,10 +534,18 @@
                     </b-form-group>
                 </b-col>
                   <b-col lg="4">
+                    <b-form-group>
+                    <label>Shop  Name :</label>
+                    <b-form-input 
+                    style="background-color: white;"
+                    readonly
+                    v-model="row.item.shop_name"
+                    >
+                    </b-form-input>
+                    </b-form-group>
                     <b-row>
                     <b-col lg="12">
                     <div style="text-align:center;">
-                    <br><br>
                     <b-button v-show="$store.state.user.type == 1" @click="PrintWaybill(row)" variant="success"><i class="fa fa-print" aria-hidden="true"></i> Waybill</b-button>
                     <b-button v-show="$store.state.user.type == 1" @click="PrintDeliveryForm(row)" variant="warning"><i class="fa fa-file-text-o" aria-hidden="true"></i> Delivery Form</b-button><br><br>
                     <b-button v-show="$store.state.user.type == 1" @click="AcceptIntransit(row)" variant="primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Accept</b-button>
@@ -627,7 +572,7 @@
                 <b-modal v-model="showModalAcceptIntransit" :noCloseOnEsc="true" :noCloseOnBackdrop="true"
                 header-bg-variant="success"
                 header-text-variant="light">
-                <div slot="modal-title">Accept New Order?</div>
+                <div slot="modal-title">Accept New Order? (For Drop-off)</div>
                 <b-col lg="12">Are you sure you want to Accept this Order?</b-col>
                 <div slot="modal-footer">
                   <b-button
@@ -744,7 +689,7 @@
       <b-card class="t-card animated" v-show="DeliverEntry"
         border-variant="warning"
         header-bg-variant="warning"
-        header-text-variant="white" >
+        header-text-variant="white" style="width: 100%; padding: 0%; margin:0%;">
       <div slot="header" >
       <h5>
         <span class="text-primary">
@@ -769,6 +714,17 @@
         </b-col>
         <b-col sm="3">
         </b-col>
+         <b-col sm="3">
+        </b-col>
+         <b-col sm="3">
+            <b-form-input
+            id="searchfocusDelivery"
+            ref="searchfocusDelivery"
+            v-model="filters.sohr.criteria"
+            type="text"
+            placeholder="Search"
+          ></b-form-input>
+        </b-col>
       </b-row>
         <b-table
         style="overflow: hidden"
@@ -779,6 +735,7 @@
         show-empty
         :fields="tables.sohr.fields"
         :items="DeliveryFilter"
+        :filter="filters.sohr.criteria"
       >
         <template #cell(order_name)="data">
           <b class="text-warning"> {{data.item.order_name}}</b> 
@@ -861,8 +818,7 @@
                  header-bg-variant="warning"
                  header-text-variant="light"
                  centered>
-                <div slot="modal-title">Why oh why?</div>
-
+                <div slot="modal-title">Why?</div>
                 <h6>Reason</h6>
                 <b-form-textarea
                   placeholder="Enter something..."
@@ -889,7 +845,7 @@
      <b-card class="t-card animated" v-show="CompletedEntry"
         border-variant="danger"
         header-bg-variant="danger"
-        header-text-variant="white" >
+        header-text-variant="white" style="width: 100%; padding: 0%; margin:0%;">
       <div slot="header" >
       <h5>
         <span class="text-primary">
@@ -903,7 +859,23 @@
       </div>
       <b-row class="mb-2">
         <!-- row button and search input -->
+         <b-col sm="3">
+          
+        </b-col>
         <b-col sm="3">
+          
+        </b-col>
+         <b-col sm="3">
+          
+        </b-col>
+         <b-col sm="3">
+            <b-form-input
+            id="searchfocusCompleted"
+            ref="searchfocusCompleted"
+            v-model="filters.sohr.criteria"
+            type="text"
+            placeholder="Search"
+          ></b-form-input>
         </b-col>
       </b-row>
         <b-table
@@ -915,6 +887,7 @@
         show-empty
         :fields="tables.sohr.fields"
         :items="CompletedFilter(tables.sohr.items.sohr_hash)"
+        :filter="filters.sohr.criteria"
       > 
         <template #cell(order_name)="data">
           <b class="text-danger"> {{data.item.order_name}}</b> 
@@ -943,7 +916,7 @@
                       <label>Customer Address :</label>
                   <b-form-input readonly
                   style="background-color: white;"
-                   v-model="data.item.user_address">
+                   v-model="data.item.city">
                   </b-form-input>
                     </b-form-group>
                 <b-table
@@ -1077,8 +1050,18 @@ export default {
               tdClass: "align-middle text-center",
             },
             {
-              key: "order_subtotal",
-              label: "Order Subtotal",
+            key: "shipping_fee",
+            label: "Shipping fee",
+            tdClass: "align-middle text-right",
+            thStyle: { width: "80px" },
+            sortable: true,
+            formatter: (value) => {
+                    return this.formatNumber(value)
+                }
+            },
+            {
+              key: "order_total",
+              label: "Total Amount",
               thClass: "text-right",
               tdClass: "align-middle text-right",
               thStyle: { width: "100px" },
@@ -1105,6 +1088,16 @@ export default {
             thStyle: { width: "40px" },
             sortable: false
             },
+              {
+              key: "unit_price",
+              label: "Price",
+              tdClass: "align-middle text-right",
+              thStyle: { width: "80px" },
+              sortable: true,
+              formatter: (value) => {
+                      return this.formatNumber(value)
+                  }
+              },
             {
             key: "qty",
             label: "Quantity",
@@ -1112,18 +1105,9 @@ export default {
             thStyle: { width: "40px" },
             sortable: false
             },
+           
             {
-            key: "unit_price",
-            label: "Price",
-            tdClass: "align-middle text-right",
-            thStyle: { width: "80px" },
-            sortable: true,
-            formatter: (value) => {
-                    return this.formatNumber(value)
-                }
-            },
-            {
-            key: "order_total",
+            key: "total_cost",
             label: "Total Price",
             thStyle: { width: "100px" },
             tdClass: "align-middle text-right",
@@ -1188,20 +1172,20 @@ export default {
     onDeclineNewOrder() {
       if (this.forms.dashboard.fields.decline_neworder_remarks !== null && this.forms.dashboard.fields.decline_neworder_remarks.length == 0) {
           this.focusElement('decline_neworder_remarks')
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Reason'
-        })
+          Toast.fire({
+                  icon: "error",
+                  group: "notification",
+                  title: "Error!",
+                  text: "Please Enter Reason"
+                });
        }else if (this.forms.dashboard.fields.decline_neworder_remarks !== null && this.forms.dashboard.fields.decline_neworder_remarks.length <= 19) {
           this.focusElement('decline_neworder_remarks')
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Reason at least 20 Characters'
-        })
+          Toast.fire({
+                  icon: "error",
+                  group: "notification",
+                  title: "Error!",
+                  text: "Please Enter Reason at least 20 Characters"
+                  });
 
        }else{
 
@@ -1218,13 +1202,13 @@ export default {
         )
         .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The New Order has been Declined."
-          });
-
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The New Order has been Declined.',
+                showConfirmButton: false,
+                timer: 3000
+            })
           const index = this.tables.sohr.items.findIndex(
             item => item["sohr_hash"] === response.data.data["sohr_hash"]
           );
@@ -1244,7 +1228,6 @@ export default {
     },
     onAcceptingNewOrder() {
       if (this.forms.dashboard.fields.selected === 2){
-       
       this.forms.dashboard.isSaving = true;
       this.$http
         .put(
@@ -1258,12 +1241,14 @@ export default {
         )
         .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The New Order has been Accepted."
-          });
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The New Order has been Accepted.',
+                showConfirmButton: false,
+                timer: 3000
+            })
+         
           const index = this.tables.sohr.items.findIndex(
             item => item["sohr_hash"] === response.data.data["sohr_hash"]
           );
@@ -1281,24 +1266,16 @@ export default {
           this.forms.dashboard.isSaving = false;
           if (!error.response) return;
           const errors = error.response.data.errors;
-          this.$notify({
-            type: "error",
-            group: "notification",
-            title: "Error!",
-            text: "The Order has been already cancelled."
-          });
+          Toast.fire({
+                  icon: 'error',
+                  group: "notification",
+                  title: "Error!",
+                  text: "The Order has been already cancelled."
+                });
           console.log(errors);
         });
       
       }else{
-        if (this.forms.dashboard.fields.shipping_fee == 0) {
-         this.$notify({
-            type: "error",
-            group: "notification",
-            title: "Error!",
-            text: "Please select Distribution Hub."
-          });
-        }else{
         this.forms.dashboard.isSaving = true;
         this.$http
           .put(
@@ -1312,12 +1289,13 @@ export default {
           )
           .then(response => {
             this.forms.dashboard.isSaving = false;
-            this.$notify({
-              type: "success",
-              group: "notification",
-              title: "Success!",
-              text: "The New Order has been Accepted."
-            });
+            Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The New Order has been Accepted.',
+                showConfirmButton: false,
+                timer: 3000
+            })
             const index = this.tables.sohr.items.findIndex(
               item => item["sohr_hash"] === response.data.data["sohr_hash"]
             );
@@ -1335,19 +1313,16 @@ export default {
           this.forms.dashboard.isSaving = false;
           if (!error.response) return;
           const errors = error.response.data.errors;
-          this.$notify({
-            type: "error",
-            group: "notification",
-            title: "Error!",
-            text: "The Order has been already cancelled."
-          });
+          Toast.fire({
+                  icon: "error",
+                  group: "notification",
+                  title: "Error!",
+                  text: "The Order has been already cancelled."
+                });
           console.log(errors);
         });
-      }
-      }
-        
+      }  
     },
-    
     onAcceptingIntransit() {
     
           this.forms.dashboard.isSaving = true
@@ -1361,35 +1336,20 @@ export default {
             })
           .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The Order has been Accepted."
-          });
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The Order has been Accepted.',
+                showConfirmButton: false,
+                timer: 3000
+            })
           
           this.showModalAcceptIntransit = false
           setTimeout(function () {
                 window.location.reload();
           }, 1200);
-
           })
-          // this.refresh()
     },
-    //   refresh() {
-    //         this.$http.post('/api/refresh', this.tables.sohr, {
-    //             headers: {
-    //                   Authorization: 'Bearer ' + localStorage.getItem('token'),
-    //               }
-    //         })
-    //         .then((response) => {
-    //             return response
-    //         })
-    //         .catch(error => {
-    //           if (!error.response) return
-    //           console.log(error)
-    //         })
-    // },
      onAcceptingIntransitPickUp() {
           this.forms.dashboard.isSaving = true
           this.$http.put("api/acceptintransitpickup/" + this.row.sohr_hash,
@@ -1401,19 +1361,13 @@ export default {
             })
           .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The New Order has been Accepted."
-           
-          });
-          // for (var key in response.data.data) {
-          //   row[key] = response.data.data[key];
-          // }
-          //     const index = this.tables.sohr.items.findIndex(
-          //   item => item["sohr_hash"] === response.data.data["sohr_hash"]
-          // );
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The Order has been Accepted.',
+                showConfirmButton: false,
+                timer: 3000
+            })
             this.showModalAcceptIntransitPickup = false
             setTimeout(function () {
                 window.location.reload();
@@ -1432,13 +1386,13 @@ export default {
             })
           .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The Order has been Ready to Deliver."
-            });
-            
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The Order has been Ready to Deliver.',
+                showConfirmButton: false,
+                timer: 3000
+            })    
             this.showModalAcceptIntransitDispatch = false
             setTimeout(function () {
                 window.location.reload();
@@ -1461,13 +1415,13 @@ export default {
         )
         .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The Order is ready to Delivered."
-          });
-
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The Order is ready to Delivered.',
+                showConfirmButton: false,
+                timer: 3000
+            })
           const index = this.tables.sohr.items.findIndex(
             item => item["sohr_hash"] === response.data.data["sohr_hash"]
           );
@@ -1489,20 +1443,19 @@ export default {
     },
     onDeclineIntrasit() {
        if (this.forms.dashboard.fields.decline_intransit_remarks !== null && this.forms.dashboard.fields.decline_intransit_remarks.length == 0) {
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Reason'
-        })
+        Toast.fire({
+                  icon: "error",
+                  group: "notification",
+                  title: "Error!",
+                  text: "Please Enter Reason"
+                });
        }else if (this.forms.dashboard.fields.decline_intransit_remarks !== null && this.forms.dashboard.fields.decline_intransit_remarks.length <= 19) {
-          this.$notify({
-          type: 'error',
-          group: 'notification',
-          title: 'Error!',
-          text: 'Please Enter Reason at least 20 Characters'
-        })
-
+         Toast.fire({
+                  icon: "error",
+                  group: "notification",
+                  title: "Error!",
+                  text: "Please Enter Reason at least 20 Characters"
+                });
        }else{
       this.forms.dashboard.isSaving = true;
       this.$http
@@ -1517,12 +1470,13 @@ export default {
         )
         .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The New Order has been Declined."
-          });
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The New Order has been Declined.',
+                showConfirmButton: false,
+                timer: 3000
+            })
 
           const index = this.tables.sohr.items.findIndex(
             item => item["sohr_hash"] === response.data.data["sohr_hash"]
@@ -1558,13 +1512,13 @@ export default {
         )
         .then(response => {
           this.forms.dashboard.isSaving = false;
-          this.$notify({
-            type: "success",
-            group: "notification",
-            title: "Success!",
-            text: "The Order has been Delivered."
-          });
-
+          Swal.fire({
+                title: 'Success!',
+                icon: 'success',
+                text: 'The Order has been Delivered.',
+                showConfirmButton: false,
+                timer: 3000
+            })
           const index = this.tables.sohr.items.findIndex(
             item => item["sohr_hash"] === response.data.data["sohr_hash"]
           );
@@ -1589,11 +1543,16 @@ export default {
       if (this.forms.dashboard.fields.selected == 3) {
         this.forms.dashboard.fields.selectdhTodeliver = null;
         this.showModalAcceptNewOrderPickUp = true;
+        this.forms.dashboard.fields.m_shipping_fee = Number(row.item.total_excess_fee) + Number(this.brgy_shipping.shipping_fee)
+        console.log(this.forms.dashboard.fields.m_shipping_fee)
       }else{
+        // this.forms.dashboard.fields.m_shipping_fee = 0;
         this.forms.dashboard.fields.selectdhTodeliver = null;
         this.showModalAcceptNewOrderDeliver = true;
-        this.forms.dashboard.fields.tf_shipping = Number(this.transfer_fee.transfer_fee) + Number(row.item.total_excess_fee)
 
+        // Number(row.item.total_excess_fee) + Number(brgy_shipping.shipping_fee)
+        // this.forms.dashboard.fields.m_shipping_fee = Number(row.item.total_excess_fee) + Number(brgy_shipping.shipping_fee)
+        
       }
     },
 
@@ -1640,7 +1599,7 @@ export default {
     
     },
     CompletedFilter(sohr_hash){
-        return this.tables.sohr.items.filter(r => r.order_stat == 7 && r.status_user == "COMPLETED");
+        return this.tables.sohr.items.filter(r => r.order_stat == 7 && r.status_user == 5);
     },
     solnfilter(sohr_hash) {
       return this.tables.soln.items.filter(r => r.sohr_hash == sohr_hash);
@@ -1805,7 +1764,8 @@ export default {
         },
   },
   created() {
-      this.LoadTable();
+    
+      this.LoadTable();     
       // setInterval(() =>  this.LoadTable(), 3000)
   },
 

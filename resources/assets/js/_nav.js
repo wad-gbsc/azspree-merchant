@@ -6,7 +6,6 @@ export default {
     },
     {
       name: 'Product',
-      url: '/product',
       icon: 'icon-book-open',
       children:[
         {
@@ -20,8 +19,7 @@ export default {
       
         {
         name: 'My Shop',
-        url: '/Order',
-        icon: 'fa fa-bars',
+        icon: 'fa fa-shopping-bag',
         children:[
           {
             name: 'Order(s)',

@@ -1,11 +1,11 @@
 <template>
     <!--<b-animated fade-in>  main container -->
     <div class="container">
-        <div v-if="$store.state.user.type != 0">
+        <div v-if="$store.state.user.type == 1">
         <not-found></not-found>
         </div>
         <notifications group="notification" />
-        <div class="animated fadeIn" v-show="$store.state.user.type == 0">
+        <div class="animated fadeIn" v-show="$store.state.user.type != 1">
             <b-row>
                 <b-col sm="12">
                     <b-card >
@@ -31,6 +31,7 @@
                         >
                        
                         <template v-slot:cell(action)="data">
+                            <div v-if="$store.state.user.type == 0">
                             <div v-show="data.item.answer == null">
                                 <b-btn
                                     :size="'sm'"
@@ -39,6 +40,7 @@
                                 >
                                     <i class="fa fa-share"></i>
                                 </b-btn>
+                            </div>
                             </div>
                         </template>
                         </b-table>
@@ -77,14 +79,14 @@
                         </b-form>
                     </b-col> <!-- modal body -->
 
-            <div slot="modal-footer"><!-- modal footer buttons -->
+                <div slot="modal-footer"><!-- modal footer buttons -->
                 <b-button :disabled="forms.comments.isSaving" variant="primary" @click="onComment">
                     <icon v-if="forms.comments.isSaving" name="sync" spin></icon>
                     <i class="fa fa-check"></i>
                     Save
                 </b-button>
                 <b-button variant="secondary" @click="showModalComments=false">Close</b-button>
-            </div>
+                </div>
                          </b-modal>
                         </b-col>
                         </b-row>
@@ -136,7 +138,7 @@ export default {
                         },
                         {
                             key: "fullname",
-                            label: "Costumer Name",
+                            label: "Customer Name",
                             tdClass: "align-middle",
                             thStyle: { width: "80px" },
                             sortable: true

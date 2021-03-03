@@ -38,14 +38,16 @@
         </li>
       </ul>
       <slot> 
-        <br>
+        <!-- <br>
         <center>
+      <b-img :src="getProfilePhoto()" class="avatar" style="width:50%;"/> <br>
+           <br>
         <a style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ;cursor: pointer;
-          font-weight: 400; font-size: 16px;" href="http://azspree.test/#/Profile" ><i class="fa fa-user" aria-hidden="true"></i> <span>{{$store.state.user.shop_name}}</span></a>
+          font-weight: 400; font-size: 16px;" @click="$router.push({name: 'Profile'})" ><i class="fa fa-user" aria-hidden="true"></i> <span>{{$store.state.user.shop_name}}</span></a>
           <br><br>
            <a style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif ; cursor: pointer;
           font-weight: 400; font-size: 16px;" @click="logOut()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
-          </center>
+          </center> -->
           </slot>
       <div slot="footer"></div>
     </nav>
@@ -75,6 +77,12 @@ export default {
     SidebarNavTitle
   },
   methods: {
+      getProfilePhoto(){
+
+                let photo = this.$store.state.user.photo == "defualt.png" ? "/images/default.png" : "/images/profile/" +  this.$store.state.user.photo ;
+                // let photo = (this.forms.photo.length > 200) ? this.forms.photo : "/images/profile/" + this.forms.photo ;
+                return photo;
+            },
     handleClick (e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')

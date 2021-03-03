@@ -54,10 +54,9 @@ input[type="number"]::-webkit-outer-spin-button {
         .img-wrapper {
             width: 180px;
             height: 250px;
-            display: flex;
             flex-direction: column;
             img {
-                max-height: 250px;
+                max-height: 237px;
             }
         }
         
@@ -93,7 +92,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <b-form-group v-show="$store.state.user.type == 0">
                 <b-button
                   variant="primary"
-                  @click="showEntry = true, entryMode='Add', clearFields('products'), focusElement('product_name', true)"
+                  @click="showEntry = true, entryMode='Add', clearFields('products'), focusElement('product_name', true) , images = []"
                 >
                   <i class="fa fa-plus-circle"></i> Add New Product
                 </b-button>
@@ -180,7 +179,6 @@ input[type="number"]::-webkit-outer-spin-button {
                     </div>
                     <div v-else>
                       <b-btn
-                      v-b-tooltip title="Approve"
                       v-show="data.item.is_verified == 2 || data.item.is_verified == 3"
                       :size="'sm'"
                       variant="success"
@@ -189,7 +187,6 @@ input[type="number"]::-webkit-outer-spin-button {
                       <i class="fa fa-check"></i>
                     </b-btn>
                       <b-btn
-                      v-b-tooltip title="Disapprove"
                       v-show="data.item.is_verified == 1 || data.item.is_verified == 2 "
                       :size="'sm'"
                       variant="danger"
@@ -197,17 +194,16 @@ input[type="number"]::-webkit-outer-spin-button {
                       >
                       <i class="fa fa-thumbs-down"></i>
                       </b-btn>
-
+<!-- 
                       <b-btn
-                      v-b-tooltip title="Ban"
                       v-show="data.item.is_verified == 3 || data.item.is_verified == 1"
                       :size="'sm'"
                       variant="dark"
                       @click="BannedProduct(data)"
-                    >
+                    > 
                     <i class="fa fa-ban"></i>
                     </b-btn>
-                    
+                    -->
                     </div>
                   </template>
                    <template v-slot:cell(show_details)="data">
@@ -251,7 +247,9 @@ input[type="number"]::-webkit-outer-spin-button {
                       <b-row class="mb-2">
                         <b-col>
                           <b>Product Details :</b>
-                          <label>&emsp;{{data.item.product_details}}</label>
+                          <label style="text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;">&emsp;{{data.item.product_details}}</label>
                         </b-col>
                       </b-row>
 
@@ -357,6 +355,7 @@ input[type="number"]::-webkit-outer-spin-button {
             :invalid-feedback="invalidFeedbackName"
             :valid-feedback="ValidFeedbackName"
             :state="nameState">
+            <input type="hidden" v-model="forms.products.fields.inmr_hash" />
                 <label for="product_name"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Product Name</label>
                         <b-form-input
                         id="product_name"
@@ -508,21 +507,55 @@ input[type="number"]::-webkit-outer-spin-button {
                   </b-col>
                
         <b-col lg="6">
+                <!-- <label>{{ShowImages[0] != undefined ? ShowImages[0].path:'N/A'}}</label> -->
+                
         <div class="uploader">
-     
-        <div v-show="!images.length">
+      
+        <div v-show="images.length < 1 ">
                 <b-form-file multiple id="file" ref="file" name="images" type="file" v-model="files" @change="onInputChange"> 
               </b-form-file>
         </div>
-        <div class="images-preview" v-show="images.length">
+
+          
+        <div class="images-preview" v-show="images.length > 0 || ShowImages.length > 0 ">
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[0] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[0] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
+          </div>
+           <div class="img-wrapper img" v-bind:style="{display: ShowImages[1] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[1] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
+          </div>  
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[2] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[2] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
+          </div>
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[3] != undefined ? 'flex' : 'none' }">
+                <img :src="ShowImages[3] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
+          </div>     
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[4] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[4] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''" >
+          </div>
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[5] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[5] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
+          </div> 
+
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[6] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[6] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
+          </div> 
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[7] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[7] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
+          </div> 
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[8] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[8] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
+          </div> 
+          <div class="img-wrapper img" v-bind:style="{display: ShowImages[9] != undefined ? 'flex' : 'none' }">
+                <img :src=" ShowImages[9] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
+          </div> 
             <div class="img-wrapper img" v-for="(image, index) in images" :key="index">
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
             </div>
         </div>
-           <div v-show="images.length">
-            <b-button @click ="files = [], images = []" variant="danger" >Remove</b-button>
-        </div>
-        <!-- <img :src="'/storage/app/public/products/' + $store.state.user.sumr_hash + ''" /> -->
+          <div v-show="images.length > 0  || ShowImages.length > 0">
+            <b-button @click ="ShowImages.length > 0 ? removeImages() : files = [], images = []" variant="danger">Remove</b-button>
+          </div>
       </div>
     </b-col>
     </b-row>   
@@ -535,7 +568,7 @@ input[type="number"]::-webkit-outer-spin-button {
                     <i class="fa fa-check"></i>
                     Save
                 </b-button>
-                <b-button variant="secondary" @click=" files = [], images = [], showEntry=false">Close</b-button>
+                <b-button variant="secondary" @click=" files = [], images = [], showEntry=false , ShowImages = [] , clearFields('products')">Close</b-button>
               </b-col>
               </b-row>
             </b-col>
@@ -551,27 +584,25 @@ input[type="number"]::-webkit-outer-spin-button {
   export default {
     data() {
       return {
+        ShowImages: [],
         files: [],
         images: [],
         entryMode: "Add",
         showModalProducts: false, 
         showModalDelete: false,
         showEntry: false,
-        image: '',
         forms: { 
             products: {
             isSaving: false,
             isDeleting: false,
             fields: {
-              getStatus: null,
-              getmerchantproducts: null,
-              image: '',
-              imagePreview: null,
-              showPreview: false,
-              dimension: 0,
-              is_measurable: 0,
+              inmr_hash: null,
               product_name: null,
               product_details: null ,
+              getStatus: null,
+              getmerchantproducts: null,
+              dimension: 0,
+              is_measurable: 0,
               onhand_qty: 0,
               available_qty: 0,
               cost_amt: 0,
@@ -678,43 +709,61 @@ input[type="number"]::-webkit-outer-spin-button {
       };
     },
      methods: {
-       BannedProduct(data) {
-          this.inmr_hash = data.item.inmr_hash;
-          Swal.fire({
+      removeImages() {
+        this.inmr_hash = this.forms.products.fields.inmr_hash;
+               Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Banned it!',
-                    text: "You won't be able to revert this!",
+                    confirmButtonText: 'Yes, delete it!',
                     }).then((result) => {
 
                         // Send request to the server
                          if (result.value) {
-                                this.$http
+                          //  console.log('Show')
+                          this.$http
                           .put(
-                            "api/products/banned/" + this.inmr_hash,
-                            this.forms.products.fields,
+                            "api/products/remove/" + this.inmr_hash, this.forms.products.fields,
                             {
                               headers: {
                                 Authorization: "Bearer " + localStorage.getItem("token")
                               }
                             }
-                          ).then(()=>{
-                                    Swal.fire(
-                                    'Banned!',
-                                    'The Product has been Banned.',
-                                    'success'
-                                    )
-                                    this.loadProducts();
-                            }).catch(()=> {
-                                    Swal.fire("Failed!", "There was something wronge.", "warning");
-                            });
+                          )
+                          .then(()=>{
+                                     Swal.fire({
+                                        title: 'Deleted!',
+                                        icon: 'success',
+                                        text: 'The Product has been Deleted.',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    }),
+                                    this.$http
+                                    .get("api/products/" + this.forms.products.fields.inmr_hash, {
+                                      headers: {
+                                        Authorization: "Bearer " + localStorage.getItem("token")
+                                      }
+                                    })
+                                    .then(response => {
+                                      this.forms.products.fields = response.data.products;
+                                      this.ShowImages = response.data.images;
+                                      // console.log(this.ShowImages.length > 0)
+                                      this.showEntry = true;
+                                      this.entryMode = "Edit";
+                                    })
+                                    .catch(err => {
+                                      console.log(err);
+                                    });
+                          }).catch(()=> {
+                                  Swal.fire("Failed!", "There was something wronge.", "warning");
+                          });
                          }
                     })
-       },
+      },
+     
        DisapproveProduct(data) {
           this.inmr_hash = data.item.inmr_hash;
           Swal.fire({
@@ -739,11 +788,13 @@ input[type="number"]::-webkit-outer-spin-button {
                               }
                             }
                           ).then(()=>{
-                                    Swal.fire(
-                                    'Disapproved!',
-                                    'The Product has been Disapproved.',
-                                    'success'
-                                    )
+                                    Swal.fire({
+                                        title: 'Disapproved!',
+                                        icon: 'success',
+                                        text: 'The Product has been Disapproved.',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    })
                                     this.loadProducts();
                             }).catch(()=> {
                                     Swal.fire("Failed!", "There was something wronge.", "warning");
@@ -775,11 +826,13 @@ input[type="number"]::-webkit-outer-spin-button {
                               }
                             }
                           ).then(()=>{
-                                    Swal.fire(
-                                    'Approved!',
-                                    'The Product has been Approved.',
-                                    'success'
-                                    )
+                                    Swal.fire({
+                                        title: 'Approved!',
+                                        icon: 'success',
+                                        text: 'The Product has been Approved.',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    })
                                     this.loadProducts();
                             }).catch(()=> {
                                     Swal.fire("Failed!", "There was something wronge.", "warning");
@@ -789,25 +842,15 @@ input[type="number"]::-webkit-outer-spin-button {
         },
        
       
-          onInputChange(e) {
+        onInputChange(e) {
             const files = e.target.files;
             Array.from(files).forEach(file => this.addImage(file));
         },  
        
         addImage(file) {
-            if (!file.type.match('image.*')) {
-                Toast.fire({
-                  type: "error",
-                  group: "notification",
-                  title: "Error!",
-                  text: "`${file.name} is not an image`"
-                });
-                return;
-            }
-           
             this.files.push(file);
             const img = new Image(),
-                reader = new FileReader();
+            reader = new FileReader();
             reader.onload = (e) => this.images.push(e.target.result);
             reader.readAsDataURL(file);
         },
@@ -816,6 +859,7 @@ input[type="number"]::-webkit-outer-spin-button {
             const formData = new FormData();
             this.files.forEach(file => {
                 formData.append('images[]', file, file.name);
+              
             });
              this.$http.post('/api/upload', formData, {
                 headers: {
@@ -824,12 +868,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   }
                 })
                 .then(response => {
-                //   Toast.fire({
-                //   type: "success",
-                //   group: "notification",
-                //   title: "Success!",
-                //   text: "Image Uploaded"
-                // });
                   this.images = [];
                   this.files = [];
                 })
@@ -838,9 +876,6 @@ input[type="number"]::-webkit-outer-spin-button {
                   console.log(error)
                 })
         },
-      // filterProduct(sumr_hash) {
-      // return this.tables.products.items.filter(r => r.sumr_hash == sumr_hash);
-      // },
       onProductEntry() {
         if (this.forms.products.fields.product_name == null || this.forms.products.fields.product_name == "") {
             Toast.fire(
@@ -912,14 +947,6 @@ input[type="number"]::-webkit-outer-spin-button {
               'Please Enter Weight',
               'error'
               )
-        // }else if (this.images !== null && this.images.length == 0) {
-        //   this.focusElement('file')
-        //   this.$notify({
-        //   type: 'error',
-        //   group: 'notification',
-        //   title: 'Error!',
-        //   text: 'Please Enter Image'
-        // })
         }else{
           if (this.entryMode == "Add") {
             if (this.images !== null && this.images.length == 0) {
@@ -940,10 +967,10 @@ input[type="number"]::-webkit-outer-spin-button {
                 }
               })
         .then(response => {
+          this.upload();
           this.forms.products.isSaving = false;
           this.clearFields('products');
           this.loadProducts();
-          this.upload();
           this.images = [];
           this.files = [];
           this.showEntry = false;
@@ -981,7 +1008,63 @@ input[type="number"]::-webkit-outer-spin-button {
             //if from a modal?
             //row to be edited
             //is from tab
-            this.updateEntity("products", "inmr_hash", false, this.row, true);
+            if (this.ShowImages.length == 0 && this.images.length == 0) {
+               this.focusElement('file')
+               Toast.fire(
+              'Error!',
+              'Please Enter Image',
+              'error'
+              )
+            }else{  
+            this.forms.products.isSaving = true;
+            this.$http
+                .put(
+                "api/products/" + this.forms.products.fields.inmr_hash,
+                this.forms.products.fields,
+                {
+                    headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+                )
+                .then(response => {
+                  if (this.images.length > 0) {
+                    this.upload();
+                }
+                    Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Update successfuly.',
+                    showConfirmButton: false,
+                    timer: 2000
+                    })
+                    this.forms.products.isSaving = false;
+                    this.showEntry = false;
+                    this.loadProducts()
+                    
+                }) 
+                .catch((error) => {
+                    this.forms.products.isSaving = false;
+                    if (!error.response) return;
+                    const errors = error.response.data.errors;
+                    var a = 0;
+                    for (var key in errors) {
+                        if (a == 0) {
+                                this.focusElement(key, false);
+                                Toast.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                text: errors[key][0]
+                                })
+                                }
+                                a++
+                    }
+                });
+                
+                    
+            }
           }
         }
       },
@@ -1000,13 +1083,31 @@ input[type="number"]::-webkit-outer-spin-button {
         this.showModalDelete = true;
       },
      
+      // setUpdate(data) {
+      //   this.resetFieldStates("products");
+      //   this.fillEntityForm("products", data.item.inmr_hash);
+      //   this.showEntry = true;
+      //   this.entryMode = "Edit";
+      // },
+
       setUpdate(data) {
-        this.row = data.item;
-        this.resetFieldStates("products");
-        this.fillEntityForm("products", data.item.inmr_hash);
-        this.showEntry = true;
-        this.entryMode = "Edit";
-      },
+      this.$http
+        .get("api/products/" + data.item.inmr_hash, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          this.forms.products.fields = response.data.products;
+          this.ShowImages = response.data.images;
+          // console.log(this.ShowImages.length > 0)
+          this.showEntry = true;
+          this.entryMode = "Edit";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
       loadProducts() {
          this.$http
       .get("api/products", {
@@ -1027,11 +1128,19 @@ input[type="number"]::-webkit-outer-spin-button {
      },
   computed: {
     getMerchantProducts() {
-      if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus != null) {
-        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts && p.is_verified == this.forms.products.fields.getStatus);
-      }else if (this.forms.products.fields.getmerchantproducts != null){
-        return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts)
-      }else{
+    if (this.forms.products.fields.getmerchantproducts != null) {
+       
+      return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts && p.is_verified == this.forms.products.fields.getStatus);
+    
+    }else if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus == null){
+       
+      return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts)
+     
+     }else if (this.forms.products.fields.getmerchantproducts == null && this.forms.products.fields.getStatus != null){
+     
+     return this.tables.products.items.filter(p => p.is_verified == this.forms.products.fields.getStatus)
+    
+    }else{
         return this.tables.products.items;
         }
     },

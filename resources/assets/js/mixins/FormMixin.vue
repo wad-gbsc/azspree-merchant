@@ -334,6 +334,7 @@ export default {
           }
         })
         .then(response => {
+          
           const items = response.data.data;
           this.forms[entity].fields = items;
           this[entry] = true;

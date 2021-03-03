@@ -257,8 +257,8 @@ export default {
                     }
                 }).catch(err => {
                       Toast.fire({
-                      icon: 'success',
-                      title: 'Success!',
+                      icon: 'error',
+                      title: 'Error!',
                       text: 'Incorrect username or password.'
                     })
                       this.login.is_saving = false

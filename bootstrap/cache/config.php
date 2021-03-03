@@ -8,7 +8,7 @@
     'timezone' => 'Asia/Singapore',
     'locale' => 'en',
     'fallback_locale' => 'en',
-    'key' => 'base64:MApgZxfKgUBkQwN9gY7/o6dC115EALwB9qFzFWYH6UE=',
+    'key' => 'base64:Z5C66CtNqwPGjZWiLBUEJgucyXoyxfuSGAlz0uoRdwA=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -35,11 +35,12 @@
       20 => 'Illuminate\\Validation\\ValidationServiceProvider',
       21 => 'Illuminate\\View\\ViewServiceProvider',
       22 => 'Intervention\\Image\\ImageServiceProvider',
-      23 => 'App\\Providers\\AppServiceProvider',
-      24 => 'App\\Providers\\AuthServiceProvider',
-      25 => 'App\\Providers\\EventServiceProvider',
-      26 => 'App\\Providers\\RouteServiceProvider',
-      27 => 'Tymon\\JWTAuth\\Providers\\LaravelServiceProvider',
+      23 => 'SimpleSoftwareIO\\QrCode\\QrCodeServiceProvider',
+      24 => 'App\\Providers\\AppServiceProvider',
+      25 => 'App\\Providers\\AuthServiceProvider',
+      26 => 'App\\Providers\\EventServiceProvider',
+      27 => 'App\\Providers\\RouteServiceProvider',
+      28 => 'Tymon\\JWTAuth\\Providers\\LaravelServiceProvider',
     ),
     'aliases' => 
     array (
@@ -79,6 +80,7 @@
       'JWTAuth' => 'Tymon\\JWTAuth\\Facades\\JWTAuth',
       'JWTFactory' => 'Tymon\\JWTAuth\\Facades\\JWTFactory',
       'Image' => 'Intervention\\Image\\Facades\\Image',
+      'QrCode' => 'SimpleSoftwareIO\\QrCode\\Facades\\QrCode',
     ),
   ),
   'auth' => 
@@ -288,8 +290,8 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\storage\\app/public',
-        'url' => 'http://localhost/storage',
+        'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\public\\public/images',
+        'url' => 'http://localhost/public',
         'visibility' => 'public',
       ),
       's3' => 
@@ -488,7 +490,7 @@
   ),
   'jwt' => 
   array (
-    'secret' => 'pLTnDJl3f7KuZxkTz6dSfhDWaWVn3U9dTRch4qMNVaz9XK0a47fpQo8hA3Afk6i0',
+    'secret' => 'NZvXQGDOIMQzYNzzX2UMBGPoa0yHTfMFd1WrMSAxgp7YEWAmEETuAY2tCgaeA9SS',
     'keys' => 
     array (
       'public' => NULL,

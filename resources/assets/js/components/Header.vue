@@ -1,9 +1,16 @@
-<style scoped>
+<style scoped lang="scss">
 .avatar {
   vertical-align: middle;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+.dropdown-toggle::after {
+    display: none;
+   
+}
+.navbar .nav > li > .dropdown-menu:before, .navbar .nav > li > .dropdown-menu:after{
+    border-bottom: none;
 }
 </style>
 <template >
@@ -38,22 +45,22 @@
         <i class="icon-location-pin"></i>
       </b-nav-item> -->
 
-      <b-nav-item-dropdown right class="asd" aria-expanded="true" >
+      <b-nav-item-dropdown class="dropdown-toggle" right aria-expanded="true" >
       
         
-        <div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
+        <div class="dropdown-header bg-light py-2 "><strong>Account</strong></div>
         <template slot="button-content" >
           <!-- image -->
           
-          <b-img :src="$store.state.user.path" class="avatar" width="30%" height="30%"></b-img>&nbsp;
-          <span style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-          font-weight: 400; font-size: 16px;">{{$store.state.user.shop_name}}</span>
+          <b-img :src="getProfilePhoto()" class="avatar" width="30%" height="30%"></b-img>&nbsp;
+          <!-- <span style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; -->
+          <!-- font-weight: 400; font-size: 16px;">{{$store.state.user.shop_name}}</span> -->
         </template>
-        <b-dropdown-item @click="$router.push({name: 'Profile'})">
+        <b-dropdown-item @click="profile()">
          <i class="fa fa-user-o"></i>Profile
         </b-dropdown-item>
         <b-dropdown-item @click="logOut()">
-          <i class="fa fa-lock"></i>Logout
+          <i class="fa fa-sign-out" aria-hidden="true"></i>Logout
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -65,6 +72,17 @@
 export default {
   name: "c-header",
   methods: {
+
+    profile() {
+      setTimeout(function(){
+        this.$router.push({ name: 'Profile' })
+        }.bind(this), 500)
+      },
+
+       getProfilePhoto(){
+              let photo = this.$store.state.user.photo == "default.png" ? "/images/default.png" : "/images/profile/" +  this.$store.state.user.photo ;
+              return photo;
+            },
     logOut() {
       if (localStorage.token) {
         this.$http

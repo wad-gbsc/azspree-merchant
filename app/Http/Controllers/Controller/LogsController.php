@@ -27,9 +27,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\Generator;
 
 
-ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-set_time_limit(300);
-ini_set("pcre.backtrack_limit", "5000000");
+// ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+// set_time_limit(300);
+// ini_set("pcre.backtrack_limit", "5000000");
 
 class LogsController extends Controller
 {
@@ -37,73 +37,107 @@ class LogsController extends Controller
     public function logs()
     { 
         
-            $data['sumr'] = DB::table('sumr')
-            ->select('*')
-            ->where('sumr.type', '0')
-            ->get();
-            $data['issuancemain'] = DB::table('ismn')
-            ->select('*')
-            ->where('ismn.is_deleted', 0)
-            ->where('ismn.is_paid', 0)
-            ->orderBy('issuance_hash', 'desc')
-            ->get();
-            $data['comr'] = DB::table('comr')
-            ->select('azspree')
-            ->get();
+            $data['sumr'] = DB::table('sumr')->select('*') ->where('sumr.type', '0')->get();
+            $data['issuancemain'] = DB::table('ismn')->select(
+                'ismn.*',
+                'sumr.seller_name'
+                )
+                ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'ismn.issued_to')
+                ->where('ismn.is_deleted', 0)
+                ->where('ismn.is_paid', 0)
+                ->orderBy('issuance_hash', 'desc')
+                ->get();
+
+            $data['comr'] = DB::table('comr')->select('azspree')->get();
 
             $data['sohr'] = SohrModel::select(
                 'sohr.*',
                 'user.fullname',
-                'sumr.*',
-                'city.*',
-                'm_city.*',
-                'odst.*' ,
-                'regn.*'                       
+                'sumr.*'
+                // 'city.*',
+                // 'm_city.*',
+                // 'odst.*' ,
+                // 'regn.*'                       
     )                          
-                    ->leftJoin('regn', 'regn.regn_hash', '=', 'sohr.regn_hash')
-                    ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+                    // ->leftJoin('regn', 'regn.regn_hash', '=', 'sohr.regn_hash')
+                    // ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
                     ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                     ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
-                    ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
-                    ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
+                    // ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
+                    // ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
                     ->where('sohr.is_selected' , 0)
+                    ->where('sohr.order_stat' , 7)
+                    // ->where('sohr.status_user' , 5)
                     ->orderBy('sohr_hash', 'desc')
                     ->get();
     
             return $data;
     }
-    public function PrintReport($id)
-    {   
-        $data['logs'] = IssuanceDetails::select(
-                    'isdt.*'                     
-        )                          
-                        ->where('isdt.issuance_hash' , $id)
-                        ->orderBy('issuance_details_hash', 'desc');
+    // public function PrintReport($id)
+    // {   
+    //     $data['logs'] = IssuanceDetails::select('isdt.*')->where('isdt.issuance_hash' , $id)->orderBy('issuance_details_hash', 'desc');
+    //                                      
 
-        $data['logs'] = $data['logs']->get();
-
-        // $qrcode = new Generator;
-        // $data['qr'] = $qrcode->size(250)->generate('Make me a QrCode!');
+    //     $data['logs'] = $data['logs']->get();
         
-        // $qrcode = new Generator;
-        // $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
-        // $qrcode = QrCode::format('png')->size(399)->color(40,40,40)->generate('Make me a QrCode!');
+    //     // $qrcode = new Generator;
+    //     // $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
+    //     // $qrcode = QrCode::format('png')->size(399)->color(40,40,40)->generate('Make me a QrCode!');
+
+    //     $mpdf = new Mpdf();
+    //     $content = view('logs.logs')->with($data);
+    //     $mpdf->WriteHTML($content);
+    //     $mpdf->Output();
+        
+    // }
+    
+    public function PrintInvoice($id)
+    {   
+
+        $data['issuances'] = DB::table('ismn')->select(
+            'ismn.*',
+            'sumr.*'
+            )
+        
+                ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'ismn.issued_to')
+                ->where('issuance_hash', $id)->get();
+
+        $data['invoice'] = IssuanceDetails::select(
+            'isdt.*',
+            'sohr.*',
+            'soln.*',
+            'inmr.*'
+            )
+                ->leftJoin('sohr', 'sohr.sohr_hash', '=', 'isdt.sohr_hash')
+                ->leftJoin('soln', 'soln.sohr_hash', '=', 'sohr.sohr_hash')
+                ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'soln.inmr_hash')
+                ->where('isdt.issuance_hash' , $id)
+                ->orderBy('issuance_details_hash', 'desc');
+
+
+        $data['details'] = IssuanceDetails::select(
+            'isdt.*'
+        )
+                
+                ->where('isdt.issuance_hash' , $id)
+                ->orderBy('issuance_details_hash', 'desc');
+        
+                
+        $data['details'] = $data['details']->get();
+        $data['invoice'] = $data['invoice']->get();
 
         $mpdf = new Mpdf();
-        $content = view('logs.logs')->with($data);
+        $content = view('logs.invoice')->with($data);
         $mpdf->WriteHTML($content);
         $mpdf->Output();
-        
     }
-
-
     public function create(Request $request)
     {
-        Validator::make($request->all(),
-            [
-                'issued_to' => 'required',
-            ]
-        )->validate();
+        // Validator::make($request->all(),
+        //     [
+        //         'issued_to' => 'required',
+        //     ]
+        // )->validate();
 
         $y = date("Y");
 
@@ -164,13 +198,12 @@ class LogsController extends Controller
      */
     public function update(Request $request, $id)
     { 
-        Validator::make($request->all(),
-        [
-            'issued_to' => 'required',
-        ]
-        )->validate();
+        // Validator::make($request->all(),
+        // [
+        //     'issued_to' => 'required',
+        // ]
+        // )->validate();
 
-        
         $issuance = IssuanceMain::findOrFail($id);
         $issuance->issued_to = $request->input('issued_to');
         $issuance->created_datetime = Carbon::now();
@@ -243,10 +276,7 @@ class LogsController extends Controller
     
     public function show($id)
     {
-        $data['issuance'] = IssuanceMain::select(
-                            'ismn.*'
-        )
-                            ->findOrFail($id);
+        $data['issuance'] = IssuanceMain::select('ismn.*') ->findOrFail($id);
         
         $data['issuance_items'] = IssuanceDetails::select(
                                 'isdt.*'
@@ -259,7 +289,16 @@ class LogsController extends Controller
     }
     public function MarkPaid(Request $request, $id)
     {   
+        // Validator::make($request->all(),
+        // [
+        //     'transaction_no' => 'required',
+        //     'transaction_date' => 'required',
+        // ]
+        // )->validate();
+
         $issuance = IssuanceMain::findOrFail($id);
+        $issuance->transaction_no = $request->input('transaction_no');
+        $issuance->transaction_date = $request->input('transaction_date');
         $issuance->is_paid = 1;
         $issuance->update();
 

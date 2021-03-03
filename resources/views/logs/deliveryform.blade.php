@@ -60,6 +60,13 @@
                     <br><br>
                 </td>
             </tr>
+
+            <tr>
+                <td colspan="12" style="text-align: right;">
+                        <i>For Merchant's Copy</i>
+                </td>
+            </tr>
+
 		<tr >
 			<td colspan="10">
                 <br><br>
@@ -81,12 +88,7 @@
                     <br>
                     <span>Name: {{$user->fullname}}</span>
                     <br>
-                    <span>Email: {{$user->email}}</span>
-                    <br>
-                    <span>Address: {{$user->address ." " .$user->barangay}} <br> {{$user->city .", " .$user->province}}</span>
-                    
-                    <br>
-                    <span>&nbsp;</span>
+                    <span>Address: {{$user->city .", " .$user->province}}</span>
                     <br><br><br><br>
                 </td>
                 <td colspan="4">
@@ -106,9 +108,7 @@
                     <br>
                     <span>Name: {{$item->fullname}}</span>
                     <br>
-                    <span>Email: {{$item->email}}</span>
-                    <br>
-                    <span>Address: {{$item->address ." " .$item->barangay}} <br> {{$item->city .", " .$item->province}}</span>
+                    <span>Address: {{$item->city .", " .$item->province}}</span>
                     <br><br><br><br>
                 </td>
             </tr>
@@ -118,16 +118,16 @@
         </table>
         <table width="100%" >
             <tr>
-                <td colspan="1">
-                    <span class="field">product code</span>
+                <td colspan="5">
+                    <span class="field">product name</span>
                     <br><br>
                 </td>
-                <td colspan="5" style="text-align: center;">
-                    <span class="field">description</span>
+                <td colspan="1">
+                    <span class="field">quantity</span>
                     <br><br>
                 </td>
                 <td colspan="2" style="text-align: right;">
-                    <span class="field">unit price</span>
+                    <span class="field">unit cost</span>
                     <br><br>
                 </td> 
                 <td colspan="1" style="text-align: right;">
@@ -135,7 +135,7 @@
                     <br><br>
                 </td>
                 <td colspan="3" style="text-align: right;">
-                    <span class="field">total price</span>
+                    <span class="field">amount</span>
                     <br><br>
                 </td>
             </tr>
@@ -151,15 +151,15 @@
             ?>
             
             <tr>
-                <td colspan="1" style="text-align: left;">
+                <td colspan="5" style="text-align: left;">
                   <span>{{$line->product_name}}</span> 
                   <br><br>
                 </td>
-                <td colspan="6" style="text-align: left;">
-                    <span>{{$line->product_desc}}</span>
+                <td colspan="1">
+                    <span>{{number_format($line->qty)}}</span>
                     <br><br>
                 </td>
-                <td colspan="1" style="text-align: right;">
+                <td colspan="2" style="text-align: right;">
                     <span>{{number_format($line->cost_amt,2)}}</span>
                     <br><br>
                 </td>
@@ -187,7 +187,7 @@
                     <br>
                     <span>Shipping Fee Disc.</span>
                     <br>
-                    <span><b>GRAND TOTAL</b></span>
+                    <span><b>TOTAL AMOUNT</b></span>
                     <br><br><br><br>
                 </td>
                 <td colspan="2" style="text-align: right;">
@@ -199,26 +199,25 @@
                     <br><br><br><br>
                 </td>
             </tr>
-            <tr>
-               
-                    <tr>
-                    <td colspan="6"  style="font-size: 18px">
-                        <br><center>MERCHANT'S SIGNATURE</center><br>
-                    </td>
-                    <td colspan="6"  style="font-size: 18px">
-                        <br><center>DH'S SIGNATURE</center><br>
-                    </td>
-                </tr>
-            </tr>
-            <tr>
-                <td colspan="12">
-                    <center>
-                        <br>
-                        <span>For more information, please contact us at https://www.facebook.com/AZSpree</span>
-                    </center>
-                    <br><br>
-                </td>
-            </tr>
+        </table>
+        <table width="100%">
+        <tr>
+            <td colspan="3" style="font-size: 18px">
+                <center>MERCHANT'S SIGNATURE</center>
+            </td>
+            <td colspan="9" style="font-size: 18px">
+                <center>DH'S SIGNATURE</center>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">
+                <br>
+                <center>
+                    <span>For more information, please contact us at https://www.facebook.com/AZSpree</span>
+                </center>
+                <br><br>
+            </td>
+        </tr>
         </table>
     </body>
 </html>

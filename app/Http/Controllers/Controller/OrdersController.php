@@ -55,7 +55,7 @@ class OrdersController extends Controller
                                 ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
                                 ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                                 ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
-                                ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
+                                ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
                                 ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
                                 ->orderBy('sohr_hash', 'desc')
                                 ->get();
@@ -72,7 +72,7 @@ class OrdersController extends Controller
                                             ->get();
                 }
     
-        }else{
+}else if (Auth::user()->type == 0) {
 {
             $data['sohr'] = SohrModel::select(
                         'sohr.*',
@@ -87,10 +87,10 @@ class OrdersController extends Controller
                             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
                             ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                             ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
-                            ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
+                            ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
                             ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
                             ->where('sohr.sumr_hash' , Auth::user()->sumr_hash)
-                            ->orwhere('sohr.where_dh' , Auth::user()->sumr_hash)
+                            // ->orwhere('sohr.where_dh' , Auth::user()->sumr_hash)
                             ->orderBy('sohr_hash', 'desc')
                             ->get();
 }
@@ -106,6 +106,39 @@ class OrdersController extends Controller
                             ->orderBy('soln.sohr_hash' , 'desc')
                             ->get();
 }
+}else{
+    {
+        $data['sohr'] = SohrModel::select(
+                    'sohr.*',
+                    'user.fullname',
+                    'sumr.*',
+                    'city.city',
+                    'm_city.m_city',
+                    'odst.*' ,
+                    'regn.*'                       
+)                          
+                        ->leftJoin('regn', 'regn.regn_hash', '=', 'sohr.regn_hash')
+                        ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+                        ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
+                        ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
+                        ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
+                        ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
+                        ->where('sohr.where_dh' , 1)
+                        ->orderBy('sohr_hash', 'desc')
+                        ->get();
+}
+{
+        $data['soln'] = SolnModel::select(
+                    'soln.*',
+                    'inmr.product_name',
+                    'sohr.*'
+)
+
+                        ->leftJoin('sohr', 'sohr.sohr_hash', '=', 'soln.sohr_hash')
+                        ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'soln.inmr_hash')
+                        ->orderBy('soln.sohr_hash' , 'desc')
+                        ->get();
+}
 }
 
 {
@@ -115,7 +148,7 @@ class OrdersController extends Controller
                         
 )
                             // ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'dhsf.sumr_hash')
-                            ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
+                            ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
                             ->where('sumr.type', '1')
                             ->get();
 }
@@ -142,7 +175,26 @@ class OrdersController extends Controller
    
     public function orders()
 {
-{
+    if (Auth::user()->type == 0) {
+
+        {
+                    $data['orders'] = SohrModel::select(
+                        'sohr.*',
+                        'user.fullname',
+                        'sumr.*',
+                        'odst.*'                        
+        )                          
+                            ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+                            ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
+                            ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
+                            ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
+                            ->where('sohr.sumr_hash', Auth::user()->sumr_hash)
+                            ->where('sohr.order_stat', 1)
+                            ->orderBy('sohr_hash', 'asc')
+                            ->get();
+        }
+    }else if (Auth::user()->type == 2) {
+        {
             $data['orders'] = SohrModel::select(
                 'sohr.*',
                 'user.fullname',
@@ -153,11 +205,14 @@ class OrdersController extends Controller
                     ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                     ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                     ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
-                    ->where('sohr.sumr_hash', Auth::user()->sumr_hash)
                     ->where('sohr.order_stat', 1)
                     ->orderBy('sohr_hash', 'asc')
                     ->get();
 }
+}
+
+        if (Auth::user()->type == 0) {
+
 {
             $data['cancellations'] = SohrModel::select(
                 'sohr.*',
@@ -174,6 +229,26 @@ class OrdersController extends Controller
                             ->orderBy('sohr_hash', 'asc')
                             ->get();
 }
+        }else if (Auth::user()->type == 2) {
+            {
+                $data['cancellations'] = SohrModel::select(
+                    'sohr.*',
+                    'user.*',
+                    'sumr.*',
+                    'odst.*'                        
+    )                          
+                                ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+                                ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
+                                ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
+                                ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
+                                ->where('sohr.order_stat', 9)
+                                ->orderBy('sohr_hash', 'asc')
+                                ->get();
+    }
+        }
+
+        if (Auth::user()->type == 0) {
+
 {
             $data['shipments'] = SohrModel::select(
                 'sohr.*',
@@ -191,6 +266,24 @@ class OrdersController extends Controller
                             ->orderBy('sohr_hash', 'asc')
                             ->get();
 }
+        }else if (Auth::user()->type == 2) {
+            {
+                $data['shipments'] = SohrModel::select(
+                    'sohr.*',
+                    'user.*',
+                    'sumr.*',
+                    'odst.*'                        
+    )                          
+                                ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+                                ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
+                                ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
+                                ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
+                                ->where('sohr.order_stat' ,'>=', 2)
+                                ->where('sohr.order_stat' ,'<=', 5)
+                                ->orderBy('sohr_hash', 'asc')
+                                ->get();
+    }
+        }
 {
             $data['soln'] = SolnModel::select(
                     'soln.*',
@@ -227,7 +320,7 @@ class OrdersController extends Controller
                 ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                 ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                 ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
-                ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.m_city')
+                ->leftJoin('m_city', 'm_city.city_hash', '=', 'sumr.city_hash')
                 ->where('sohr.sumr_hash', Auth::user()->sumr_hash)
                 ->orderBy('sohr_hash', 'desc')
                 ->get();
@@ -306,12 +399,12 @@ class OrdersController extends Controller
 
         if(count($check) < 1) {
         $sohr = SohrModel::findOrFail($id);
-        $sohr->tf_shipping = $request->input('m_shipping_fee');
-        $sohr->where_dh = $request->input('selectdhTodeliver');
+        $sohr->m_shipping_fee = $request->input('m_shipping_fee');
+        $sohr->where_dh = 1;
         $sohr->order_stat = $request->input('selected');
         $sohr->status_user = 2;
         $sohr->accept_datetime = Carbon::now();
-        $sohr->to_pick_datetime = date('Y-m-d', strtotime($request->input('to_pick_datetime')));
+        // $sohr->to_pick_datetime = date('Y-m-d', strtotime($request->input('to_pick_datetime')));
         $sohr->is_cancel = 0;
         // $sohr->tracking_no = $letter  .$number;
         $sohr->save();
@@ -358,32 +451,16 @@ class OrdersController extends Controller
         $sohr = SohrModel::findOrFail($id);
         
         $sohr->order_stat = 5;
+        $sohr->status_user = 3;
         $sohr->dh_accept_order_datetime = Carbon::now();
         $sohr->save();
         
         return ( new Reference( $sohr ) )
             ->response()
-            ->setStatusCode(200);
-       
+            ->setStatusCode(200);  
     }
-
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function refresh()
-    {
-        $refresh = SohrModel::all();
-
-        return (new Reference( $refresh ))
-            ->response()
-            ->setStatusCode(200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -450,6 +527,7 @@ class OrdersController extends Controller
         // $az_pouch = DB::table('comr')->select('az_pouch')->get();
         $sohr = SohrModel::findOrFail($id);
         $sohr->order_stat = 7;
+        $sohr->status_user = 4;
         $points = $sohr->order_total / 100;
 
         DB::table('user')->where('user_hash', $sohr->user_hash)->increment('az_pouch', $points);
