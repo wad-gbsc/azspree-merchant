@@ -905,6 +905,8 @@
             </b-button>
           </template>
           <template v-slot:row-details="data">
+            <b-row>
+              <b-col lg="4">
                   <b-form-group>
                       <label>Customer Name :</label>
                   <b-form-input readonly
@@ -919,6 +921,10 @@
                    v-model="data.item.city">
                   </b-form-input>
                     </b-form-group>
+              </b-col>
+              <b-col lg="4"></b-col>
+              <b-col lg="4"></b-col>
+            </b-row>
                 <b-table
                     responsive
                     hover
@@ -928,6 +934,7 @@
                     :fields="tables.soln.fields"
                     :items="solnfilter(data.item.sohr_hash)">
                 </b-table>
+
           </template>
           </b-table>
     </b-card>

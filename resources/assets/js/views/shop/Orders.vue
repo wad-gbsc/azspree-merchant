@@ -45,6 +45,8 @@
                       </b-button>
                     </template>
                     <template v-slot:row-details="row"> 
+                        <b-row>
+                        <b-col lg="4">  
                           <b-form-group>
                           <label>Customer Name :</label>
                           <b-form-input disabled
@@ -56,7 +58,10 @@
                           <b-form-input disabled
                           v-model="row.item.address">
                           </b-form-input>
-                          </b-form-group>
+                          </b-form-group></b-col>
+                        <b-col lg="4"></b-col>
+                        <b-col lg="4"></b-col>
+                      </b-row> 
                          <b-table
                               style="overflow: hidden;"
                               responsive

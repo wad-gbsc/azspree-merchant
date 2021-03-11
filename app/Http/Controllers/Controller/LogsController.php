@@ -44,7 +44,6 @@ class LogsController extends Controller
                 )
                 ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'ismn.issued_to')
                 ->where('ismn.is_deleted', 0)
-                ->where('ismn.is_paid', 0)
                 ->orderBy('issuance_hash', 'desc')
                 ->get();
 
@@ -73,27 +72,37 @@ class LogsController extends Controller
     
             return $data;
     }
-    // public function PrintReport($id)
-    // {   
-    //     $data['logs'] = IssuanceDetails::select('isdt.*')->where('isdt.issuance_hash' , $id)->orderBy('issuance_details_hash', 'desc');
-    //                                      
+    public function PrintReport($from_date, $to_date)
+    {   
+        $data['invoices'] = IssuanceMain::select(
+            'ismn.*',
+            'isdt.*'
+            )
 
-    //     $data['logs'] = $data['logs']->get();
-        
-    //     // $qrcode = new Generator;
-    //     // $data['qr'] = $qrcode->size(100)->generate('Make a qrcode without Laravel!');
-    //     // $qrcode = QrCode::format('png')->size(399)->color(40,40,40)->generate('Make me a QrCode!');
+            ->leftJoin('isdt', 'isdt.issuance_hash', '=', 'ismn.issuance_hash')
+            ->where('ismn.is_deleted' , 0)
+            ->where('ismn.is_paid' , 1)
+            ->orderBy('issuance_no', 'asc');
 
-    //     $mpdf = new Mpdf();
-    //     $content = view('logs.logs')->with($data);
-    //     $mpdf->WriteHTML($content);
-    //     $mpdf->Output();
+        if($from_date != 0 || $to_date != 0)
+        {
+            $data['invoices']->whereRaw('DATE(created_datetime) BETWEEN DATE("'.$from_date.'") AND DATE("'.$to_date.'")');
+        }
         
-    // }
+        $data['invoices'] = $data['invoices']->get();  
+
+        $data['date_from'] = $from_date;
+        $data['date_to'] = $to_date;
+
+        $mpdf = new Mpdf();
+        $content = view('logs.report')->with($data);
+        $mpdf->WriteHTML($content);
+        $mpdf->Output();
+        
+    }
     
     public function PrintInvoice($id)
     {   
-
         $data['issuances'] = DB::table('ismn')->select(
             'ismn.*',
             'sumr.*'
@@ -102,7 +111,7 @@ class LogsController extends Controller
                 ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'ismn.issued_to')
                 ->where('issuance_hash', $id)->get();
 
-        $data['invoice'] = IssuanceDetails::select(
+        $data['invoices'] = IssuanceDetails::select(
             'isdt.*',
             'sohr.*',
             'soln.*',
@@ -124,13 +133,38 @@ class LogsController extends Controller
         
                 
         $data['details'] = $data['details']->get();
-        $data['invoice'] = $data['invoice']->get();
+        $data['invoices'] = $data['invoices']->get();
 
         $mpdf = new Mpdf();
         $content = view('logs.invoice')->with($data);
         $mpdf->WriteHTML($content);
         $mpdf->Output();
     }
+
+    // public function PrintReport() {
+
+    //     $data['invoices'] = IssuanceDetails::select(
+    //         'isdt.*',
+    //         'sohr.*',
+    //         'soln.*',
+    //         'inmr.*',
+    //         'odst.*'
+    //         )
+    //             ->leftJoin('sohr', 'sohr.sohr_hash', '=', 'isdt.sohr_hash')
+    //             ->leftJoin('soln', 'soln.sohr_hash', '=', 'sohr.sohr_hash')
+    //             ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'soln.inmr_hash')
+    //             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
+    //             // ->where('isdt.issuance_hash' , $id)
+    //             ->orderBy('issuance_details_hash', 'desc');
+        
+        
+    //     $data['invoices'] = $data['invoices']->get();
+
+    //     $mpdf = new Mpdf();
+    //     $content = view('logs.report')->with($data);
+    //     $mpdf->WriteHTML($content);
+    //     $mpdf->Output();
+    // }
     public function create(Request $request)
     {
         // Validator::make($request->all(),
@@ -163,6 +197,7 @@ class LogsController extends Controller
                 'seller_name'=>$item['seller_name'],
                 'order_date'=>$item['order_date'],
                 'payment_method'=>$item['payment_method'],
+                'order_subtotal'=>$item['order_subtotal'],
                 'shipping_fee'=>$item['shipping_fee'],
                 'seller_name'=>$item['seller_name'],
                 'm_shipping_fee'=>$item['m_shipping_fee'],
@@ -292,19 +327,30 @@ class LogsController extends Controller
         // Validator::make($request->all(),
         // [
         //     'transaction_no' => 'required',
+            
         //     'transaction_date' => 'required',
+
         // ]
         // )->validate();
 
         $issuance = IssuanceMain::findOrFail($id);
         $issuance->transaction_no = $request->input('transaction_no');
-        $issuance->transaction_date = $request->input('transaction_date');
+        $issuance->bank_fee = $request->input('bank_fee');
+        $issuance->transaction_date = date('Y-m-d', strtotime($request->input('transaction_date')));
         $issuance->is_paid = 1;
         $issuance->update();
 
         return ( new Reference( $issuance ) )
             ->response()
             ->setStatusCode(200);
+    }
+
+    public function printTerms() 
+    {
+        $mpdf = new Mpdf();
+        $content = view('logs.terms');
+        $mpdf->WriteHTML($content);
+        $mpdf->Output();
     }
     
 

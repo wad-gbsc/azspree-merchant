@@ -26,15 +26,43 @@
          
         <!-- row button and search input -->
         <b-col sm="3">
-            <b-button
+            <b-button style="margin-top: 20px;"
                   variant="primary"
                   @click="showEntry = true, entryMode='Create', tables.sohrItems.items = []"
                 >
                   <i class="fa fa-plus-circle"></i> Create New Issuance
             </b-button>
+             <b-button variant="warning" style="color:white; margin-top: 20px;" @click="previewReport()">
+            <i class="fa fa-print"></i> Print Report
+          </b-button>
         </b-col>
-        <b-col sm="3"><span></span></b-col>
-        <b-col sm="3"><span></span></b-col>
+       <b-col sm="3">
+          <label>From Date</label>
+          <date-picker
+            id="from_datetime"
+            format="MMMM/DD/YYYY"
+            type="date"
+            lang="en"
+            input-class="form-control mx-input"
+            v-model="from_datetime"
+            ref="from_datetime"
+            :clearable="false"
+          ></date-picker>
+        </b-col>
+
+        <b-col sm="3">
+          <label>To Date</label>
+          <date-picker
+            id="to_datetime"
+            format="MMMM/DD/YYYY"
+            type="date"
+            lang="en"
+            input-class="form-control mx-input"
+            v-model="to_datetime"
+            ref="to_datetime"
+            :clearable="false"
+          ></date-picker>
+        </b-col>
         <b-col sm="3">
           <b-form-input
             class="mt-4"
@@ -60,20 +88,23 @@
                   :per-page="paginations.issuancemain.perPage"
                   :current-page="paginations.issuancemain.currentPage"
                 >
-
+                <template  v-slot:cell(status)="data">
+                <h6><b-badge v-if="data.item.is_paid == 0" pill variant="warning" style="color: white;">{{"Pending"}}</b-badge> 
+                    <b-badge v-else-if="data.item.is_paid == 1" pill variant="success">{{"Paid"}}</b-badge></h6>
+                </template>
                 <template v-slot:cell(action)="data">
                   <b-button-group>
-                    <b-btn :size="'lg'" variant="primary" @click="setMarkDone(data)">
+                    <b-btn v-if="data.item.is_paid == 0" :size="'sm'" variant="primary" @click="setMarkDone(data) , clearFields('logs')">
                       <i class="fa fa-check-square-o"></i>
                     </b-btn>
-                   <b-btn :size="'lg'" variant="success" @click="previewReport(data)">
-                      <i class="fa fa-print"></i>
-                    </b-btn>
-                    <b-btn :size="'lg'" variant="info" style="color:white" @click="setUpdate(data)">
+                    <b-btn v-if="data.item.is_paid == 0" :size="'sm'" variant="info" style="color:white" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
+                   <b-btn :size="'sm'" variant="success" @click="previewSOA(data)">
+                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    </b-btn>
                     <b-btn
-                      :size="'lg'"
+                      :size="'sm'"
                       :disabled="forms.logs.isDeleting"
                       variant="danger"
                       @click="setDelete(data)"
@@ -285,7 +316,21 @@
                       class='form-control'
               ></b-form-input>
               </b-form-group>
+                <b-form-group>
+                  <label>Bank Fee :</label>
+              <vue-autonumeric
+                        ref="bank_fee"
+                        id="bank_fee"
+                        v-model="forms.logs.fields.bank_fee"
+                        class='form-control text-right'
+                        placeholder="0.00"
+                    :options="{
+                            minimumValue: '0',
+                            decimalCharacter: '.',}"
+                ></vue-autonumeric>
+              </b-form-group>
               <b-form-group>
+                <label>Transaction Date :</label>
                 <date-picker
                   id="transaction_date"
                   format="MMMM/DD/YYYY"
@@ -330,6 +375,7 @@
                  selectMerchant: 0,
                  issued_to: null,
                  issuance_hash: null,
+                 transaction_date: new Date(),
               }
           },
         },
@@ -524,13 +570,6 @@
             issuancemain: {
               fields: [
             {
-              key: "issuance_hash",
-              label: "ID",
-              thStyle: { width: "150px" },
-              tdClass: "align-middle",
-              sortable: true
-            },
-            {
               key: "issuance_no",
               label: "Issuance No.",
               tdClass: "align-middle",
@@ -542,19 +581,17 @@
               tdClass: "align-middle",
               sortable: true
             },
-            // {
-            //   key: "issuance_datetime",
-            //   label: "Datetime",
-            //   tdClass: "align-middle",
-            //   sortable: true,
-            //   formatter: (value) => {
-            //       return this.moment(value, 'MMMM DD, YYYY hh:mm a')
-            //   }
-            // },
+            {
+                key: "status",
+                thClass: "text-center",
+                label: "Status",
+                thStyle: { width: "100px" },
+                tdClass: "text-center"
+            },
             {
               key: "action",
               label: "",
-              thStyle: { width: "120px" },
+              thStyle: { width: "180px" },
               tdClass: "text-center"
             }
 
@@ -603,10 +640,94 @@
       if(this.tables.sohrItems.items.length > 0) {
         this.forms.logs.fields.items = this.tables.sohrItems.items
         if (this.entryMode == "Create") {
-          this.createEntity("logs", false, "issuancemain")
+            this.forms.logs.isSaving = true;
+            this.resetFieldStates('logs');
+
+            this.$http
+              .post("api/" + 'logs', this.forms.logs.fields, {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token")
+                }
+              })
+        .then(response => {
+          this.forms.logs.isSaving = false;
+          this.clearFields('logs');
           this.loadIssuance();
+          this.showEntry = false;
+          Swal.fire({
+              title: 'Success!',
+              text: 'The record has been successfully created.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+              })
+        })
+        .catch(error => {
+          this.forms.logs.isSaving = false;
+          if (!error.response) return;
+          const errors = error.response.data.errors;
+          var a = 0;
+          for (var key in errors) {
+            // this.forms[entity].states[key] = false
+            // this.forms[entity].errors[key] =  errors[key]
+            if (a == 0) {
+                    this.focusElement(key, false);
+                    Toast.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: errors[key][0]
+                    })
+                    }
+                    a++
+          }
+        });
         } else {
-          this.updateEntity("logs", "issuance_hash", false, this.row)
+          this.forms.logs.isSaving = true;
+            this.$http
+                .put(
+                "api/logs/" + this.forms.logs.fields.issuance_hash,
+                this.forms.logs.fields,
+                {
+                    headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+                )
+                .then(response => {
+                    Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Update successfuly.',
+                    showConfirmButton: false,
+                    timer: 2000
+                    })
+                    this.forms.logs.isSaving = false;
+                    this.showEntry = false;
+                    this.loadIssuance()
+                    
+                }) 
+                .catch((error) => {
+                    this.forms.logs.isSaving = false;
+                    if (!error.response) return;
+                    const errors = error.response.data.errors;
+                    var a = 0;
+                    for (var key in errors) {
+                        if (a == 0) {
+                                this.focusElement(key, false);
+                                Toast.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                text: errors[key][0]
+                                })
+                                }
+                                a++
+                    }
+                });
+                
         }
       }
       else {
@@ -648,19 +769,22 @@
     removeSOHR(index){
         this.tables.sohrItems.items.splice(index, 1)
     },
-    //   previewReport() {
-    //   var date_from = 0;
-    //   var date_to = 0;
-    //   if (this.from_datetime != null && this.to_datetime != null) {
-    //     date_from = this.moment(this.from_datetime, "YYYY-MM-DD");
-    //     date_to = this.moment(this.to_datetime, "YYYY-MM-DD");
-    //   }
-    //   window.open("api/logs/printreport/" + date_from + "/" + date_to);
-    // },
-     previewReport(data) {
+      previewReport() {
+      var date_from = 0;
+      var date_to = 0;
+      if (this.from_datetime != null && this.to_datetime != null) {
+        date_from = this.moment(this.from_datetime, "YYYY-MM-DD");
+        date_to = this.moment(this.to_datetime, "YYYY-MM-DD");
+      }
+      window.open("api/logs/print/" + date_from + "/" + date_to);
+    },
+     previewSOA(data) {
       this.issuance_hash = data.item.issuance_hash;
       window.open("api/logs/printreport/" + this.issuance_hash);
       },
+      // previewReport() {
+      // window.open("api/logs/print");
+      // },
       async setDelete(data) {
         this.issuance_hash = data.item.issuance_hash;
         Swal.fire({
@@ -755,6 +879,8 @@
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
                   confirmButtonText: 'Yes, Mark as Paid!',
+                  
+
                   }).then((result) => {
 
                       // Send request to the server
@@ -769,11 +895,14 @@
                             }
                           }
                         ).then(()=>{
-                                  Swal.fire(
-                                  'Paid!',
-                                  'The Issuance has been Paid.',
-                                  'success'
-                                  )
+                                  
+                                  Swal.fire({
+                                  title: 'Paid!',
+                                  text: "The Issuance has been Paid.",
+                                  icon: 'success',
+                                  showConfirmButton: false,
+                                  timer: 2000,
+                                  })
                                   this.loadIssuance();
                                   this.showModalMarkDone = false;
                           }).catch(()=> {

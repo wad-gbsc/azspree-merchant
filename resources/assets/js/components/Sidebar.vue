@@ -49,7 +49,7 @@
           font-weight: 400; font-size: 16px;" @click="logOut()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
           </center> -->
           </slot>
-      <div slot="footer"></div>
+      <div slot="footer"><br><center><a href="#" @click="printTerms(data)">Terms & Condition</a></center></div>
     </nav>
   </div>
 </template>
@@ -77,12 +77,9 @@ export default {
     SidebarNavTitle
   },
   methods: {
-      getProfilePhoto(){
-
-                let photo = this.$store.state.user.photo == "defualt.png" ? "/images/default.png" : "/images/profile/" +  this.$store.state.user.photo ;
-                // let photo = (this.forms.photo.length > 200) ? this.forms.photo : "/images/profile/" + this.forms.photo ;
-                return photo;
-            },
+     printTerms(data) {
+      window.open("api/terms");
+      },
     handleClick (e) {
       e.preventDefault()
       e.target.parentElement.classList.toggle('open')

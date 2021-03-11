@@ -54,7 +54,8 @@ Route::middleware('auth:api')->group(function () {
     Route::put('todeliver/{id}', 'Controller\OrdersController@Todeliver');
     Route::post('products', 'Controller\ProductsController@create');
     Route::resource('posts', 'Controller\OrdersController');
-    Route::post('upload','Controller\ProductsController@upload');
+    Route::post('upload','Controller\ProductsController@uploadCreate');
+    Route::post('upload/{id}','Controller\ProductsController@uploadUpdate');
     Route::get('dashboardcheck/{id}', 'Controller\OrdersController@checkIfUsed');
     Route::put('products/remove/{id}', 'Controller\ProductsController@removeImages');
 
@@ -73,11 +74,12 @@ Route::middleware('auth:api')->group(function () {
     Route::put('comments/{id}', 'Controller\CommentsController@update');
     Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 });
-
+Route::get('logs/print/{from}/{to}', 'Controller\LogsController@PrintReport');
 Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintInvoice');
 // Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
 Route::get('waybill/{id}', 'Controller\WaybillController@PrintWaybill');
 Route::get('deliveryform/{id}', 'Controller\WaybillController@PrintDeliveryForm');
+Route::get('terms', 'Controller\LogsController@printTerms');
 // Route::get('logs/printreport/{id}', , function ($id)  {
 //     return Hasher::decode($id);
 // });

@@ -8,6 +8,7 @@ use App\Models\ProductsModel;
 use App\Models\Category;
 use App\Models\SumrModel;
 use App\Models\ImagesModel;
+use App\Models\VariantModel;
 use App\Http\Resources\Reference; 
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -34,7 +35,7 @@ class ProductsController extends Controller
                 ->leftJoin('inct', 'inct.inct_hash', '=', 'inmr.inct_hash')
                 ->where('inmr.is_deleted', 0)
                 ->where('inmr.sumr_hash', Auth::user()->sumr_hash)
-                ->orderBy('inmr_hash', 'desc')
+                ->orderBy('is_verified', 'asc')
                 ->get();
        }else{
         $data['products'] = DB::table('inmr')->select(
@@ -63,18 +64,6 @@ class ProductsController extends Controller
      */
     public function create(Request $request)
     {
-        // Validator::make($request->all(),
-        //     [
-        //         'product_name' => 'required',
-        //         'inct_hash' => 'required',
-        //         'product_details' => 'required',
-        //         'onhand_qty' => 'required',
-        //         'available_qty' => 'required',
-        //         'cost_amt' => 'required',
-        //         'weight' => 'required'
-        //     ]
-        // )->validate();
-        
         Validator::make($request->all(),
         [
             'product_name' => 'required',
@@ -102,53 +91,76 @@ class ProductsController extends Controller
         $products->image_path = 'Default.jpg';
         $products->product_details = $request->input('product_details');
         $products->inct_hash = $request->input('inct_hash');
-        $products->onhand_qty = $request->input('onhand_qty');
-        $products->available_qty = $request->input('available_qty');
-        $products->cost_amt = $request->input('cost_amt');
-        $products->inct_hash = $request->input('inct_hash');
-        $products->lengthsize = $request->input('lengthsize');
-        $products->height = $request->input('height');
-        $products->width = $request->input('width');
-        $products->dimension = ceil($request->input('dimension'));
-        $products->weight = ceil($request->input('weight'));
         $products->create_datetime = Carbon::now();
         $products->sumr_hash = Auth::user()->sumr_hash;
         $products->save();
 
         DB::table('inmr')->where('inmr_hash', $products->inmr_hash)->update(['image_path' =>  $products->sumr_hash.'/'.$products->inmr_hash.'/Default.jpg']);
 
-        // if (count($request->images)) {
-        //     foreach ($request->images as $image) {
-        //         $image->store('products/'.Auth::user()->sumr_hash.'/'.$products->inmr_hash);
-        //     }
-        // }
+        $items = $request->input('items');
+        $items_dataset = [];
+
+        foreach($items as $item)
+        {
+            $items_dataset[] = [
+                'inmr_hash'=>$products->inmr_hash,
+                'var_name'=> $item['var_name'],
+                'onhand_qty'=> $item['onhand_qty'],
+                'available_qty' => $item['available_qty'],
+                'cost_amt' => $item['cost_amt'],
+                'lengthsize' => $item['lengthsize'], 
+                'height' => $item['height'],
+                'width' => $item['width'], 
+                'dimension' => ceil($item['dimension']),
+                'weight' => ceil($item['weight']), 
+        
+            ];
+        }
+    
+        DB::table('vrnt')->insert($items_dataset);
         
         return ( new Reference( $products ))
                 ->response()
                 ->setStatusCode(201);
     }
 
-    public function upload(Request $request)
-    {   
-
+    public function uploadCreate(Request $request)
+    { 
         
-        $last_id = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->max('inmr_hash');
-        $last_item = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->where('inmr_hash',  $last_id)->max('inmr_hash');
-        $items_dataset = [];
+            if (count($request->images)) {
+                foreach ($request->images as $image) {
+                    $last_id = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->max('inmr_hash');
+                    $last_item = DB::table('inmr')->select('*')->where('sumr_hash' , Auth::user()->sumr_hash)->where('inmr_hash',$last_id)->max('inmr_hash');
+                    $file_name = strtolower(trim($image->getClientOriginalName()));
+                    $image->move('storage/app/public/products/'.Auth::user()->sumr_hash.'/'.$last_item ,$file_name);
+                    $items_dataset[] = [
+                        'inmr_hash' => $last_id,
+                        'path' => $file_name
+                    ];
+                    }
+                    DB::table('imgs')->insert($items_dataset);
+                }
+        return response()->json([
+            "message" => "Done"
+        ]);
+    }
+    public function uploadUpdate(Request $request , $id)
+    { 
+        
+       DB::table('inmr')->select('*')->where('inmr_hash' ,$id)->get();
+
         if (count($request->images)) {
             foreach ($request->images as $image) {
                 $file_name = strtolower(trim($image->getClientOriginalName()));
-
-                $image->move('storage/products/'.Auth::user()->sumr_hash.'/'.$last_item ,$file_name);
+                $image->move('storage/app/public/products/'.Auth::user()->sumr_hash.'/'.$id ,$file_name);
                 $items_dataset[] = [
-                    'inmr_hash' => $last_id,
+                    'inmr_hash' => $id,
                     'path' => $file_name
                 ];
             }
-       
-        }
-        DB::table('imgs')->insert($items_dataset);
-
+            DB::table('imgs')->insert($items_dataset);
+        
+     }
         return response()->json([
             "message" => "Done"
         ]);
@@ -157,14 +169,13 @@ class ProductsController extends Controller
     {
         $data['products'] = ProductsModel::findOrFail($id);
 
-        $data['images'] = ImagesModel::select(
-            'imgs.path')
-            // 'inmr.*'
+        $data['variant'] = VariantModel::select('vrnt.*')->where('vrnt.inmr_hash', $id)->where('vrnt.is_deleted', 0)->get();
 
-            //     ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'imgs.inmr_hash')
-                ->where('imgs.inmr_hash', $id)
-                ->where('imgs.is_deleted', 0)
-                ->get();
+        $data['images'] = ImagesModel::select('imgs.path')->where('imgs.inmr_hash', $id)->where('imgs.is_deleted', 0)->get();
+            
+                
+                
+                
         return $data;
     }
 
@@ -203,20 +214,37 @@ class ProductsController extends Controller
         )->validate();
         $products->product_name = $request->input('product_name');
         $products->product_details = $request->input('product_details');
-        $products->onhand_qty = $request->input('onhand_qty');
-        $products->available_qty = $request->input('available_qty');
         $products->inct_hash = $request->input('inct_hash');
-        $products->cost_amt = $request->input('cost_amt');
-        $products->lengthsize = $request->input('lengthsize');
-        $products->height = $request->input('height');
-        $products->width = $request->input('width');
-        $products->dimension = $request->input('dimension');
-        $products->weight = $request->input('weight');
         $products->update_datetime = Carbon::now();
         $products->sumr_hash = Auth::user()->sumr_hash;
-
         //update  based on the http json body that is sent
         $products->save();
+
+        $items = $request->input('items');
+        $old_items = VariantModel::where('inmr_hash', $products->inmr_hash);
+        $old_items->delete();
+
+        $items = $request->input('items');
+        $items_dataset = [];
+
+        foreach($items as $item)
+        {
+            $items_dataset[] = [
+                'inmr_hash'=>$products->inmr_hash,
+                'var_name'=> $item['var_name'],
+                'onhand_qty'=> $item['onhand_qty'],
+                'available_qty' => $item['available_qty'],
+                'cost_amt' => $item['cost_amt'],
+                'lengthsize' => $item['lengthsize'], 
+                'height' => $item['height'],
+                'width' => $item['width'], 
+                'dimension' => ceil($item['dimension']),
+                'weight' => ceil($item['weight']), 
+        
+            ];
+        }
+    
+        DB::table('vrnt')->insert($items_dataset);
 
         return ( new Reference( $products ) )
             ->response()
@@ -269,7 +297,7 @@ class ProductsController extends Controller
     {
         $products = ProductsModel::findOrFail($id);
 
-        $products->is_verified = 3;
+        $products->is_verified = 2;
         //update classification based on the http json body that is sent
         $products->save();
 
@@ -279,23 +307,8 @@ class ProductsController extends Controller
     }
     public function removeImages($id)
     {   
-    // $path = DB::table('imgs')->select('*')->where('inmr_hash', $id)->where('is_deleted' , 0)->get();
-    // $path = DB::table('imgs')->select('*')->where('inmr_hash', $id)->get();
     DB::table('imgs')->where('inmr_hash', $id)->update(['is_deleted' =>  1]);
-    // $images = public_path('storage/products/'.Auth::user()->sumr_hash. '/'.$id);
-    // $images =  Storage::delete('storage/products/'.Auth::user()->sumr_hash. '/'.$id);
-    // dd($images);
-    // $productImage = public_path('/storage/products/'.Auth::user()->sumr_hash. '/'.$id);
-    // Storage::delete($productImage);
-        
-   \File::deleteDirectory(public_path('/storage/products/'.Auth::user()->sumr_hash. '/'.$id));
-        // dd($path);
-
-            // foreach($path as $p){
-                // $image_path = public_path('/storage/products/'.Auth::user()->sumr_hash. '/'.$id);
-                // @unlink($image_path);
-                
-            //  }
+   \File::deleteDirectory(public_path('/storage/app/public/products/'.Auth::user()->sumr_hash. '/'.$id));
     return;
    
 }

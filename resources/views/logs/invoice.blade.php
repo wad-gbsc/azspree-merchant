@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Invoice</title>
+        <title>Statement of Account</title>
         
       <style type="text/css">
             body{
@@ -51,7 +51,7 @@
         <table width="100%" >
             <tr class="border">
                 <td colspan="12" class="header report_header" style="font-size: 14pt; font-family: Times new roman;">
-                    <center><b>INVOICE</b></center>
+                    <center><b>Statement of Account</b></center>
                 </td>
                 <br><br>
             </tr>
@@ -59,8 +59,8 @@
                 <td class="border" colspan="10">
                     @foreach ($issuances as $issuance)
                         
-                    @endforeach
-                        <span>Invoice To.</span>
+                    
+                        <span>Send To.</span>
                         <br>
                         <span class="field">Name: {{$issuance->seller_name}}</span>
                         <br>
@@ -71,6 +71,7 @@
                         <span>Bank Name & Branch: {{$issuance->bank_name}}</span>
                         <br>
                         <span>&nbsp;</span>
+                    @endforeach
                 </td>
                 <td  class="border" colspan="2" style="text-align:right;">
                     <span>Date Prepared :  {{date("Y-m-d")}}</span>
@@ -113,19 +114,13 @@
                 <td colspan="12" class="top"></td>
             </tr>
             <tr>
-                <td colspan="6">
-
                 @foreach ($details as $detail)
-
                     <?php 
                     $transaction_fee = 0;
                     $transaction_fee += $detail->azspree; 
                     ?>
-                   
                 @endforeach
-
-
-                @foreach($invoice as $in)
+                @foreach($invoices as $in)
                    <?php
                    $subtotal = 0;
                    $shipping = 0;
@@ -133,8 +128,7 @@
                    $subtotal += $amount;
                    $shipping += $in->m_shipping_fee;
                    ?>
-
-
+                <td colspan="6">
                     <span>{{$in->product_name}}</span>
                     <br><br><br><br>
                 </td>
@@ -157,6 +151,11 @@
             </tr>
             <tr>
                 <td colspan="12">&nbsp;</td>
+                
+            </tr>
+            <tr>
+                <td colspan="12"><small>Note: Bank charges may apply upon transfer of your payout from our BDO account to your bank account.</small></td>
+                <br><br>
             </tr>
             <tr>
                 <td colspan="6">
@@ -176,18 +175,19 @@
                     <span><b>GRAND TOTAL</b></span>
                     <br><br><br><br>
                 </td>
+                
                 <td colspan="2" style="text-align: right;">
-                    <span>- {{number_format($subtotal,2)}}</span>
+                    <span>{{number_format($subtotal,2)}}</span>
                     <br>
-                    <span>- {{number_format($shipping,2)}}</span>
+                    <span>-{{number_format($shipping,2)}}</span>
                     <br>
-                    <span>- {{number_format($transaction_fee, 2)}}</span>
+                    <span>-{{number_format($transaction_fee, 2)}}</span>
                     <br>
-                    <span>- 25.00</span>
+                    <span>-</span>
                     <br>
-                    <span>- 3.00</span>
+                    <span>-3.00</span>
                     <br>
-                    <span><b>{{number_format($subtotal + $shipping + 25 + 3 , 2)}}<b></span>
+                    <span><b>{{number_format($subtotal - ($shipping + $transaction_fee + 3) , 2)}}<b></span>
                     <br><br><br><br>
                 </td>
             </tr>

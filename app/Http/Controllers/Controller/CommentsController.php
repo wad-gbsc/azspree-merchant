@@ -19,9 +19,7 @@ class CommentsController extends Controller
      */
     public function index()
     {
-        if ( Auth::user()->type == 0) {
-
-        
+        if (Auth::user()->type == 0) {
         $data['comments'] = CommentsModel::select(
             'cmnt.*',
             'user.fullname',
@@ -32,10 +30,8 @@ class CommentsController extends Controller
                 ->leftJoin('user', 'user.user_hash', '=', 'cmnt.user_hash')
                 ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'cmnt.sumr_hash')
                 ->where('cmnt.sumr_hash' , Auth::user()->sumr_hash)
-                // ->orderBy('sohr_hash', 'desc')
                 ->get();
         }else if (Auth::user()->type == 2) {
-
             $data['comments'] = CommentsModel::select(
                 'cmnt.*',
                 'user.fullname',
@@ -45,7 +41,6 @@ class CommentsController extends Controller
                     ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'cmnt.inmr_hash')
                     ->leftJoin('user', 'user.user_hash', '=', 'cmnt.user_hash')
                     ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'cmnt.sumr_hash')
-                    // ->orderBy('sohr_hash', 'desc')
                     ->get();
         }
         return $data;

@@ -92,7 +92,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <b-form-group v-show="$store.state.user.type == 0">
                 <b-button
                   variant="primary"
-                  @click="showEntry = true, entryMode='Add', clearFields('products'), focusElement('product_name', true) , images = []"
+                  @click="showEntry = true, entryMode='Add', clearFields('products'), focusElement('product_name', true) , images = [] , tables.variant.items = []"
                 >
                   <i class="fa fa-plus-circle"></i> Add New Product
                 </b-button>
@@ -116,10 +116,9 @@ input[type="number"]::-webkit-outer-spin-button {
                 v-model="forms.products.fields.getStatus"
                 :allowClear="false"
                 :placeholder="'Select Status'">
+                <option value="0">Pending</option>
                 <option value="1">Verified</option>
-                <option value="2">Pending</option>
-                <option value="3">Disapproved</option>
-                <option value="4">Banned</option>
+                <option value="2">Disapproved</option>
                 </select2>
               </b-form-group>
               </b-col>
@@ -154,15 +153,14 @@ input[type="number"]::-webkit-outer-spin-button {
                   :per-page="paginations.products.perPage"
                 >
                 <template v-slot:cell(status)="data">
-                    <b-badge v-if="data.item.is_verified == 1" pill variant="success">{{"Verified"}}</b-badge>
-                    <b-badge v-else-if="data.item.is_verified == 2" pill variant="warning" style="color: white;">{{"Pending"}}</b-badge>
-                    <b-badge v-else-if="data.item.is_verified == 3" pill variant="danger" style="color: white;">{{"Disapproved"}}</b-badge>
-                    <b-badge v-else-if="data.item.is_verified == 4" pill variant="dark" style="color: white;">{{"Banned"}}</b-badge>
+                    <b-badge v-if="data.item.is_verified == 0" pill variant="warning" style="color: white;">{{"Pending"}}</b-badge>
+                    <b-badge v-else-if="data.item.is_verified == 1" pill variant="success">{{"Verified"}}</b-badge>
+                    <b-badge v-else-if="data.item.is_verified == 2" pill variant="danger" style="color: white;">{{"Disapproved"}}</b-badge>
+                    <!-- <b-badge v-else-if="data.item.is_verified == 4" pill variant="dark" style="color: white;">{{"Banned"}}</b-badge> -->
                 </template>
                 <template v-slot:cell(action)="data">
                     
                     <div v-if="$store.state.user.type == 0">
-                    <div v-show="data.item.is_verified != 4">
                     <b-btn :size="'sm'" variant="primary" @click="setUpdate(data)">
                       <i class="fa fa-edit"></i>
                     </b-btn>
@@ -176,10 +174,9 @@ input[type="number"]::-webkit-outer-spin-button {
                       <i v-else class="fa fa-trash"></i>
                     </b-btn>
                     </div>
-                    </div>
                     <div v-else>
                       <b-btn
-                      v-show="data.item.is_verified == 2 || data.item.is_verified == 3"
+                      v-show="data.item.is_verified == 0 || data.item.is_verified == 2"
                       :size="'sm'"
                       variant="success"
                       @click="ApproveProduct(data)"
@@ -187,7 +184,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <i class="fa fa-check"></i>
                     </b-btn>
                       <b-btn
-                      v-show="data.item.is_verified == 1 || data.item.is_verified == 2 "
+                      v-show="data.item.is_verified == 1 || data.item.is_verified == 0 "
                       :size="'sm'"
                       variant="danger"
                       @click="DisapproveProduct(data)"
@@ -214,7 +211,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       @click="data.toggleDetails()"
                     >
                       <i class="fa fa-eye"></i>
-                      {{ row.detailsShowing ? 'Hide' : 'Show'}} Details 
+                      {{ data.detailsShowing ? 'Hide' : 'Show'}} Details 
                     </b-button>
                   </template>
                   <template v-slot:row-details="data"> 
@@ -247,9 +244,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <b-row class="mb-2">
                         <b-col>
                           <b>Product Details :</b>
-                          <label style="text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;">&emsp;{{data.item.product_details}}</label>
+                          <label style="white-space: pre-line;">&emsp;{{data.item.product_details}}</label>
                         </b-col>
                       </b-row>
 
@@ -348,7 +343,7 @@ input[type="number"]::-webkit-outer-spin-button {
       <b-col lg="12">
         <b-form @keydown="resetFieldStates('products')" autocomplete="off" @shown="focusElement('product_name')">
             <b-row>
-            <b-col lg="4">
+            <b-col lg="6">
             <b-form-group
             id="fieldset-1"
             label-for="input-1"
@@ -397,7 +392,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       ></b-form-textarea>
                     </b-form-group>
                     
-                      <b-form-group>
+                      <!-- <b-form-group>
                         <label for="onhand_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> On hand Quantity.</label><span>  The number you have physically available.</span>
                       <b-form-input
                             min="0"
@@ -503,7 +498,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       v-model="this.Getdimension"
                       class='form-control'
                     ></vue-autonumeric>
-                  </b-form-group>
+                  </b-form-group> -->
                   </b-col>
                
         <b-col lg="6">
@@ -519,35 +514,34 @@ input[type="number"]::-webkit-outer-spin-button {
           
         <div class="images-preview" v-show="images.length > 0 || ShowImages.length > 0 ">
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[0] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[0] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
+                <img :src=" ShowImages[0] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
           </div>
            <div class="img-wrapper img" v-bind:style="{display: ShowImages[1] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[1] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
+                <img :src=" ShowImages[1] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
           </div>  
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[2] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[2] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
+                <img :src=" ShowImages[2] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
           </div>
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[3] != undefined ? 'flex' : 'none' }">
-                <img :src="ShowImages[3] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
+                <img :src="ShowImages[3] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
           </div>     
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[4] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[4] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''" >
+                <img :src=" ShowImages[4] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''" >
           </div>
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[5] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[5] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
+                <img :src=" ShowImages[5] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
           </div> 
-
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[6] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[6] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
+                <img :src=" ShowImages[6] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
           </div> 
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[7] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[7] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
+                <img :src=" ShowImages[7] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
           </div> 
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[8] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[8] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
+                <img :src=" ShowImages[8] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
           </div> 
           <div class="img-wrapper img" v-bind:style="{display: ShowImages[9] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[9] != undefined ? '/storage/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
+                <img :src=" ShowImages[9] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
           </div> 
             <div class="img-wrapper img" v-for="(image, index) in images" :key="index">
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
@@ -559,6 +553,44 @@ input[type="number"]::-webkit-outer-spin-button {
       </div>
     </b-col>
     </b-row>   
+     <b-row class="mb-2">
+        <b-col lg=4>
+            <b-button variant="primary" @click="showModalProducts = true, selectedRow=[]">
+                <i class="fa fa-plus-circle"></i> Add Variant
+            </b-button>
+        </b-col>
+        <b-col lg=4></b-col>
+        <b-col lg=4>
+        </b-col>
+      </b-row>  
+      <b-row>
+                <b-col sm="12">
+                  <b-table
+                    responsive
+                    fixed
+                    striped
+                    hover
+                    small
+                    bordered
+                    show-empty
+                    :filter="filters.variant.criteria"
+                    :fields="tables.variant.fields"
+                    :items.sync="tables.variant.items"
+                  
+                  >
+                    <template v-slot:cell(action)="data">
+                                <b-btn
+                                    :size="'sm'"
+                                    variant="danger"
+                                    @click="removeProduct(data.index)"
+                                >
+                                    <i class="fa fa-minus"></i>
+                                </b-btn>
+                    </template>
+                        </b-table>
+                  <!-- table -->
+                </b-col>
+              </b-row>
            </b-form>
             <hr />
             <b-row class="pull-right">
@@ -575,9 +607,165 @@ input[type="number"]::-webkit-outer-spin-button {
             </b-card>
           </b-col>
         </b-row>
+            <div>
+              <!-- modal div -->
+              <b-modal
+                size="lg"
+                v-model="showModalProducts"
+                :noCloseOnEsc="true"
+                :noCloseOnBackdrop="true"
+                :scrollable="true"
+                @shown="focusElement('var_name')"
+              >
+                <div slot="modal-title">
+                  <!-- modal title -->
+                  Add Variant
+                </div>
+                <!-- modal title -->
+
+                <b-row>
+                <b-col lg="6">
+                  <b-form-group>
+                        <label for="var_name"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Variant Name</label> <small>(Color, Size, Texture, etc.)</small>
+                        <b-form-input
+                            ref="var_name"
+                            id="var_name"
+                            v-model="forms.products.fields.var_name"
+                            type="text"
+                            placeholder="Variant Name">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-group>
+                        <label for="onhand_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> On hand Quantity</label><br><span>  The number you have physically available.</span>
+                      <b-form-input
+                            min="0"
+                            ref="onhand_qty"
+                            id="onhand_qty"
+                            v-model="forms.products.fields.onhand_qty"
+                            type="number"
+                            placeholder="On Hand Quantity">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-group>
+                      <label for="available_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Available Quantity</label><br><span>  The quantity of an item that is currently available for sale.</span>
+                      <b-form-input
+                              min="0"
+                              ref="available_qty"
+                              id="available_qty"
+                              v-model="forms.products.fields.available_qty"
+                              type="number"
+                              placeholder="Available Quantity">
+                      </b-form-input>
+                    </b-form-group>
+                    <b-form-group>
+                      <label><i class="icon-required fa fa-exclamation-circle"></i> Price</label>
+                      <vue-autonumeric
+                          ref="cost_amt"
+                          id="cost_amt"
+                          v-model="forms.products.fields.cost_amt"
+                          class='form-control text-right'
+                          placeholder="0.00"
+                          :options="{
+                              minimumValue: '0',
+                              decimalCharacter: '.',}"
+                      ></vue-autonumeric>
+                  </b-form-group>
+                  </b-col>
+
+                  <b-col lg="6">
+                  <b-form-group>
+                  <label><i class="icon-required fa fa-exclamation-circle"></i> Weight (kg) :</label>
+                    <vue-autonumeric
+                      ref="weight"
+                      id="weight"
+                      v-model="forms.products.fields.weight"
+                      class='form-control'
+                      placeholder="Kg"
+                      :options="{
+                          minimumValue: '0',
+                          decimalPlaces: 3,
+                          decimalCharacter: '.'}"
+                    ></vue-autonumeric>
+                  </b-form-group>
+                  <b-form-group>
+                  <b-form-checkbox
+                  ref="is_measurable"
+                  id="is_measurable"
+                  v-model="forms.products.fields.is_measurable"
+                  value=1
+                  unchecked-value=0
+                  @input="forms.products.fields.is_measurable==0? (forms.products.fields.lengthsize = 0 ,  forms.products.fields.width = 0 , forms.products.fields.height = 0): ''"
+                  >
+                  Is Measurable?
+                  </b-form-checkbox>
+                  </b-form-group>
+                  <b-form-group>
+                  <label>Length (cm) :</label>
+                  <vue-autonumeric
+                      ref="lengthsize"
+                      id="lengthsize"
+                      placeholder="cm"
+                      :disabled="forms.products.fields.is_measurable == 0" 
+                      v-model="forms.products.fields.lengthsize"
+                      class='form-control'
+                  ></vue-autonumeric>
+                  </b-form-group>
+                  <b-form-group>
+                  <label>Width (cm) :</label>
+                  <vue-autonumeric
+                      ref="width"
+                      id="width"
+                      placeholder="cm"
+                      :disabled="forms.products.fields.is_measurable == 0"
+                      v-model="forms.products.fields.width"
+                      class='form-control'
+                  ></vue-autonumeric>
+                  </b-form-group>
+                  <b-form-group>
+                  <label>Height (cm) :</label>
+                  <vue-autonumeric
+                      ref="height"
+                      id="height"
+                      :disabled="forms.products.fields.is_measurable == 0"
+                      v-model="forms.products.fields.height"
+                      class='form-control'
+                      placeholder="cm"
+                  ></vue-autonumeric>
+                  </b-form-group>
+                  <b-form-group>
+                  <label>Dimension (kg):</label>
+                  <vue-autonumeric
+                      placeholder="kg"
+                      disabled
+                      ref="dimension"
+                      id="dimension"
+                      v-model="this.Getdimension"
+                      class='form-control'
+                    ></vue-autonumeric>
+                  </b-form-group>
+                  </b-col>
+                </b-row>
+                <!-- modal body -->
+
+                <div slot="modal-footer">
+                  <!-- modal footer buttons -->
+                  <b-button
+                    variant="primary"
+                    @click="acceptVariant"
+                  >
+                    <!-- <icon v-if="forms.purchaseorderlist.isSaving" name="sync" spin></icon> -->
+                    <i class="fa fa-check"></i>
+                    Accept
+                  </b-button>
+                  <b-button variant="secondary" @click="showModalProducts=false">Close</b-button>
+                </div>
+                <!-- modal footer buttons -->
+              </b-modal>
+            </div>
+    <!-- modal div -->
+        </div>
         </div>
       </div>
-    </div>
 </template>
 
 <script>
@@ -601,6 +789,7 @@ input[type="number"]::-webkit-outer-spin-button {
               product_details: null ,
               getStatus: null,
               getmerchantproducts: null,
+              var_name: null,
               dimension: 0,
               is_measurable: 0,
               onhand_qty: 0,
@@ -681,12 +870,81 @@ input[type="number"]::-webkit-outer-spin-button {
               }
             ],
             items: []
-          }
+          },
+          variant: {
+          fields: [
+            {
+              key: "var_name",
+              label: "Variant Name",
+              thStyle: { width: "10%" },
+              tdClass: "align-middle",
+              sortable: true
+            },
+            {
+              key: "onhand_qty",
+              label: "On hand Qty.",
+              tdClass: "align-middle",
+              thClass: "text-center",
+              thStyle: { width: "6%" },
+              sortable: true
+            },
+            {
+              key: "available_qty",
+              label: "Available Qty.",
+              tdClass: "align-middle",
+              thClass: "text-center",
+              thStyle: { width: "7%" },
+              sortable: true
+            },
+            {
+                key: "cost_amt",
+                label: "Price",           
+                thClass: "text-right",
+                tdClass: "align-middle text-right",
+                thStyle: { width: "110px" },
+                sortable: true,
+                formatter: (value) => {
+                        return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "weight",
+                label: "Weight (kg)",
+                thStyle: { width: "6%" },
+                tdClass: "align-middle text-right",
+                sortable: true,
+                formatter: (value) => {
+                        return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "dimension",
+                label: "Dimension (kg)",
+                thStyle: { width: "6%" },
+                tdClass: "align-middle text-right",
+                sortable: true,
+                formatter: (value) => {
+                        return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "action",
+                label: "",
+                thStyle: { width: "4%" },
+                tdClass: "text-center",
+                sortable: true
+              },
+          ],
+          items: []
+        }
         },
         filters: {
           products: {
             criteria: null
-          }
+          },
+            variant: {
+          criteria: null
+        },
         },
         paginations: {
           products: {
@@ -714,6 +972,7 @@ input[type="number"]::-webkit-outer-spin-button {
                Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
+                    showConfirmButton: false,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -876,6 +1135,46 @@ input[type="number"]::-webkit-outer-spin-button {
                   console.log(error)
                 })
         },
+         uploadUpdate() {
+            const formData = new FormData();
+            this.files.forEach(file => {
+                formData.append('images[]', file, file.name);
+              
+            });
+             this.$http.post('/api/upload/' + this.forms.products.fields.inmr_hash, formData, {
+                headers: {
+                      Authorization: 'Bearer ' + localStorage.getItem('token'),
+                      'Content-Type' : 'multipart/form-data'
+                  }
+                })
+                .then(response => {
+                  this.images = [];
+                  this.files = [];
+                })
+                .catch(error => {
+                  if (!error.response) return
+                  console.log(error)
+                })
+        },
+          acceptVariant() {
+      this.tables.variant.items.push({
+        var_name: this.forms.products.fields.var_name,
+        onhand_qty: this.forms.products.fields.onhand_qty,
+        available_qty: this.forms.products.fields.available_qty,
+        cost_amt: this.forms.products.fields.cost_amt,
+        weight: this.forms.products.fields.weight,
+        lengthsize: this.forms.products.fields.lengthsize,
+        width: this.forms.products.fields.width,
+        height: this.forms.products.fields.height,
+        dimension: this.forms.products.fields.dimension,
+      });
+      this.showModalProducts = '';
+      this.showModalProducts = false;
+      
+    },
+    removeProduct(index){
+        this.tables.variant.items.splice(index, 1)
+    },
       onProductEntry() {
         if (this.forms.products.fields.product_name == null || this.forms.products.fields.product_name == "") {
             Toast.fire(
@@ -959,6 +1258,7 @@ input[type="number"]::-webkit-outer-spin-button {
             }else{  
             this.forms.products.isSaving = true;
             this.resetFieldStates('products');
+            this.forms.products.fields.items = this.tables.variant.items
 
             this.$http
               .post("api/" + 'products', this.forms.products.fields, {
@@ -974,11 +1274,13 @@ input[type="number"]::-webkit-outer-spin-button {
           this.images = [];
           this.files = [];
           this.showEntry = false;
-          Toast.fire(
-              'Success!',
-              'The record has been successfully created.',
-              'success'
-              )
+          Swal.fire({
+              title: 'Success!',
+              text: 'The record has been successfully created.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 3000,
+              })
         })
         .catch(error => {
           this.forms.products.isSaving = false;
@@ -1016,6 +1318,7 @@ input[type="number"]::-webkit-outer-spin-button {
               'error'
               )
             }else{  
+            this.forms.products.fields.items = this.tables.variant.items
             this.forms.products.isSaving = true;
             this.$http
                 .put(
@@ -1029,14 +1332,14 @@ input[type="number"]::-webkit-outer-spin-button {
                 )
                 .then(response => {
                   if (this.images.length > 0) {
-                    this.upload();
+                    this.uploadUpdate();
                 }
                     Swal.fire({
                     position: 'center',
                     icon: 'success',
                     title: 'Update successfuly.',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 3000
                     })
                     this.forms.products.isSaving = false;
                     this.showEntry = false;
@@ -1101,6 +1404,7 @@ input[type="number"]::-webkit-outer-spin-button {
           this.forms.products.fields = response.data.products;
           this.ShowImages = response.data.images;
           // console.log(this.ShowImages.length > 0)
+          this.tables.variant.items = response.data.variant;
           this.showEntry = true;
           this.entryMode = "Edit";
         })
@@ -1128,17 +1432,17 @@ input[type="number"]::-webkit-outer-spin-button {
      },
   computed: {
     getMerchantProducts() {
-    if (this.forms.products.fields.getmerchantproducts != null) {
+    if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus == null) {
        
-      return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts && p.is_verified == this.forms.products.fields.getStatus);
+      return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts);
     
-    }else if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus == null){
+    }else if (this.forms.products.fields.getmerchantproducts == null && this.forms.products.fields.getStatus != null){
        
-      return this.tables.products.items.filter(p => p.sumr_hash == this.forms.products.fields.getmerchantproducts)
+      return this.tables.products.items.filter(p => p.is_verified == this.forms.products.fields.getStatus)
      
-     }else if (this.forms.products.fields.getmerchantproducts == null && this.forms.products.fields.getStatus != null){
+     }else if (this.forms.products.fields.getmerchantproducts != null && this.forms.products.fields.getStatus != null){
      
-     return this.tables.products.items.filter(p => p.is_verified == this.forms.products.fields.getStatus)
+     return this.tables.products.items.filter(p => p.is_verified == this.forms.products.fields.getStatus && p.sumr_hash == this.forms.products.fields.getmerchantproducts)
     
     }else{
         return this.tables.products.items;

@@ -290,8 +290,8 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\public\\public/images',
-        'url' => 'http://localhost/public',
+        'root' => 'C:\\xampp\\htdocs\\azspree-merchant\\storage\\app/public',
+        'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
       's3' => 
@@ -362,16 +362,16 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'smtp.mailtrap.io',
-    'port' => '2525',
+    'host' => 'smtp.gmail.com',
+    'port' => '587',
     'from' => 
     array (
-      'address' => 'hello@example.com',
-      'name' => 'Example',
+      'address' => 'Azspree@gmail.com',
+      'name' => 'AZSPREE',
     ),
-    'encryption' => NULL,
-    'username' => NULL,
-    'password' => NULL,
+    'encryption' => 'tls',
+    'username' => 'Azspree@gmail.com',
+    'password' => 'myazspreedec1',
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (

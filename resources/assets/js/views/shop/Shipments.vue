@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <notifications group="notification" />
@@ -40,18 +39,25 @@
                         {{ row.detailsShowing ? 'Hide' : 'Show'}} Details 
                       </b-button>
                     </template>
-                    <template v-slot:row-details="row"> 
+                    <template v-slot:row-details="row">
+                      <b-row>
+                        <b-col lg="4">  
                           <b-form-group>
                           <label>Customer Name :</label>
                           <b-form-input disabled
-                          v-model="this.fullname">
+                          v-model="row.item.fullname">
                           </b-form-input>
                           </b-form-group>
                           <b-form-group>
                           <label>Customer Address :</label>
-                          <b-form-input disabled>
+                          <b-form-input disabled
+                          v-model="row.item.address">
                           </b-form-input>
-                          </b-form-group>
+                          </b-form-group></b-col>
+                        <b-col lg="4"></b-col>
+                        <b-col lg="4"></b-col>
+                      </b-row> 
+                        
                          <b-table
                               style="overflow: hidden;"
                               responsive
