@@ -758,11 +758,14 @@
                 seller_name: this.selectedRow[0].seller_name,
                 order_date: this.selectedRow[0].order_date,
                 payment_method: this.selectedRow[0].payment_method,
+                order_subtotal: this.selectedRow[0].order_subtotal,
                 shipping_fee: this.selectedRow[0].shipping_fee,
                 m_shipping_fee: this.selectedRow[0].m_shipping_fee,
                 total_qty: this.selectedRow[0].total_qty,
                 order_total: this.selectedRow[0].order_total,
                 azspree: this.selectedRow[0].azspree,
+                add_charges: this.selectedRow[0].add_charges,
+                packaging_fee: this.selectedRow[0].packaging_fee,
             })
         }
     },
@@ -934,71 +937,70 @@
 
     },
       computed: {
-
         filteredSohr() {
              if (this.forms.logs.fields.issued_to != null) {
                 return this.tables.sohr.items.filter(r => r.sumr_hash == this.forms.logs.fields.issued_to);
              }
         },
-        GetTotalCost() {
-        if (this.from_datetime != null && this.to_datetime != null) {
-        this.moment(this.from_datetime, "YYYY-MM-DD");
-        this.moment(this.to_datetime, "YYYY-MM-DD");
+      //   GetTotalCost() {
+      //   if (this.from_datetime != null && this.to_datetime != null) {
+      //   this.moment(this.from_datetime, "YYYY-MM-DD");
+      //   this.moment(this.to_datetime, "YYYY-MM-DD");
           
-        this.forms.logs.fields.totalcost = 0;
-         this.tables.logs.items.forEach(item => {
-          this.forms.logs.fields.totalcost +=
-          Number(item.order_subtotal);
-      });
-          return this.forms.logs.fields.totalcost;
-          }else{
-             this.forms.logs.fields.totalcost = 0;
-         this.tables.logs.items.forEach(item => {
-          this.forms.logs.fields.totalcost +=
-          Number(item.order_subtotal);
-      });
-            return this.forms.logs.fields.totalcost;
-          }
+      //   this.forms.logs.fields.totalcost = 0;
+      //    this.tables.logs.items.forEach(item => {
+      //     this.forms.logs.fields.totalcost +=
+      //     Number(item.order_subtotal);
+      // });
+      //     return this.forms.logs.fields.totalcost;
+      //     }else{
+      //        this.forms.logs.fields.totalcost = 0;
+      //    this.tables.logs.items.forEach(item => {
+      //     this.forms.logs.fields.totalcost +=
+      //     Number(item.order_subtotal);
+      // });
+      //       return this.forms.logs.fields.totalcost;
+      //     }
           
-      },
-        GetTotalQuantity() {
-        if (this.from_datetime != null && this.to_datetime != null) {
-          this.moment(this.from_datetime, "YYYY-MM-DD");
-          this.moment(this.to_datetime, "YYYY-MM-DD");
+      // },
+      //   GetTotalQuantity() {
+      //   if (this.from_datetime != null && this.to_datetime != null) {
+      //     this.moment(this.from_datetime, "YYYY-MM-DD");
+      //     this.moment(this.to_datetime, "YYYY-MM-DD");
 
-        this.forms.logs.fields.totalqty = 0;
-         this.tables.logs.items.forEach(item => {
-          this.forms.logs.fields.totalqty +=
-          Number(item.total_qty);
-      });
-          return this.forms.logs.fields.totalqty;
-          }else{
-                 this.forms.logs.fields.totalqty = 0;
-         this.tables.logs.items.forEach(item => {
-          this.forms.logs.fields.totalqty +=
-          Number(item.total_qty);
-      });
-            return this.forms.logs.fields.totalqty;
-          }
-        },  
-      filterLogs() {
-         if (this.forms.logs.fields.selectMerchant != null && this.forms.logs.fields.selectMerchant.length > 0) {
-          if (this.from_datetime != null && this.to_datetime != null) {
-          return this.tables.logs.items.filter(
-            d =>
-              this.moment(d.order_date, "YYYY-MM-DD") >=
-                this.moment(this.from_datetime, "YYYY-MM-DD") &&
-              this.moment(d.order_date, "YYYY-MM-DD") <=
-                this.moment(this.to_datetime, "YYYY-MM-DD") && (d.seller_name === this.forms.logs.fields.selectMerchant)
-          );
-            return this.tables.logs.items;
-          }else{
-            return this.tables.logs.items.filter(s => s.seller_name === this.forms.logs.fields.selectMerchant);
-          }
-       }else{
-        return this.tables.logs.items;
-      }
-    }
+      //   this.forms.logs.fields.totalqty = 0;
+      //    this.tables.logs.items.forEach(item => {
+      //     this.forms.logs.fields.totalqty +=
+      //     Number(item.total_qty);
+      // });
+      //     return this.forms.logs.fields.totalqty;
+      //     }else{
+      //            this.forms.logs.fields.totalqty = 0;
+      //    this.tables.logs.items.forEach(item => {
+      //     this.forms.logs.fields.totalqty +=
+      //     Number(item.total_qty);
+      // });
+      //       return this.forms.logs.fields.totalqty;
+      //     }
+      //   },  
+    //   filterLogs() {
+    //      if (this.forms.logs.fields.selectMerchant != null && this.forms.logs.fields.selectMerchant.length > 0) {
+    //       if (this.from_datetime != null && this.to_datetime != null) {
+    //       return this.tables.logs.items.filter(
+    //         d =>
+    //           this.moment(d.order_date, "YYYY-MM-DD") >=
+    //             this.moment(this.from_datetime, "YYYY-MM-DD") &&
+    //           this.moment(d.order_date, "YYYY-MM-DD") <=
+    //             this.moment(this.to_datetime, "YYYY-MM-DD") && (d.seller_name === this.forms.logs.fields.selectMerchant)
+    //       );
+    //         return this.tables.logs.items;
+    //       }else{
+    //         return this.tables.logs.items.filter(s => s.seller_name === this.forms.logs.fields.selectMerchant);
+    //       }
+    //    }else{
+    //     return this.tables.logs.items;
+    //   }
+    // }
     },
 
     created() {

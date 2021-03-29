@@ -5,14 +5,14 @@
       <ul class="nav">
         <li class="nav-item" v-for="(item, index) in navItems">
           <template v-if="item.title">
-            <SidebarNavTitle :name="item.name"/>
+            <SidebarNavTitle :name="item.name" />
           </template>
           <template v-else-if="item.divider">
             <li class="divider"></li>
           </template>
           <template v-else>
             <template v-if="item.children" >
-              <SidebarNavDropdown :name="item.name" :url="item.url" :icon="item.icon">
+              <SidebarNavDropdown v-if="item.type.includes($store.state.user.type)" :name="item.name" :url="item.url" :icon="item.icon">
                 <template v-for="(child, index) in item.children" >
                   <template v-if="child.children" >
                     <SidebarNavDropdown :name="child.name" :url="child.url" :icon="child.icon" >

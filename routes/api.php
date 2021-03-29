@@ -73,6 +73,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('comments/{id}', 'Controller\CommentsController@show');
     Route::put('comments/{id}', 'Controller\CommentsController@update');
     Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintReport');
+
+    Route::get('merchants', 'Controller\MerchantsController@index');
+    Route::post('merchants/', 'Controller\MerchantsController@create');
+    Route::get('merchants/{id}', 'Controller\MerchantsController@show');
+    Route::put('merchants/delete/{id}', 'Controller\MerchantsController@delete');
+
+    Route::get('variant/{id}', 'Controller\ProductsController@showVariant');
 });
 Route::get('logs/print/{from}/{to}', 'Controller\LogsController@PrintReport');
 Route::get('logs/printreport/{id}', 'Controller\LogsController@PrintInvoice');

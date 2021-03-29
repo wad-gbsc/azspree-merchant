@@ -52,11 +52,33 @@ input[type="number"]::-webkit-outer-spin-button {
         flex-wrap: wrap;
         margin-top: 20px;
         .img-wrapper {
-            width: 180px;
-            height: 250px;
+            width: 157px;
+            height: 227px;
             flex-direction: column;
             img {
-                max-height: 237px;
+                max-height: 214px;
+            }
+        }
+        
+    }
+}
+.uploaderDefault {
+    width: 100%;
+    margin-top: -3.5px ;
+    border-radius: 10px;
+    border: 3px dashed #fff;
+    position: relative;
+   
+    .images-preview {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        .img-wrapper {
+            width: 230px;
+            height: 300px;
+            flex-direction: column;
+            img {
+                max-height: 287px;
             }
         }
         
@@ -191,7 +213,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       >
                       <i class="fa fa-thumbs-down"></i>
                       </b-btn>
-<!-- 
+                    <!-- 
                       <b-btn
                       v-show="data.item.is_verified == 3 || data.item.is_verified == 1"
                       :size="'sm'"
@@ -244,7 +266,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <b-row class="mb-2">
                         <b-col>
                           <b>Product Details :</b>
-                          <label style="white-space: pre-line;">&emsp;{{data.item.product_details}}</label>
+                          <label style="white-space: pre;">&emsp;{{data.item.product_details}}</label>
                         </b-col>
                       </b-row>
 
@@ -271,7 +293,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       
                        <b-row class="mb-2">
                         <b-col>
-                          <b>Sales :</b>
+                          <b>Price :</b>
                           <label>&emsp;{{data.item.cost_amt}}</label>
                         </b-col>
                       </b-row>
@@ -289,8 +311,6 @@ input[type="number"]::-webkit-outer-spin-button {
                           <label>&emsp;{{data.item.dimension}}</label>
                         </b-col>
                       </b-row>
-                      
-
                       </b-col>
                        </b-row>
                        </b-card>
@@ -343,7 +363,7 @@ input[type="number"]::-webkit-outer-spin-button {
       <b-col lg="12">
         <b-form @keydown="resetFieldStates('products')" autocomplete="off" @shown="focusElement('product_name')">
             <b-row>
-            <b-col lg="6">
+            <b-col lg="4">
             <b-form-group
             id="fieldset-1"
             label-for="input-1"
@@ -501,56 +521,71 @@ input[type="number"]::-webkit-outer-spin-button {
                   </b-form-group> -->
                   </b-col>
                
-        <b-col lg="6">
-                <!-- <label>{{ShowImages[0] != undefined ? ShowImages[0].path:'N/A'}}</label> -->
-                
-        <div class="uploader">
-      
-        <div v-show="images.length < 1 ">
-                <b-form-file multiple id="file" ref="file" name="images" type="file" v-model="files" @change="onInputChange"> 
-              </b-form-file>
-        </div>
+        <b-col lg="8">
+        <b-row>
+          <b-col lg="4">
+          <label for="image_path"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Default Image</label>
+            <div class="uploaderDefault">
+              <b-form-file id="image_path" ref="image_path" name="image_path" type="file" @change="updateDefault">  </b-form-file>
 
-          
-        <div class="images-preview" v-show="images.length > 0 || ShowImages.length > 0 ">
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[0] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[0] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
-          </div>
-           <div class="img-wrapper img" v-bind:style="{display: ShowImages[1] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[1] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
-          </div>  
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[2] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[2] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
-          </div>
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[3] != undefined ? 'flex' : 'none' }">
-                <img :src="ShowImages[3] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
-          </div>     
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[4] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[4] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''" >
-          </div>
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[5] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[5] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
-          </div> 
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[6] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[6] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
-          </div> 
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[7] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[7] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
-          </div> 
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[8] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[8] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
-          </div> 
-          <div class="img-wrapper img" v-bind:style="{display: ShowImages[9] != undefined ? 'flex' : 'none' }">
-                <img :src=" ShowImages[9] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
-          </div> 
-            <div class="img-wrapper img" v-for="(image, index) in images" :key="index">
-                <img :src="image" :alt="`Image Uplaoder ${index}`">
+              <div v-show="forms.products.fields.image_path != null" class="images-preview" >
+                  <div class="img-wrapper img">
+                        <img :src="getDefaultPhoto()">
+                  </div>
+              </div>
             </div>
-        </div>
-          <div v-show="images.length > 0  || ShowImages.length > 0">
-            <b-button @click ="ShowImages.length > 0 ? removeImages() : files = [], images = []" variant="danger">Remove</b-button>
-          </div>
-      </div>
+          </b-col>
+        
+          <b-col lg="8">
+            <div class="uploader">
+            
+              <div v-show="images.length < 1 ">
+                      <b-form-file multiple id="file" ref="file" name="images" type="file" v-model="files" @change="onInputChange"> 
+                    </b-form-file>
+              </div>
+
+              <div class="images-preview" v-show="images.length > 0 || ShowImages.length > 0 ">
+                  <div class="img-wrapper img" v-bind:style="{display: ShowImages[0] != undefined ? 'flex' : 'none' }">
+                      <img :src="ShowImages[0] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
+                  </div>
+                  <div class="img-wrapper img" v-bind:style="{display: ShowImages[1] != undefined ? 'flex' : 'none' }">
+                      <img :src="ShowImages[1] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
+                </div>
+                  <div class="img-wrapper img" v-bind:style="{display: ShowImages[2] != undefined ? 'flex' : 'none' }">
+                      <img :src="ShowImages[2] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
+                </div>
+                  <div class="img-wrapper img" v-bind:style="{display: ShowImages[3] != undefined ? 'flex' : 'none' }">
+                      <img :src="ShowImages[3] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
+                
+                </div>
+                  <div class="img-wrapper img" v-bind:style="{display: ShowImages[4] != undefined ? 'flex' : 'none' }">
+                      <img :src="ShowImages[4] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''">
+                  </div>
+                <div class="img-wrapper img" v-bind:style="{display: ShowImages[5] != undefined ? 'flex' : 'none' }">
+                      <img :src=" ShowImages[5] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
+                </div> 
+                <div class="img-wrapper img" v-bind:style="{display: ShowImages[6] != undefined ? 'flex' : 'none' }">
+                      <img :src=" ShowImages[6] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
+                </div> 
+                <div class="img-wrapper img" v-bind:style="{display: ShowImages[7] != undefined ? 'flex' : 'none' }">
+                      <img :src=" ShowImages[7] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
+                </div> 
+                <div class="img-wrapper img" v-bind:style="{display: ShowImages[8] != undefined ? 'flex' : 'none' }">
+                      <img :src=" ShowImages[8] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
+                </div> 
+                <div class="img-wrapper img" v-bind:style="{display: ShowImages[9] != undefined ? 'flex' : 'none' }">
+                      <img :src=" ShowImages[9] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
+                </div> 
+                  <div class="img-wrapper img" v-for="(image, index) in images" :key="index" id="imgasd">
+                      <img :src="image" :alt="`Image Uplaoder ${index}`" >
+                  </div>
+              </div>
+                <div v-show="images.length > 0  || ShowImages.length > 0">
+                  <b-button @click ="ShowImages.length > 0 ? removeImages() : files = [], images = []" variant="danger">Remove</b-button>
+                </div>
+            </div>
+          </b-col>
+      </b-row>
     </b-col>
     </b-row>   
      <b-row class="mb-2">
@@ -576,9 +611,114 @@ input[type="number"]::-webkit-outer-spin-button {
                     :filter="filters.variant.criteria"
                     :fields="tables.variant.fields"
                     :items.sync="tables.variant.items"
-                  
                   >
+
+                  <template v-slot:cell(var_name)="data">
+                      <b-form-input
+                        ref="var_name"
+                        id="var_name"
+                        v-model="data.item.var_name"
+                        class="form-control"
+                      ></b-form-input>
+                    </template>
+                  <template v-slot:cell(onhand_qty)="data">
+                    <vue-autonumeric
+                      ref="onhand_qty"
+                      id="onhand_qty"
+                      v-model="data.item.onhand_qty"
+                      class="form-control"
+                      :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                    ></vue-autonumeric>
+                  </template>
+                 <template v-slot:cell(available_qty)="data">
+                    <vue-autonumeric
+                      ref="available_qty"
+                      id="available_qty"
+                      v-model="data.item.available_qty"
+                      class="form-control"
+                      :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                    ></vue-autonumeric>
+                  </template>
+                  <template v-slot:cell(cost_amt)="data">
+                    <vue-autonumeric
+                      ref="cost_amt"
+                      id="cost_amt"
+                      v-model="data.item.cost_amt"
+                      class="form-control"
+                      style="text-align: right;"
+                      :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                    ></vue-autonumeric>
+                  </template>
+                  <template v-slot:cell(weight)="data">
+                      <vue-autonumeric
+                        ref="weight"
+                        id="weight"
+                        v-model="data.item.weight"
+                        class="form-control"
+                        :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
+                    </template>
+                    <template v-slot:cell(lengthsize)="data">
+                      <vue-autonumeric
+                        ref="lengthsize"
+                        id="lengthsize"
+                        v-model="data.item.lengthsize"
+                        class="form-control"
+                        :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
+                    </template>
+                   
+                    <template v-slot:cell(width)="data">
+                      <vue-autonumeric
+                        ref="width"
+                        id="width"
+                        v-model="data.item.width"
+                        class="form-control"
+                        :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
+                    </template> 
+                    <template v-slot:cell(height)="data">
+                      <vue-autonumeric
+                        ref="height"
+                        id="height"
+                        v-model="data.item.height"
+                        class="form-control"
+                        :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
+                    </template>
+                   <!-- <template v-slot:cell(dimension)="data">
+                      <vue-autonumeric
+                        ref="dimension"
+                        id="dimension"
+                        v-model="data.item.dimension"
+                        class="form-control"
+                        :options="{
+                                minimumValue: '0', 
+                                emptyInputBehavior:'0',}"
+                      ></vue-autonumeric>
+                    </template> -->
                     <template v-slot:cell(action)="data">
+                                <!-- <b-btn
+                                    :size="'sm'"
+                                    variant="primary"
+                                    @click="EditVariant(data)"
+                                >
+                                    <i class="fa fa-edit"></i>
+                                </b-btn> -->
                                 <b-btn
                                     :size="'sm'"
                                     variant="danger"
@@ -587,6 +727,7 @@ input[type="number"]::-webkit-outer-spin-button {
                                     <i class="fa fa-minus"></i>
                                 </b-btn>
                     </template>
+
                         </b-table>
                   <!-- table -->
                 </b-col>
@@ -600,7 +741,7 @@ input[type="number"]::-webkit-outer-spin-button {
                     <i class="fa fa-check"></i>
                     Save
                 </b-button>
-                <b-button variant="secondary" @click=" files = [], images = [], showEntry=false , ShowImages = [] , clearFields('products')">Close</b-button>
+                <b-button variant="secondary" @click="files = [], images = [], showEntry=false , ShowImages = [] , clearFields('products')">Close</b-button>
               </b-col>
               </b-row>
             </b-col>
@@ -615,7 +756,8 @@ input[type="number"]::-webkit-outer-spin-button {
                 :noCloseOnEsc="true"
                 :noCloseOnBackdrop="true"
                 :scrollable="true"
-                @shown="focusElement('var_name')"
+                @shown="focusElement('var_name') , clearFields('variant')"
+
               >
                 <div slot="modal-title">
                   <!-- modal title -->
@@ -628,9 +770,10 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-group>
                         <label for="var_name"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Variant Name</label> <small>(Color, Size, Texture, etc.)</small>
                         <b-form-input
+                            maxlength="18"
                             ref="var_name"
                             id="var_name"
-                            v-model="forms.products.fields.var_name"
+                            v-model="forms.variant.fields.var_name"
                             type="text"
                             placeholder="Variant Name">
                         </b-form-input>
@@ -641,7 +784,7 @@ input[type="number"]::-webkit-outer-spin-button {
                             min="0"
                             ref="onhand_qty"
                             id="onhand_qty"
-                            v-model="forms.products.fields.onhand_qty"
+                            v-model="forms.variant.fields.onhand_qty"
                             type="number"
                             placeholder="On Hand Quantity">
                         </b-form-input>
@@ -652,7 +795,7 @@ input[type="number"]::-webkit-outer-spin-button {
                               min="0"
                               ref="available_qty"
                               id="available_qty"
-                              v-model="forms.products.fields.available_qty"
+                              v-model="forms.variant.fields.available_qty"
                               type="number"
                               placeholder="Available Quantity">
                       </b-form-input>
@@ -662,7 +805,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <vue-autonumeric
                           ref="cost_amt"
                           id="cost_amt"
-                          v-model="forms.products.fields.cost_amt"
+                          v-model="forms.variant.fields.cost_amt"
                           class='form-control text-right'
                           placeholder="0.00"
                           :options="{
@@ -678,7 +821,7 @@ input[type="number"]::-webkit-outer-spin-button {
                     <vue-autonumeric
                       ref="weight"
                       id="weight"
-                      v-model="forms.products.fields.weight"
+                      v-model="forms.variant.fields.weight"
                       class='form-control'
                       placeholder="Kg"
                       :options="{
@@ -691,10 +834,10 @@ input[type="number"]::-webkit-outer-spin-button {
                   <b-form-checkbox
                   ref="is_measurable"
                   id="is_measurable"
-                  v-model="forms.products.fields.is_measurable"
+                  v-model="forms.variant.fields.is_measurable"
                   value=1
                   unchecked-value=0
-                  @input="forms.products.fields.is_measurable==0? (forms.products.fields.lengthsize = 0 ,  forms.products.fields.width = 0 , forms.products.fields.height = 0): ''"
+                  @input="forms.variant.fields.is_measurable==0? (forms.variant.fields.lengthsize = 0 ,  forms.variant.fields.width = 0 , forms.variant.fields.height = 0): ''"
                   >
                   Is Measurable?
                   </b-form-checkbox>
@@ -705,8 +848,8 @@ input[type="number"]::-webkit-outer-spin-button {
                       ref="lengthsize"
                       id="lengthsize"
                       placeholder="cm"
-                      :disabled="forms.products.fields.is_measurable == 0" 
-                      v-model="forms.products.fields.lengthsize"
+                      :disabled="forms.variant.fields.is_measurable == 0" 
+                      v-model="forms.variant.fields.lengthsize"
                       class='form-control'
                   ></vue-autonumeric>
                   </b-form-group>
@@ -716,8 +859,8 @@ input[type="number"]::-webkit-outer-spin-button {
                       ref="width"
                       id="width"
                       placeholder="cm"
-                      :disabled="forms.products.fields.is_measurable == 0"
-                      v-model="forms.products.fields.width"
+                      :disabled="forms.variant.fields.is_measurable == 0"
+                      v-model="forms.variant.fields.width"
                       class='form-control'
                   ></vue-autonumeric>
                   </b-form-group>
@@ -726,14 +869,14 @@ input[type="number"]::-webkit-outer-spin-button {
                   <vue-autonumeric
                       ref="height"
                       id="height"
-                      :disabled="forms.products.fields.is_measurable == 0"
-                      v-model="forms.products.fields.height"
+                      :disabled="forms.variant.fields.is_measurable == 0"
+                      v-model="forms.variant.fields.height"
                       class='form-control'
                       placeholder="cm"
                   ></vue-autonumeric>
                   </b-form-group>
                   <b-form-group>
-                  <label>Dimension (kg):</label>
+                  <label>Dimension (kg):</label> <small>(Length x Width x Height &divide; 3500)</small>
                   <vue-autonumeric
                       placeholder="kg"
                       disabled
@@ -789,19 +932,24 @@ input[type="number"]::-webkit-outer-spin-button {
               product_details: null ,
               getStatus: null,
               getmerchantproducts: null,
-              var_name: null,
-              dimension: 0,
-              is_measurable: 0,
-              onhand_qty: 0,
-              available_qty: 0,
-              cost_amt: 0,
-              weight: 0,
-              lengthsize: 0,
-              width: 0,
-              height: 0,
               inct_hash: null,
+              image_path: '',
             },
           },
+        variant: {
+          fields: {
+            var_name: null,
+            dimension: 0,
+            is_measurable: 0,
+            onhand_qty: 0,
+            available_qty: 0,
+            cost_amt: 0,
+            weight: 0,
+            lengthsize: 0,
+            width: 0,
+            height: 0,
+          }
+        },
         },
         tables: {
           products: {
@@ -876,33 +1024,32 @@ input[type="number"]::-webkit-outer-spin-button {
             {
               key: "var_name",
               label: "Variant Name",
-              thStyle: { width: "10%" },
-              tdClass: "align-middle",
-              sortable: true
+              thStyle: { width: "6%" },
+              tdClass: "text-left",
+              sortable: false
             },
             {
               key: "onhand_qty",
               label: "On hand Qty.",
-              tdClass: "align-middle",
-              thClass: "text-center",
-              thStyle: { width: "6%" },
-              sortable: true
+              tdClass: "text-left",
+              thClass: "text-left",
+              thStyle: { width: "4%" },
+              sortable: false
             },
             {
               key: "available_qty",
               label: "Available Qty.",
-              tdClass: "align-middle",
-              thClass: "text-center",
-              thStyle: { width: "7%" },
-              sortable: true
+              tdClass: "text-left",
+              thClass: "text-left",
+              thStyle: { width: "4%" },
+              sortable: false
             },
             {
                 key: "cost_amt",
                 label: "Price",           
-                thClass: "text-right",
                 tdClass: "align-middle text-right",
-                thStyle: { width: "110px" },
-                sortable: true,
+                thStyle: { width: "80px" },
+                sortable: false,
                 formatter: (value) => {
                         return this.formatNumber(value)
                     }
@@ -911,8 +1058,38 @@ input[type="number"]::-webkit-outer-spin-button {
                 key: "weight",
                 label: "Weight (kg)",
                 thStyle: { width: "6%" },
-                tdClass: "align-middle text-right",
-                sortable: true,
+                tdClass: "text-left",
+                sortable: false,
+                formatter: (value) => {
+                        return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "lengthsize",
+                label: "Length (cm)",
+                thStyle: { width: "6%" },
+                tdClass: "text-left",
+                sortable: false,
+                formatter: (value) => {
+                  return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "width",
+                label: "Width (cm)",
+                thStyle: { width: "6%" },
+                tdClass: "text-left",
+                sortable: false,
+                formatter: (value) => {
+                  return this.formatNumber(value)
+                    }
+              },
+              {
+                key: "height",
+                label: "Height (cm)",
+                thStyle: { width: "6%" },
+                tdClass: "text-left",
+                sortable: false,
                 formatter: (value) => {
                         return this.formatNumber(value)
                     }
@@ -921,18 +1098,19 @@ input[type="number"]::-webkit-outer-spin-button {
                 key: "dimension",
                 label: "Dimension (kg)",
                 thStyle: { width: "6%" },
-                tdClass: "align-middle text-right",
-                sortable: true,
-                formatter: (value) => {
-                        return this.formatNumber(value)
-                    }
+                tdClass: "text-left",
+                sortable: false,
+                formatter: (value, key, item) => {
+                item.total_cost = item.lengthsize * item.width * item.height / 3500;
+                return this.formatNumber(item.total_cost);
+              }
               },
               {
                 key: "action",
                 label: "",
                 thStyle: { width: "4%" },
                 tdClass: "text-center",
-                sortable: true
+                sortable: false
               },
           ],
           items: []
@@ -972,7 +1150,7 @@ input[type="number"]::-webkit-outer-spin-button {
                Swal.fire({
                     title: 'Are you sure?',
                     // text: "You won't be able to revert this!",
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -1099,8 +1277,33 @@ input[type="number"]::-webkit-outer-spin-button {
                          }
                     })
         },
-       
-      
+        getDefaultPhoto(){
+                if (this.entryMode == "Edit") {
+                  let image_path = (this.forms.products.fields.image_path != "Default.jpg") ? this.forms.products.fields.image_path : "/storage/app/public/products/" + this.$store.state.user.sumr_hash + '/'+ this.forms.products.fields.inmr_hash + '/Default.jpg';
+                  return image_path;
+                }else{
+                  let image_path = (this.forms.products.fields.image_path == '') ?  '' : this.forms.products.fields.image_path;
+                  return image_path;
+                }
+            },
+        updateDefault(e){
+                let file = e.target.files[0];
+                let reader = new FileReader();
+
+                let limit = 2111775;
+                if(file['size'] > limit){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'You are uploading a large file',
+                    })
+                    return false;
+                }
+                reader.onload = (file) => {
+                    this.forms.products.fields.image_path = reader.result;
+                }
+                reader.readAsDataURL(file);
+            },
         onInputChange(e) {
             const files = e.target.files;
             Array.from(files).forEach(file => this.addImage(file));
@@ -1156,21 +1359,82 @@ input[type="number"]::-webkit-outer-spin-button {
                   console.log(error)
                 })
         },
-          acceptVariant() {
-      this.tables.variant.items.push({
-        var_name: this.forms.products.fields.var_name,
-        onhand_qty: this.forms.products.fields.onhand_qty,
-        available_qty: this.forms.products.fields.available_qty,
-        cost_amt: this.forms.products.fields.cost_amt,
-        weight: this.forms.products.fields.weight,
-        lengthsize: this.forms.products.fields.lengthsize,
-        width: this.forms.products.fields.width,
-        height: this.forms.products.fields.height,
-        dimension: this.forms.products.fields.dimension,
-      });
-      this.showModalProducts = '';
-      this.showModalProducts = false;
-      
+
+      EditVariant(data) {
+        this.$http
+        .get("api/variant/" + data.item.vrnt_hash, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          this.forms.variant.fields = response.data.variant;
+          this.showModalProducts = true;
+          this.entryMode = "Edit";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+        },
+      acceptVariant() {
+        if (this.forms.variant.fields.var_name == null || this.forms.variant.fields.var_name == "") {
+            Toast.fire(
+            'Error!',
+            'Please Enter Variant Name',
+            'error'
+            )
+         this.focusElement('var_name' , false)
+        }else if (this.forms.variant.fields.onhand_qty == "" || this.forms.variant.fields.onhand_qty == 0) {
+          this.focusElement('onhand_qty')
+          Toast.fire(
+            'Error!',
+            'Please Enter On hand Quantity',
+            'error'
+            )
+        }else if (this.forms.variant.fields.available_qty == "" || this.forms.variant.fields.available_qty == 0) {
+          this.focusElement('available_qty')
+          Toast.fire(
+              'Error!',
+              'Please Enter Available Quantity',
+              'error'
+              )
+        }else if (Number(this.forms.variant.fields.onhand_qty) < Number(this.forms.variant.fields.available_qty)) {
+          this.focusElement('onhand_qty')
+          Toast.fire(
+              'Error!',
+              'Your On Hand Stock should be greater than Your Available Stock',
+              'error'
+              )
+          }else if (this.forms.variant.fields.cost_amt == "" || this.forms.variant.fields.cost_amt == 0) {
+          this.focusElement('cost_amt')
+          Toast.fire(
+              'Error!',
+              'Please Enter Price',
+              'error'
+              )
+        }else if (this.forms.variant.fields.weight == null || this.forms.variant.fields.weight == 0) {
+          this.focusElement('weight')
+          Toast.fire(
+              'Error!',
+              'Please Enter Weight',
+              'error'
+              )
+        }else {
+
+          this.tables.variant.items.push({
+          var_name: this.forms.variant.fields.var_name,
+          onhand_qty: this.forms.variant.fields.onhand_qty,
+          available_qty: this.forms.variant.fields.available_qty,
+          cost_amt: this.forms.variant.fields.cost_amt,
+          weight: this.forms.variant.fields.weight,
+          lengthsize: this.forms.variant.fields.lengthsize,
+          width: this.forms.variant.fields.width,
+          height: this.forms.variant.fields.height,
+          dimension: this.forms.variant.fields.dimension,
+        });
+        this.showModalProducts = '';
+        this.showModalProducts = false;
+          }
     },
     removeProduct(index){
         this.tables.variant.items.splice(index, 1)
@@ -1211,41 +1475,16 @@ input[type="number"]::-webkit-outer-spin-button {
             'Please Enter Product Details at least 50 Characters',
             'error'
             )
-        }else if (this.forms.products.fields.onhand_qty == "" || this.forms.products.fields.onhand_qty == 0) {
-          this.focusElement('onhand_qty')
-          Toast.fire(
-            'Error!',
-            'Please Enter On hand Quantity',
-            'error'
-            )
-        }else if (this.forms.products.fields.available_qty == "" || this.forms.products.fields.available_qty == 0) {
-          this.focusElement('available_qty')
-          Toast.fire(
-              'Error!',
-              'Please Enter Available Quantity',
-              'error'
-              )
-        }else if (Number(this.forms.products.fields.onhand_qty) < Number(this.forms.products.fields.available_qty)) {
-          this.focusElement('onhand_qty')
-          Toast.fire(
-              'Error!',
-              'Your On Hand Stock should be greater than Your Available Stock',
-              'error'
-              )
-          }else if (this.forms.products.fields.cost_amt == "" || this.forms.products.fields.cost_amt == 0) {
-          this.focusElement('cost_amt')
-          Toast.fire(
-              'Error!',
-              'Please Enter Price',
-              'error'
-              )
-        }else if (this.forms.products.fields.weight == null || this.forms.products.fields.weight == 0) {
-          this.focusElement('weight')
-          Toast.fire(
-              'Error!',
-              'Please Enter Weight',
-              'error'
-              )
+        
+
+        }else if (this.tables.variant.items.length == 0) {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Please Add a Variant of your Product',
+                showConfirmButton: false,
+                timer: 1500
+              });
         }else{
           if (this.entryMode == "Add") {
             if (this.images !== null && this.images.length == 0) {
@@ -1270,17 +1509,20 @@ input[type="number"]::-webkit-outer-spin-button {
           this.upload();
           this.forms.products.isSaving = false;
           this.clearFields('products');
-          this.loadProducts();
           this.images = [];
           this.files = [];
           this.showEntry = false;
+          this.forms.products.fields.image_path = '';
           Swal.fire({
-              title: 'Success!',
+            title: 'Success!',
               text: 'The record has been successfully created.',
               icon: 'success',
               showConfirmButton: false,
-              timer: 3000,
+              timer: 5000,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
               })
+          this.loadProducts();
         })
         .catch(error => {
           this.forms.products.isSaving = false;
@@ -1401,11 +1643,13 @@ input[type="number"]::-webkit-outer-spin-button {
           }
         })
         .then(response => {
-          this.forms.products.fields = response.data.products;
           this.ShowImages = response.data.images;
-          // console.log(this.ShowImages.length > 0)
+          this.forms.products.fields = response.data.products;
+          // console.log(this.ShowImages)
           this.tables.variant.items = response.data.variant;
           this.showEntry = true;
+          this.forms.variant.fields = response.data.variant;
+          // console.log(this.forms.variant.fields)
           this.entryMode = "Edit";
         })
         .catch(err => {
@@ -1483,10 +1727,10 @@ input[type="number"]::-webkit-outer-spin-button {
         return this.forms.products.fields.product_details !== null && this.forms.products.fields.product_details.length >= 50
       },
         Getdimension() {
-        this.forms.products.fields.dimension = 0;
-        this.forms.products.fields.dimension += 
-        ( Number(this.forms.products.fields.lengthsize) * Number(this.forms.products.fields.width) * Number(this.forms.products.fields.height) / 3500 );
-          return this.forms.products.fields.dimension;
+        this.forms.variant.fields.dimension = 0;
+        this.forms.variant.fields.dimension += 
+        ( Number(this.forms.variant.fields.lengthsize) * Number(this.forms.variant.fields.width) * Number(this.forms.variant.fields.height) / 3500 );
+          return this.forms.variant.fields.dimension;
         } 
     },
  created () {

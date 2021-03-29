@@ -51,7 +51,7 @@
                           <b-form-group>
                           <label>Customer Address :</label>
                           <b-form-input disabled
-                          v-model="row.item.address">
+                          v-model="row.item.city">
                           </b-form-input>
                           </b-form-group></b-col>
                         <b-col lg="4"></b-col>

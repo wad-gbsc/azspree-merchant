@@ -78,7 +78,6 @@ class LogsController extends Controller
             'ismn.*',
             'isdt.*'
             )
-
             ->leftJoin('isdt', 'isdt.issuance_hash', '=', 'ismn.issuance_hash')
             ->where('ismn.is_deleted' , 0)
             ->where('ismn.is_paid' , 1)
@@ -86,7 +85,7 @@ class LogsController extends Controller
 
         if($from_date != 0 || $to_date != 0)
         {
-            $data['invoices']->whereRaw('DATE(created_datetime) BETWEEN DATE("'.$from_date.'") AND DATE("'.$to_date.'")');
+            $data['invoices']->whereRaw('DATE(order_date) BETWEEN DATE("'.$from_date.'") AND DATE("'.$to_date.'")');
         }
         
         $data['invoices'] = $data['invoices']->get();  
@@ -94,7 +93,8 @@ class LogsController extends Controller
         $data['date_from'] = $from_date;
         $data['date_to'] = $to_date;
 
-        $mpdf = new Mpdf();
+        // $mpdf = new Mpdf();
+        $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
         $content = view('logs.report')->with($data);
         $mpdf->WriteHTML($content);
         $mpdf->Output();
@@ -141,41 +141,11 @@ class LogsController extends Controller
         $mpdf->Output();
     }
 
-    // public function PrintReport() {
-
-    //     $data['invoices'] = IssuanceDetails::select(
-    //         'isdt.*',
-    //         'sohr.*',
-    //         'soln.*',
-    //         'inmr.*',
-    //         'odst.*'
-    //         )
-    //             ->leftJoin('sohr', 'sohr.sohr_hash', '=', 'isdt.sohr_hash')
-    //             ->leftJoin('soln', 'soln.sohr_hash', '=', 'sohr.sohr_hash')
-    //             ->leftJoin('inmr', 'inmr.inmr_hash', '=', 'soln.inmr_hash')
-    //             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-    //             // ->where('isdt.issuance_hash' , $id)
-    //             ->orderBy('issuance_details_hash', 'desc');
-        
-        
-    //     $data['invoices'] = $data['invoices']->get();
-
-    //     $mpdf = new Mpdf();
-    //     $content = view('logs.report')->with($data);
-    //     $mpdf->WriteHTML($content);
-    //     $mpdf->Output();
-    // }
+    
     public function create(Request $request)
     {
-        // Validator::make($request->all(),
-        //     [
-        //         'issued_to' => 'required',
-        //     ]
-        // )->validate();
 
         $y = date("Y");
-
-        
         $last_in = IssuanceMain::select('issuance_hash')->max('issuance_hash' );
         $issuance = new IssuanceMain();
         $issuance->issuance_no = 'IN-'. $y .'-'.str_pad($last_in + 1,5,"0",STR_PAD_LEFT);
@@ -204,6 +174,8 @@ class LogsController extends Controller
                 'total_qty'=>$item['total_qty'],
                 'order_total'=>$item['order_total'],
                 'azspree'=>$item['azspree'],
+                'add_charges'=>$item['add_charges'],
+                'packaging_fee'=>$item['packaging_fee'],
             ];
         }
 

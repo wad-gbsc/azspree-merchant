@@ -25,6 +25,8 @@ import Logs from '@/views/shop/Logs'
 import Shipments from '@/views/shop/Shipments'
 import Cancellations from '@/views/shop/Cancellations'
 import Comments from '@/views/shop/Comments'
+import Merchants from '@/views/maintenance/Merchants'
+
 
 import store from '../store'
 Vue.use(Router)
@@ -108,6 +110,21 @@ const router = new Router({
                 meta: {requiresAuth: true}
               },
             ]},
+            {
+              path: 'maintenance',
+              name: 'Maintenance',
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  path: 'Merchants',
+                  name: 'Merchants',
+                  component: Merchants,
+                  meta: {requiresAuth: true}
+                },
+              ]},
+    
       ]
     },
     // {

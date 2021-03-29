@@ -183,11 +183,11 @@
                     <br>
                     <span>-{{number_format($transaction_fee, 2)}}</span>
                     <br>
-                    <span>-</span>
+                    <span>{{number_format($issuance->bank_fee, 2)}}</span>
                     <br>
-                    <span>-3.00</span>
+                    <span>-{{number_format($in->packaging_fee, 2)}}</span>
                     <br>
-                    <span><b>{{number_format($subtotal - ($shipping + $transaction_fee + 3) , 2)}}<b></span>
+                    <span><b>{{number_format($subtotal - ($shipping + $transaction_fee + $issuance->bank_fee + $in->packaging_fee) , 2)}}<b></span>
                     <br><br><br><br>
                 </td>
             </tr>

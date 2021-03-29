@@ -89,7 +89,7 @@
                             <div class="tab-pane active show" id="activity">
                                 <h3 class="text-center">Display User Activity</h3>
 
-                                        <img :src="GetItems()" style="max-width: 50%">
+                                        <!-- <img :src="GetItems()" style="max-width: 50%"> -->
                                         
                                 </div><br>
                                 
@@ -225,8 +225,6 @@
                                     <label for="photo" class="col-sm-2 control-label">Profile Photo</label>
                                     <div class="col-sm-12">
                                         <b-form-file  id="photo" ref="photo" name="photo" type="file" @change="updateProfile">  </b-form-file>
-             
-                                        <!-- <input type="file" @change="updateProfile" name="photo" id="photo" ref="photo" class="form-input"> -->
                                     </div>
 
                                 </div>
@@ -321,19 +319,13 @@
                 }
                 },
 
-                 GetItems(){
-                return "/images/" + "default.png" ;
-            },
-                
             getProfilePhoto(){
 
-                let photo = (this.forms.profile.fields.photo.length > 200) ? this.forms.profile.fields.photo : "/images/profile/" + this.forms.profile.fields.photo ;
+                let photo = (this.forms.profile.fields.photo.length < 200) ? this.forms.profile.fields.photo : "/images/profile/" + this.forms.profile.fields.photo;
                 return photo;
-
             },
             getCoverPhoto(){
-
-                    let cover = (this.forms.profile.fields.cover.length > 200) ? this.forms.profile.fields.cover : "/images/cover/" + this.forms.profile.fields.cover ;
+                    let cover = (this.forms.profile.fields.cover.length > 200) ? this.forms.profile.fields.cover : "/images/cover/" + this.forms.profile.fields.cover;
                     return cover;
             },
             updateProfile(e){
@@ -432,9 +424,6 @@
            
         },
         created() {
-           
-
-
             this.$http
             .get("api/profile", {
                 headers: {

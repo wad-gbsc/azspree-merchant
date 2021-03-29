@@ -174,13 +174,11 @@ class OrdersController extends Controller
         {
                     $data['orders'] = SohrModel::select(
                         'sohr.*',
-                        'user.fullname',
                         'sumr.*',
                         'odst.*',
                         'city.city'                      
         )                          
                             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                            ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                             ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                             ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
                             ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -193,13 +191,11 @@ class OrdersController extends Controller
         {
             $data['orders'] = SohrModel::select(
                 'sohr.*',
-                'user.fullname',
                 'sumr.*',
                 'odst.*',
                 'city.city'                  
 )                          
                     ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                    ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                     ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                     ->leftJoin('sumr', 'sumr.sumr_hash', '=', 'sohr.sumr_hash')
                     ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -214,14 +210,12 @@ class OrdersController extends Controller
 {
             $data['cancellations'] = SohrModel::select(
                 'sohr.*',
-                'user.*',
                 'sumr.*',
                 'odst.*',
                 'city.city'
 
 )                          
                             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                            ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                             ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                             ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
                             ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -234,13 +228,11 @@ class OrdersController extends Controller
             {
                 $data['cancellations'] = SohrModel::select(
                     'sohr.*',
-                    'user.*',
                     'sumr.*',
                     'odst.*',
                     'city.city'                      
     )                          
                                 ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                                ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                                 ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                                 ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
                                 ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -255,13 +247,11 @@ class OrdersController extends Controller
 {
             $data['shipments'] = SohrModel::select(
                 'sohr.*',
-                'user.*',
                 'sumr.*',
                 'odst.*',    
                 'city.city'
                 )                     
                             ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                            ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                             ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                             ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
                             ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -275,13 +265,11 @@ class OrdersController extends Controller
             {
                 $data['shipments'] = SohrModel::select(
                     'sohr.*',
-                    'user.*',
                     'sumr.*',
                     'odst.*',
                     'city.city'                     
     )                          
                                 ->leftJoin('odst', 'odst.order_hash', '=', 'sohr.order_stat')
-                                ->leftJoin('user', 'user.user_hash', '=', 'sohr.user_hash')
                                 ->leftJoin('soln', 'soln.soln_hash', '=', 'sohr.sohr_hash')
                                 ->leftJoin('sumr', 'sohr.sumr_hash', '=', 'sumr.sumr_hash')
                                 ->leftJoin('city', 'city.city_hash', '=', 'sohr.city_hash')
@@ -470,6 +458,8 @@ class OrdersController extends Controller
         
         $sohr->order_stat = 5;
         $sohr->status_user = 3;
+        $sohr->add_charges = $request->input('add_charges');
+        $sohr->packaging_fee = $request->input('packaging_fee');
         $sohr->dh_accept_order_datetime = Carbon::now();
         $sohr->save();
         
@@ -558,7 +548,7 @@ class OrdersController extends Controller
             
                 foreach ($myorder as $order)
                 {
-                    DB::table('inmr')->where('inmr_hash', $order->inmr_hash)->increment('sales',$order->qty);
+                    DB::table('vrnt')->where('inmr_hash', $order->inmr_hash)->where('vrnt_hash', $order->vrnt_hash)->increment('sales',$order->qty);
                 }
         $sohr->delivered_datetime = Carbon::now();
         $sohr->completed_datetime = date('y:m:d H:i:s', strtotime('+3 days'));

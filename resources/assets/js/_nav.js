@@ -7,6 +7,7 @@ export default {
     {
       name: 'Product',
       icon: 'icon-book-open',
+      type: [2 , 0],
       children:[
         {
           name: 'Product(s)',
@@ -14,12 +15,20 @@ export default {
           icon: 'icon-list',
           type: [0 , 2]
         },
+        { 
+          name: 'Comment(s)',
+          url: '/shop/Comments',
+          icon: 'fa fa-comments',
+          type: [0 , 2]
+          
+        },
 
       ]},
       
         {
         name: 'My Shop',
         icon: 'fa fa-shopping-bag',
+        type: [2 , 0],
         children:[
           {
             name: 'Order(s)',
@@ -45,13 +54,7 @@ export default {
           //   url: '/shop/category',
           //   icon: 'fa fa-code'
           // },
-          { 
-            name: 'Comment(s)',
-            url: '/shop/Comments',
-            icon: 'fa fa-comments',
-            type: [0 , 2]
-            
-          },
+          
           // {
           //   name: 'Rating(s)',
           //   url: '/references/categories',
@@ -64,22 +67,23 @@ export default {
             type: [2]
           },
         ]},
-        // {
-        //   name: 'Settings',
-        //   url: '/settings',
-        //   icon: 'fa fa-cogs',
-        //   children:[
-        //     {
-        //       name: 'Profile',
-        //       url: '/settings/Profile',
-        //       icon: 'icon-list'
-        //     },
-        //     {
-        //       name: 'Logout',
-        //       url: '/logout',
-        //       icon: 'icon-list'
-        //     },
-        //   ]},
+        {
+          name: 'Maintenance',
+          icon: 'fa fa-cogs',
+          type: [2],
+          children:[
+            {
+              name: 'Merchant(s)',
+              url: '/maintenance/Merchants',
+              icon: 'fa fa-users',
+              type: [2],
+            },
+            // {
+            //   name: 'Logout',
+            //   url: '/logout',
+            //   icon: 'icon-list'
+            // },
+          ]},
         // {
         //   name: 'Finance',
         //   url: '/references',

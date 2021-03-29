@@ -118,7 +118,7 @@
                     <th class="th1" style="text-align:left;">Quantity</th>
                     <th class="th1" style="text-align:left;">Order Cost Total</th>
                     <th class="th1" style="text-align:left;">Buyer's ShippingFee</th>
-                    <th class="th1" style="text-align:left;">Merchants's ShippingFee</th>
+                    <th class="th1" style="text-align:left;">Merchant's ShippingFee</th>
                     {{-- <th class="th1" style="text-align:left;">Merchant</th> --}}
                     {{-- <th class="th1" style="text-align:left;">DH</th> --}}
                     <th class="th1" style="text-align:left;">Azspree</th>
@@ -146,13 +146,13 @@
                 </tbody>
         </table>   
         <br>
-        {{-- <div style="text-align:right; font-size: 10pt; ">
+        <div style="text-align:right; font-size: 10pt; ">
             <span>
                 Total Quantity :1000  
                 &emsp;
                 Total Cost : 600,000.00 
             </span>
-        </div> --}}
+        </div>
         <br>
 
         <div style="text-align:center;">

@@ -151,10 +151,8 @@ class WaybillController extends Controller
         $mpdf->WriteHTML($delivery2);
         $mpdf->WriteHTML('<pagebreak resetpagenum="1" pagenumstyle="1" suppress="" />');
         $mpdf->WriteHTML($delivery3);
+        // $mpdf->Output($id .'.pdf', 'D');
         $mpdf->Output();
-        
-
-        
     }
 
 }

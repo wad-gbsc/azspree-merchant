@@ -267,8 +267,9 @@
                 header-bg-variant="primary"
                 header-text-variant="light">
                 <div slot="modal-title">Accept New Order? <small>For Drop-off</small></div>
-
+              
                 <label>Are you sure you want to Accept this Order?</label><br>
+                <small>Drop-off Address: 2nd Floor, Alecel Bldg., Telabastagan, City of San Fernando Pampanga.</small>
                 <div slot="modal-footer">
                   <b-button
                     class="button"
@@ -572,8 +573,34 @@
                 <b-modal v-model="showModalAcceptIntransit" :noCloseOnEsc="true" :noCloseOnBackdrop="true"
                 header-bg-variant="success"
                 header-text-variant="light">
-                <div slot="modal-title">Accept New Order? (For Drop-off)</div>
-                <b-col lg="12">Are you sure you want to Accept this Order?</b-col>
+                <div slot="modal-title">Accept New Order? (Drop-off)</div>
+               Are you sure you want to Accept this Order?<br><br>
+
+
+               <label> Additional Charge</label>
+                    <vue-autonumeric
+                        ref="add_charges"
+                        id="add_charges"
+                        v-model="forms.dashboard.fields.add_charges"
+                        class='form-control text-right'
+                        placeholder="0.00"
+                    :options="{
+                            minimumValue: '0',
+                            decimalCharacter: '.',}"
+                ></vue-autonumeric>
+
+                <label> Packaging Fee</label>
+                    <vue-autonumeric
+                        ref="packaging_fee"
+                        id="packaging_fee"
+                        v-model="forms.dashboard.fields.packaging_fee"
+                        class='form-control text-right'
+                        placeholder="0.00"
+                    :options="{
+                            minimumValue: '0',
+                            decimalCharacter: '.',}"
+                ></vue-autonumeric>
+
                 <div slot="modal-footer">
                   <b-button
                     class="button"

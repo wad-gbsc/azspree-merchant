@@ -52,7 +52,7 @@
         <template slot="button-content" >
           <!-- image -->
           
-          <b-img :src="getProfilePhoto()" class="avatar" width="30%" height="30%"></b-img>&nbsp;
+          <b-img :src="'/images/profile'+ '/' + $store.state.user.photo" class="avatar" width="30%" height="30%"></b-img>&nbsp;
           <!-- <span style="font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; -->
           <!-- font-weight: 400; font-size: 16px;">{{$store.state.user.shop_name}}</span> -->
         </template>
@@ -78,11 +78,10 @@ export default {
         this.$router.push({ name: 'Profile' })
         }.bind(this), 500)
       },
-
-       getProfilePhoto(){
-              let photo = this.$store.state.user.photo == "default.png" ? "/images/default.png" : "/images/profile/" +  this.$store.state.user.photo ;
-              return photo;
-            },
+      //  getProfilePhoto(){
+      //         let photo = this.$store.state.user.photo == "default.png" ? "/images/profile/default.png" : "/images/profile/" +  this.$store.state.user.photo;
+      //         return photo;
+      //       },
     logOut() {
       if (localStorage.token) {
         this.$http

@@ -98,10 +98,6 @@
                     <br>
                     <span>Order No: {{$item->order_no}}</span>
                     <br>
-                    <span>Invoice No:</span>
-                    <br>
-                    <span>Invoice Date:</span>
-                    <br>
                     <span>Payment Type: {{$item->payment_method}}</span>
                     <br><br><br><br>
                 </td>
@@ -149,22 +145,23 @@
             <?php 
             $item_total = 0;
             $grand_total =0;
+            $amount = 0;
             ?>
             <?php foreach($soln as $line):
             $item_total += $line->unit_price;
+            $amount = $line->qty * $line->unit_price;
             ?>
-            
             <tr>
                 <td colspan="5" style="text-align: left;">
                   <span>{{$line->product_name}}</span> 
                   <br><br>
                 </td>
-                <td colspan="1" >
+                <td colspan="1">
                     <span>{{number_format($line->qty)}}</span>
                     <br><br>
                 </td>
                 <td colspan="2" style="text-align: right;">
-                    <span>{{number_format($line->cost_amt,2)}}</span>
+                    <span>{{number_format($line->unit_price,2)}}</span>
                     <br><br>
                 </td>
                 <td colspan="1" style="text-align: right;">
@@ -172,10 +169,9 @@
                     <br><br>
                 </td>
                 <td colspan="3" style="text-align: right;">
-                    <span>{{number_format($line->unit_price,2)}}</span>
+                    <span>{{number_format($amount,2)}}</span>
                     <br><br>
                 </td>
-               
             </tr>
             <?php endforeach; ?> 
             <tr>
