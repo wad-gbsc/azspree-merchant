@@ -44,7 +44,7 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 100%;
     margin-top: 20px ;
     border-radius: 10px;
-    border: 3px dashed #fff;
+    /* border: 3px dashed #fff; */
     position: relative;
    
     .images-preview {
@@ -266,7 +266,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       <b-row class="mb-2">
                         <b-col>
                           <b>Product Details :</b>
-                          <label style="white-space: pre;">&emsp;{{data.item.product_details}}</label>
+                          <label style="white-space: pre-line;margin-left:15%;">&emsp;{{data.item.product_details}}</label>
                         </b-col>
                       </b-row>
 
@@ -312,6 +312,7 @@ input[type="number"]::-webkit-outer-spin-button {
                         </b-col>
                       </b-row>
                       </b-col>
+                      <b-col lg="12"></b-col>
                        </b-row>
                        </b-card>
                   </template>
@@ -411,114 +412,6 @@ input[type="number"]::-webkit-outer-spin-button {
                         v-model="forms.products.fields.product_details"
                       ></b-form-textarea>
                     </b-form-group>
-                    
-                      <!-- <b-form-group>
-                        <label for="onhand_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> On hand Quantity.</label><span>  The number you have physically available.</span>
-                      <b-form-input
-                            min="0"
-                            ref="onhand_qty"
-                            id="onhand_qty"
-                            v-model="forms.products.fields.onhand_qty"
-                            type="number"
-                            placeholder="On Hand Quantity">
-                        </b-form-input>
-                    </b-form-group>
-                           <b-form-group>
-                        <label for="available_qty"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Available Quantity.</label><span>  The quantity of an item that is currently available for sale.</span>
-                     <b-form-input
-                            min="0"
-                            ref="available_qty"
-                            id="available_qty"
-                            v-model="forms.products.fields.available_qty"
-                            type="number"
-                            placeholder="Available Quantity">
-                        </b-form-input>
-                      </b-form-group>
-                      <b-form-group>
-                    <label><i class="icon-required fa fa-exclamation-circle"></i> Price</label>
-                    <vue-autonumeric
-                        ref="cost_amt"
-                        id="cost_amt"
-                        v-model="forms.products.fields.cost_amt"
-                        class='form-control text-right'
-                        placeholder="0.00"
-                    :options="{
-                            minimumValue: '0',
-                            decimalCharacter: '.',}"
-                ></vue-autonumeric>
-                  </b-form-group>
-                  </b-col>
-                  <b-col lg="2">
-                  <b-form-group>
-                  <label><i class="icon-required fa fa-exclamation-circle"></i> Weight (kg) :</label>
-                  <vue-autonumeric
-                    ref="weight"
-                    id="weight"
-                    v-model="forms.products.fields.weight"
-                    class='form-control'
-                    placeholder="Kg"
-                :options="{
-                        minimumValue: '0',
-                        decimalPlaces: 3,
-                        decimalCharacter: '.'}"
-              ></vue-autonumeric>
-                  </b-form-group>
-                  <b-form-group>
-                  <b-form-checkbox
-                  ref="is_measurable"
-                  id="is_measurable"
-                  v-model="forms.products.fields.is_measurable"
-                  value=1
-                  unchecked-value=0
-                  @input="forms.products.fields.is_measurable==0? (forms.products.fields.lengthsize = 0 ,  forms.products.fields.width = 0 , forms.products.fields.height = 0): ''"
-                  >
-                  Is Measurable?
-                  </b-form-checkbox>
-                  </b-form-group>
-                  <b-form-group>
-                  <label>Length (cm) :</label>
-                  <vue-autonumeric
-                      ref="lengthsize"
-                      id="lengthsize"
-                      placeholder="cm"
-                      :disabled="forms.products.fields.is_measurable == 0" 
-                      v-model="forms.products.fields.lengthsize"
-                      class='form-control'
-              ></vue-autonumeric>
-                  </b-form-group>
-                  <b-form-group>
-                  <label>Width (cm) :</label>
-                  <vue-autonumeric
-                      ref="width"
-                      id="width"
-                      placeholder="cm"
-                      :disabled="forms.products.fields.is_measurable == 0"
-                      v-model="forms.products.fields.width"
-                      class='form-control'
-              ></vue-autonumeric>
-                  </b-form-group>
-                  <b-form-group>
-                  <label>Height (cm) :</label>
-                  <vue-autonumeric
-                      ref="height"
-                      id="height"
-                      :disabled="forms.products.fields.is_measurable == 0"
-                      v-model="forms.products.fields.height"
-                      class='form-control'
-                      placeholder="cm"
-              ></vue-autonumeric>
-                  </b-form-group>
-                  <b-form-group>
-                  <label>Dimension (kg):</label>
-                  <vue-autonumeric
-                      placeholder="kg"
-                      disabled
-                      ref="dimension"
-                      id="dimension"
-                      v-model="this.Getdimension"
-                      class='form-control'
-                    ></vue-autonumeric>
-                  </b-form-group> -->
                   </b-col>
                
         <b-col lg="8">
@@ -546,35 +439,35 @@ input[type="number"]::-webkit-outer-spin-button {
 
               <div class="images-preview" v-show="images.length > 0 || ShowImages.length > 0 ">
                   <div class="img-wrapper img" v-bind:style="{display: ShowImages[0] != undefined ? 'flex' : 'none' }">
-                      <img :src="ShowImages[0] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
+                      <img :src="ShowImages[0] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[0].path : ''">
                   </div>
                   <div class="img-wrapper img" v-bind:style="{display: ShowImages[1] != undefined ? 'flex' : 'none' }">
-                      <img :src="ShowImages[1] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
+                      <img :src="ShowImages[1] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[1].path : ''">
                 </div>
                   <div class="img-wrapper img" v-bind:style="{display: ShowImages[2] != undefined ? 'flex' : 'none' }">
-                      <img :src="ShowImages[2] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
+                      <img :src="ShowImages[2] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[2].path : ''">
                 </div>
                   <div class="img-wrapper img" v-bind:style="{display: ShowImages[3] != undefined ? 'flex' : 'none' }">
-                      <img :src="ShowImages[3] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
+                      <img :src="ShowImages[3] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[3].path : ''">
                 
                 </div>
                   <div class="img-wrapper img" v-bind:style="{display: ShowImages[4] != undefined ? 'flex' : 'none' }">
-                      <img :src="ShowImages[4] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''">
+                      <img :src="ShowImages[4] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[4].path : ''">
                   </div>
                 <div class="img-wrapper img" v-bind:style="{display: ShowImages[5] != undefined ? 'flex' : 'none' }">
-                      <img :src=" ShowImages[5] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
+                      <img :src=" ShowImages[5] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[5].path : ''" >
                 </div> 
                 <div class="img-wrapper img" v-bind:style="{display: ShowImages[6] != undefined ? 'flex' : 'none' }">
-                      <img :src=" ShowImages[6] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
+                      <img :src=" ShowImages[6] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[6].path : ''" >
                 </div> 
                 <div class="img-wrapper img" v-bind:style="{display: ShowImages[7] != undefined ? 'flex' : 'none' }">
-                      <img :src=" ShowImages[7] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
+                      <img :src=" ShowImages[7] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[7].path : ''" >
                 </div> 
                 <div class="img-wrapper img" v-bind:style="{display: ShowImages[8] != undefined ? 'flex' : 'none' }">
-                      <img :src=" ShowImages[8] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
+                      <img :src=" ShowImages[8] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[8].path : ''" >
                 </div> 
                 <div class="img-wrapper img" v-bind:style="{display: ShowImages[9] != undefined ? 'flex' : 'none' }">
-                      <img :src=" ShowImages[9] != undefined ? '/storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
+                      <img :src=" ShowImages[9] != undefined ? 'storage/app/public/products/' + $store.state.user.sumr_hash + '/' + forms.products.fields.inmr_hash + '/' + ShowImages[9].path : ''" >
                 </div> 
                   <div class="img-wrapper img" v-for="(image, index) in images" :key="index" id="imgasd">
                       <img :src="image" :alt="`Image Uplaoder ${index}`" >
@@ -768,7 +661,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 <b-row>
                 <b-col lg="6">
                   <b-form-group>
-                        <label for="var_name"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Variant Name</label> <small>(Color, Size, Texture, etc.)</small>
+                        <label for="var_name"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Variant Name</label> <small>(Color, Size, Texture, etc.)</small> <small>Max. 18 characters</small>
                         <b-form-input
                             maxlength="18"
                             ref="var_name"
@@ -1024,7 +917,7 @@ input[type="number"]::-webkit-outer-spin-button {
             {
               key: "var_name",
               label: "Variant Name",
-              thStyle: { width: "6%" },
+              thStyle: { width: "8%" },
               tdClass: "text-left",
               sortable: false
             },
@@ -1279,7 +1172,7 @@ input[type="number"]::-webkit-outer-spin-button {
         },
         getDefaultPhoto(){
                 if (this.entryMode == "Edit") {
-                  let image_path = (this.forms.products.fields.image_path != "Default.jpg") ? this.forms.products.fields.image_path : "/storage/app/public/products/" + this.$store.state.user.sumr_hash + '/'+ this.forms.products.fields.inmr_hash + '/Default.jpg';
+                  let image_path = (this.forms.products.fields.image_path != this.$store.state.user.sumr_hash + '/' + this.forms.products.fields.inmr_hash + "/Default.jpg") ? this.forms.products.fields.image_path : "storage/app/public/products/" + this.$store.state.user.sumr_hash + '/'+ this.forms.products.fields.inmr_hash + '/Default.jpg';
                   return image_path;
                 }else{
                   let image_path = (this.forms.products.fields.image_path == '') ?  '' : this.forms.products.fields.image_path;
@@ -1509,16 +1402,16 @@ input[type="number"]::-webkit-outer-spin-button {
           this.upload();
           this.forms.products.isSaving = false;
           this.clearFields('products');
+          this.clearFields('variant');
           this.images = [];
           this.files = [];
           this.showEntry = false;
-          this.forms.products.fields.image_path = '';
           Swal.fire({
             title: 'Success!',
-              text: 'The record has been successfully created.',
+              text: 'The product has been successfully created.',
               icon: 'success',
               showConfirmButton: false,
-              timer: 5000,
+              timer: 4000,
               allowOutsideClick: false,
               allowEscapeKey: false,
               })
@@ -1577,16 +1470,18 @@ input[type="number"]::-webkit-outer-spin-button {
                     this.uploadUpdate();
                 }
                     Swal.fire({
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
                     position: 'center',
                     icon: 'success',
+                    text: 'The product has been successfully updated.',
                     title: 'Update successfuly.',
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 4000
                     })
                     this.forms.products.isSaving = false;
                     this.showEntry = false;
                     this.loadProducts()
-                    
                 }) 
                 .catch((error) => {
                     this.forms.products.isSaving = false;
